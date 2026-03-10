@@ -1,0 +1,50 @@
+.container-geral{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column; 
+
+}
+
+.container-planos{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap:3%;
+  padding: 20px 15px 0px 15px;
+  margin-top: auto;
+  width: 100%;
+  
+}
+
+.card-plano{
+  padding: 20px 0px 80px 10px;
+  width: 31%;
+  background-color: aquamarine;
+  border-radius: 15px;
+  border: 1px solid #ddd;
+}
+
+.descricao-plano{
+  padding: 15px;
+  background-color: white;
+  margin: 30px 15px 0px 15px;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+}
+
+.line-description {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.button-plano{
+  margin: auto auto 20px auto;
+  width: 90%;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #6914DA, rgb(168, 70, 228));
+  color: white;
+  font-size: 16px;
+  padding: 12px;
+}
