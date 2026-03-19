@@ -28,29 +28,30 @@ function HomePage() {
     'https://picsum.photos/800/1200/?random=18',
   ]
   return (
-    <div className='flex flex-col min-h-screen bg-slate-900 pb-20'>
-      <NavBar />
+    <div className='flex flex-col min-h-screen bg-[#0d1117] relative pb-20'>
+      <div className='fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(147,51,234,0.15),transparent_50%)] pointer-events-none'></div>
 
-      <div className='flex-1'>
-        <div className='flex flex-col p-2 space-y-4 overflow-hidden'>
-          <h1 className='text-2xl font-bold text-white'>Filmes Populares</h1>
+      <NavBar />
+      
+      <div className='flex-1 relative z-10 px-4 max-w-7xl mx-auto w-full space-y-8 mt-4'>
+        <section>
+          <h1 className='text-xl font-semibold text-white/90 mb-4 border-l-4 border-purple-600 pl-3'>
+            Filmes Populares
+          </h1>
           <Carousel imgLink={carouselImgLink} />
-        </div>
-        <div className='flex flex-col p-2 space-y-4'>
-          <h1 className='text-2xl font-bold text-white'>Novo na Next</h1>
-          <ListCard imgLink={imgLink} />
-        </div>
-        <div className='flex flex-col p-2 space-y-4'>
-          <h1 className='text-2xl font-bold text-white'>Novo na Next</h1>
-          <div className='flex space-x-2'>
-            <div className='aspect-1/2 w-1/2 bg-gray-600 rounded'></div>
-            <div className='aspect-1/2 w-1/2 bg-gray-600 rounded'></div>
-            <div className='aspect-1/2 w-1/2 bg-gray-600 rounded'></div>
+        </section>
+
+        <section>
+          <div className='flex justify-between items-center mb-4'>
+            <h1 className='text-xl font-semibold text-white/90 border-l-4 border-purple-600 pl-3'>
+              Novo na Next
+            </h1>
           </div>
-        </div>
+          <ListCard imgLink={imgLink} />
+        </section>
       </div>
 
-      <div className='fixed bottom-0 left-0 right-0'>
+      <div className='fixed bottom-0 left-0 right-0 z-50'>
         <FooNavBar />
       </div>
     </div>
