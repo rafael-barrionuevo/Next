@@ -12,9 +12,9 @@ import {
   MediaMuteButton,
   MediaFullscreenButton,
 } from "media-chrome/react";
-import film from '/mnt/HDD/Downloads/film.mp4';
+//import film from '/mnt/HDD/Downloads/film.mp4';
 function WatchContent() {
-  const src = film;
+  const src = 'https://www.youtube.com/watch?v=C5tn1MvXsLw&pp=ugUHEgVwdC1CUtIHCQnFCgGHKiGM7w%3D%3D';
   return (
     <MediaController
       style={{
