@@ -1,43 +1,240 @@
+import { useState } from "react";
+import Cards from "react-credit-cards-2";
+import "react-credit-cards-2/dist/es/styles-compiled.css";
+
 import Button from "../components/button";
 import InputField from "../components/inputField";
-import {Link} from "react-router-dom";
-import "../style/Pagamento.css";
+import { Link } from "react-router-dom";
 
-export default function Pagamento(){
+// 🔥 IMAGENS
+import JohnWickImg from "../assets/John-Wick.jpg";
+import MatrixImg from "../assets/The-Matrix.jpg";
+import AlquimiaImg from "../assets/alquimia-das-almas.jpg";
+import AttackOnTitanImg from "../assets/Attack-on-Titan.jpg";
+import AvatarImg from "../assets/Avatar.jpg";
+import BatmanImg from "../assets/batman.jpg";
+import BreakingBadImg from "../assets/breaking-bad.jpg";
+import DarkImg from "../assets/Dark.jpg";
+import DevoradoresDeEstrelasImg from "../assets/devoradoresDeEstrelas.jpg";
+import FullmetalImg from "../assets/Fullmetal-Alchemist-Brotherhood.jpg";
+import GameOfThronesImg from "../assets/game-of-thrones.jpg";
+import GladiatorImg from "../assets/Gladiator.jpg";
+import HoraDoMalImg from "../assets/horaDoMal.jpg";
+import HouseDragonImg from "../assets/House-of-the-Dragon.jpg";
+import InceptionImg from "../assets/Inception.jpg";
+import InterestelarImg from "../assets/interestelar.jpg";
+import InvocacaoImg from "../assets/invoca.jpg";
+import JogadorN1Img from "../assets/jogadorn1.jpg";
+import JujutsuImg from "../assets/jujutsuKaisen.jpg";
+import MadMaxImg from "../assets/Mad-Max.jpg";
+import MartyImg from "../assets/martySupreme.jpg";
+import OnePieceImg from "../assets/onePiece.jpg";
+import PeakyBlindersImg from "../assets/Peaky-Blinders.jpg";
+import SpiritedAwayImg from "../assets/Spirited-Away.jpg";
+import StarWarsImg from "../assets/starwars.jpg";
+import StrangerThingsImg from "../assets/stranger-things.jpg";
+import The100Img from "../assets/the-100.jpg";
+import TheCrownImg from "../assets/the-crown.jpg";
+import LastOfUsImg from "../assets/The-Last-of-Us.jpg";
+import MandalorianImg from "../assets/The-Mandalorian.jpg";
+import RevenantImg from "../assets/The-Revenant.jpg";
+import WitcherImg from "../assets/The-Witcher.jpg";
+import TheBoysImg from "../assets/theboys.jpg";
+import GodfatherImg from "../assets/theGodfather.jpg";
+import TitanicImg from "../assets/Titanic.jpg";
+import VikingsImg from "../assets/Vikings.jpg";
+import WW84Img from "../assets/ww84.jpg";
+import YourNameImg from "../assets/yourname.jpg";
+import ZootopiaImg from "../assets/zootopia.jpg";
 
-  return(
-    <div className="container-pagamento">
-        
-          <div className="pagamento-box">
-    
-            <p id="titulo-pagamentos">Informe os dados do seu cartão de crédito ou débito</p>
+export default function Pagamento() {
+  const [cardData, setCardData] = useState({
+    number: "",
+    name: "",
+    expiry: "",
+    cvc: "",
+    focus: ""
+  });
 
-            <form>
-              <InputField type="text" placeholder="Nome do cartão" className="input-pagamento"/>
+  function handleInput(e) {
+    setCardData({
+      ...cardData,
+      [e.target.name]: e.target.value
+    });
+  }
 
-              <div className="double-cards">
-                <InputField type="text" placeholder="Data de validade" className="input-pagamento"/>
+  function handleFocus(e) {
+    setCardData({
+      ...cardData,
+      focus: e.target.name
+    });
+  }
 
-                <InputField type="text" placeholder="CVV" className="input-pagamento"/>
-              </div>
+  const images = [
+    AttackOnTitanImg,
+    AvatarImg,
+    DarkImg,
+    FullmetalImg,
+    GladiatorImg,
+    HouseDragonImg,
+    InceptionImg,
+    JohnWickImg,
+    MadMaxImg,
+    MartyImg,
+    PeakyBlindersImg,
+    SpiritedAwayImg,
+    MatrixImg,
+    LastOfUsImg,
+    MandalorianImg,
+    RevenantImg,
+    WitcherImg,
+    TitanicImg,
+    VikingsImg,
+    BatmanImg,
+    BreakingBadImg,
+    DevoradoresDeEstrelasImg,
+    GameOfThronesImg,
+    HoraDoMalImg,
+    InterestelarImg,
+    JujutsuImg,
+    OnePieceImg,
+    StarWarsImg,
+    StrangerThingsImg,
+    The100Img,
+    TheBoysImg,
+    GodfatherImg,
+    WW84Img,
+    YourNameImg,
+    ZootopiaImg,
+    TheCrownImg,
+    JogadorN1Img,
+    InvocacaoImg,
+    AlquimiaImg,
+  ];
 
-              
-              
-              <InputField type="password" placeholder="CPF" className="input-pagamento"/>
+  return (
+    <div className="relative min-h-screen bg-black text-white">
 
-              <div className="double-cards">
-                <InputField type="password" placeholder="Crédito" className="input-pagamento"/>
-                <InputField type="password" placeholder="Debito" className="input-pagamento"/>
-              </div>
-
-              <InputField type="password" placeholder="CEP" className="input-pagamento"/>
-             
-              <Button type="submit" className="button-pagamento">Iniciar assinatura </Button>
-
-            </form>
-
-           
+      {/* FUNDO */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="
+          grid grid-cols-6 md:grid-cols-8 gap-2
+          rotate-12
+          w-[120%]
+          -translate-x-[10%]
+        ">
+          {images.map((img, index) => (
+            <img
+              key={index}
+              src={img}
+              className="w-full h-full object-cover"
+            />
+          ))}
         </div>
+
+        {/* OVERLAY */}
+        <div className="absolute inset-0 bg-black/80"></div>
+      </div>
+
+      {/* CONTEÚDO */}
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen
+       px-4 
+       md:min-h-screen
+  md:justify-center">
+
+          <div className="
+              w-full max-w-md
+              md:max-w-lg
+              md:bg-black/40
+              bg-black/20
+              md:backdrop-blur-xl
+              backdrop-blur-xl
+              md:border md:border-white/10
+              border border-white/10
+              md:
+              rounded-2xl
+              p-8
+            ">
+
+
+
+          {/* CARTÃO */}
+          <div className="flex justify-center mb-6">
+            <div className="scale-90 sm:scale-100">
+              <Cards
+                number={cardData.number}
+                name={cardData.name}
+                expiry={cardData.expiry}
+                cvc={cardData.cvc}
+                focused={cardData.focus}
+              />
+            </div>
+          </div>
+
+          <p className="text-lg font-semibold text-center mb-6">
+            Informe os dados do seu cartão
+          </p>
+
+          {/* FORM */}
+          <form className="space-y-4">
+
+            <InputField
+              name="number"
+              placeholder="Número do cartão"
+              className="w-full p-3 rounded-lg bg-white/10 border border-purple-400 text-white placeholder-gray-300 focus:ring-2 focus:ring-purple-500"
+              onChange={handleInput}
+              onFocus={handleFocus}
+            />
+
+            <InputField
+              name="name"
+              placeholder="Nome no cartão"
+              className="w-full p-3 rounded-lg bg-white/10 border border-purple-400 text-white placeholder-gray-300 focus:ring-2 focus:ring-purple-500"
+              onChange={handleInput}
+              onFocus={handleFocus}
+            />
+
+            <div className="grid grid-cols-2 gap-4">
+              <InputField
+                name="expiry"
+                placeholder="MM/AA"
+                className="w-full p-3 rounded-lg bg-white/10 border border-purple-400 text-white placeholder-gray-300 focus:ring-2 focus:ring-purple-500"
+                onChange={handleInput}
+                onFocus={handleFocus}
+              />
+
+              <InputField
+                name="cvc"
+                placeholder="CVV"
+                className="w-full p-3 rounded-lg bg-white/10 border border-purple-400 text-white placeholder-gray-300 focus:ring-2 focus:ring-purple-500"
+                onChange={handleInput}
+                onFocus={handleFocus}
+              />
+            </div>
+
+            <InputField
+              name="cpf"
+              placeholder="CPF"
+              className="w-full p-3 rounded-lg bg-white/10 border border-purple-400 text-white placeholder-gray-300 focus:ring-2 focus:ring-purple-500"
+            />
+
+            <InputField
+              name="cep"
+              placeholder="CEP"
+              className="w-full p-3 rounded-lg bg-white/10 border border-purple-400 text-white placeholder-gray-300 focus:ring-2 focus:ring-purple-500"
+            />
+
+            <Button
+              type="submit"
+              className="w-full bg-gradient-to-r from-purple-500 to-purple-700 text-white py-3 rounded-lg font-medium"
+            >
+              <Link to="/perfil">Iniciar assinatura</Link>
+            </Button>
+
+          </form>
+
         </div>
+      </div>
+    </div>
   );
 }

@@ -6,6 +6,7 @@ export default function InputField({
     placeholder = '',
     onChange = () => {},
     required = false,
+    onFocus,
     className =""
 }) {
     return (          
@@ -16,6 +17,7 @@ export default function InputField({
                 type={type}
                 placeholder={placeholder}
                 onChange={onChange}
+                onFocus={onFocus}
                 required={required}
                 className={className}
             />
