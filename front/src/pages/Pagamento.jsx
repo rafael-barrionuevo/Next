@@ -6,7 +6,7 @@ import Button from "../components/button";
 import InputField from "../components/inputField";
 import { Link } from "react-router-dom";
 
-// 🔥 IMAGENS
+// IMAGENS
 import JohnWickImg from "../assets/John-Wick.jpg";
 import MatrixImg from "../assets/The-Matrix.jpg";
 import AlquimiaImg from "../assets/alquimia-das-almas.jpg";
@@ -47,6 +47,11 @@ import WW84Img from "../assets/ww84.jpg";
 import YourNameImg from "../assets/yourname.jpg";
 import ZootopiaImg from "../assets/zootopia.jpg";
 
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setSubscription } from "../store/subscriptionSlice";
+
 export default function Pagamento() {
   const [cardData, setCardData] = useState({
     number: "",
@@ -69,6 +74,47 @@ export default function Pagamento() {
       focus: e.target.name
     });
   }
+
+  const subscription = useSelector(state => state.subscription);
+
+  console.log("SUBSCRIPTION:", subscription);
+
+  
+
+  const dispatch = useDispatch();
+
+  function handlePagamento() {
+
+ /*  // validação simples
+  if (!numeroCartao || numeroCartao.length < 16) {
+    alert("Cartão inválido");
+    return;
+  }
+
+  if (!nome.trim()) {
+    alert("Nome obrigatório");
+    return;
+  }
+
+  if (!cvv || cvv.length < 3) {
+    alert("CVV inválido");
+    return;
+  } */
+
+  // salva no Redux
+  dispatch(setSubscription({
+    tipo_plano: subscription.tipo_plano,
+    tipo_pagamento: "credito",
+    status: "ativo"
+  }));
+
+  console.log("pagamento feito com sucesso");
+
+  // redireciona
+  navigate("/perfil");
+}
+
+  const navigate = useNavigate();
 
   const images = [
     AttackOnTitanImg,
@@ -176,7 +222,12 @@ export default function Pagamento() {
           </p>
 
           {/* FORM */}
-          <form className="space-y-4">
+          <form 
+          onSubmit={(e) => {
+            e.preventDefault();
+            handlePagamento();
+          }}
+          className="space-y-4">
 
             <InputField
               name="number"
@@ -226,9 +277,11 @@ export default function Pagamento() {
 
             <Button
               type="submit"
-              className="w-full bg-gradient-to-r from-purple-500 to-purple-700 text-white py-3 rounded-lg font-medium"
+              
+              className="w-full 
+              bg-gradient-to-r from-purple-500 to-purple-700 text-white py-3 rounded-lg font-medium"
             >
-              <Link to="/perfil">Iniciar assinatura</Link>
+              Iniciar assinatura
             </Button>
 
           </form>

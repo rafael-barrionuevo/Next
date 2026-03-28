@@ -2,7 +2,18 @@ import { useState } from "react";
 import PerfilFeminino from "../assets/perfil-feminino.png";
 import PerfilMasculino from "../assets/perfil-masculino.png";
 
+import { useSelector } from "react-redux";
+
 export default function Perfil() {
+
+  const user = useSelector(state => state.user);
+  const subscription = useSelector(state => state.subscription);
+
+  console.log("USER:",user);
+  console.log("SUBSCRIPTION",subscription);
+  
+
+
 
   // PERFIS
   const [perfis, setPerfis] = useState([

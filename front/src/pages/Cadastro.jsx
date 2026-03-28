@@ -2,6 +2,7 @@ import Button from "../components/button";
 import InputField from "../components/inputField";
 import { Link } from "react-router-dom";
 import Logo from "../assets/LogoNext.png";
+import React, { useState } from 'react';
 
 // Filmes / séries
 import JohnWickImg from "../assets/John-Wick.jpg";
@@ -44,7 +45,46 @@ import WW84Img from "../assets/ww84.jpg";
 import YourNameImg from "../assets/yourname.jpg";
 import ZootopiaImg from "../assets/zootopia.jpg";
 
+import { useDispatch } from "react-redux";
+import { setUser } from "../store/userSlice";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 export default function Cadastro() {
+
+  //useState -> REDUX
+  //criando os estados
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  function handleCadastro(e){
+    e.preventDefault(); // MUITO IMPORTANTE (form)
+
+    //testar o forms
+    console.log("ANTES DO DISPATCH:");
+    console.log("Nome:", nome);
+    console.log("Email:", email);
+
+    dispatch(setUser({ 
+      id: Date.now(),
+      nome, 
+      email}));
+
+    console.log("DEPOIS DO DISPATCH");
+
+    navigate("/planos");
+  }
+
+  //testar se o Redux está funcionando
+  const user = useSelector(state => state.user);
+
+  console.log("REDUX:", user);
+
+  // console.log(nome, email);
 
   const images = [
       AttackOnTitanImg,
@@ -147,15 +187,18 @@ export default function Cadastro() {
 
         <img src={Logo} className="w-36 sm:w-32 mx-auto mb-6 sm:mb-8" />
 
-        <form className="space-y-4">
+        <form 
+        onSubmit={handleCadastro}className="space-y-4">
 
           <InputField
+            onChange={(e) => setNome(e.target.value)}
             type="text"
             placeholder="Nome"
             className="w-full p-3 rounded-lg bg-black/50 text-white border border-purple-400 outline-none focus:ring-2 focus:ring-purple-500"
           />
 
           <InputField
+            onChange={(e) => setEmail(e.target.value)}
             type="email"
             placeholder="E-mail"
             className="w-full p-3 rounded-lg bg-black/50 text-white border border-purple-400 outline-none focus:ring-2 focus:ring-purple-500"
@@ -173,9 +216,15 @@ export default function Cadastro() {
             className="w-full p-3 rounded-lg bg-black/50 text-white border border-purple-400 outline-none focus:ring-2 focus:ring-purple-500"
           />
 
-          <Button className="w-full bg-gradient-to-r from-purple-500 to-purple-700 text-white py-3 rounded-lg font-medium">
+          {/* <Button className="w-full bg-gradient-to-r from-purple-500 to-purple-700 text-white py-3 rounded-lg font-medium">
             <Link to="/planos">Cadastrar</Link>
+          </Button> */}
+          <Button 
+          type="submit"
+           className="w-full bg-gradient-to-r from-purple-500 to-purple-700 text-white py-3 rounded-lg font-medium">
+            Cadastrar
           </Button>
+          
 
         </form>
 

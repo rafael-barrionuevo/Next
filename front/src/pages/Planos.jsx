@@ -44,10 +44,27 @@ import WW84Img from "../assets/ww84.jpg";
 import YourNameImg from "../assets/yourname.jpg";
 import ZootopiaImg from "../assets/zootopia.jpg";
 
+import { useDispatch } from "react-redux";
+import { setSubscription } from "../store/subscriptionSlice";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function Planos() {
 
-  const [planoSelecionado, setPlanoSelecionado] = useState(1);
+  const navigate = useNavigate();
+
+   const [planoSelecionado, setPlanoSelecionado] = useState(0);
+
+   /* Redux guarda o plano FINAL
+    useState controla o clique visual (UI)
+    Clique = UI (useState)
+    Confirmar = Redux (dispatch)
+ */
+
+  const dispatch = useDispatch();
+
+  const subscription = useSelector(state => state.subscription);
+  console.log("SUBSCRIPTION:", subscription);
 
   const images = [
      AttackOnTitanImg,
@@ -133,13 +150,14 @@ const planoAtual = planos[planoSelecionado];
 <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
 
   {/* IMAGENS */}
-   <div className="absolute inset-0 overflow-hidden w-full max-w-full">
+   <div className="absolute inset-0 overflow-hidden w-full max-w-full pointer-events-none ">
 
    <div className="
    grid grid-cols-6 md:grid-cols-8 gap-2
   rotate-12
  w-[120%] h-[120%]
 -translate-x-[10%] -translate-y-[10%]
+pointer-events-none 
 ">
       {images.map((img, index) => (
         <img
@@ -152,7 +170,7 @@ const planoAtual = planos[planoSelecionado];
   </div>
 
   {/* OVERLAY */}
-  <div className="absolute inset-0 bg-black/80"></div>
+  <div className="absolute inset-0 bg-black/80 pointer-events-none"></div>
 
 </div>
 
@@ -191,7 +209,10 @@ const planoAtual = planos[planoSelecionado];
 
             <div
               key={index}
-              onClick={() => setPlanoSelecionado(index)}
+              /* onClick={() => setPlanoSelecionado(index)} */
+              onClick={() => {
+                setPlanoSelecionado(index);;
+              }}
               className={`
                 p-4 sm:p-5 rounded-xl text-center cursor-pointer
                 transition duration-300 ease-in-out
@@ -254,11 +275,26 @@ const planoAtual = planos[planoSelecionado];
       </div>
 
    
-      <Link to="/pagamento" className="w-full max-w-xs">
-        <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg transition font-medium">
+      
+        <Button 
+        onClick={() => {
+          console.log("CLICOU");
+          console.log("PLANO SELECIONADO:", planos[planoSelecionado]);
+
+          // dispatch(setPlan(planos[planoSelecionado]));
+          dispatch(setSubscription({
+            tipo_plano: planos[planoSelecionado].nome
+          }));
+
+          
+          setTimeout(() => {
+             navigate("/pagamento");
+              }, 0);}}
+          
+          className="relative z-50 w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg transition font-medium">
           Selecionar plano
         </Button>
-      </Link>
+      
       </div> 
     </div>
   );
