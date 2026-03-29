@@ -132,7 +132,7 @@ export default function Planos() {
   {
     nome: "Premium",
     qualidade: "4K + HDR",
-    preco: "R$ 59,90",
+    preco: "R$ 54,90",
     download: "Sim",
     telas: "4 dispositivos",
     anuncios: "Não",

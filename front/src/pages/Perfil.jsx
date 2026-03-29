@@ -4,16 +4,30 @@ import PerfilMasculino from "../assets/perfil-masculino.png";
 
 import { useSelector } from "react-redux";
 
+import { useDispatch } from "react-redux";
+import { logout } from "../store/userSlice";
+import { useNavigate } from "react-router-dom";
+import Button from "../components/button";
+import { resetSubscription } from "../store/subscriptionSlice";
+
 export default function Perfil() {
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  function handleLogout(){
+    dispatch(logout());//limpa usuario do Redux
+    dispatch(resetSubscription());//limpa dados do usuario do Redux
+    localStorage.removeItem("appState"); //limpa localStorage
+    
+    navigate("/")
+  }
 
   const user = useSelector(state => state.user);
   const subscription = useSelector(state => state.subscription);
 
   console.log("USER:",user);
   console.log("SUBSCRIPTION",subscription);
-  
-
-
 
   // PERFIS
   const [perfis, setPerfis] = useState([
@@ -46,10 +60,18 @@ export default function Perfil() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-[#1f2a44] to-black text-white">
 
+  
+      <Button onClick={handleLogout} className="absolute top-4 right-4 bg-red-600 px-4 py-2 rounded hover:bg-red-700 transition">
+        Sair da conta
+      </Button>
+    
+
       {/* TÍTULO */}
       <h1 className="text-2xl font-semibold mb-10">
         Quem vai assistir?
       </h1>
+
+      
 
       {/* PERFIS */}
       <div className="flex gap-10 flex-wrap justify-center">

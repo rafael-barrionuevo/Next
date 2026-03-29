@@ -18,6 +18,7 @@ const userSlice = createSlice({
       state.isAuthenticated = true;
     },
     logout: (state) => {
+      state.id = null;
       state.nome = "",
       state.email = "",
       state.isAuthenticated = false;
@@ -26,7 +27,5 @@ const userSlice = createSlice({
 });
 
 export const { setUser, logout } = userSlice.actions;
-
-//como eu posso exportar o setUser e logout se eles estao dentro de userSlice ? eu n deveria fazer algo como userSlice.setUser e userSlice.logout ?
 
 export default userSlice.reducer;
