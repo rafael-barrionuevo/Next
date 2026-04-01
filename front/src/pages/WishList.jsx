@@ -1,6 +1,6 @@
 import React from 'react';
-import NavBar from './components/NavBar.jsx';
-import FooNavBar from './components/FooNavBar.jsx';
+import NavBar from '../components/NavBar.jsx';
+import FooNavBar from '../components/FooNavBar.jsx';
 function WishList(){
    const myWishlist = [
     { id: 1, title: 'Demon Slayer', imgUrl: 'https://picsum.photos/800/450/?blur?random=1' },

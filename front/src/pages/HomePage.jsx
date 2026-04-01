@@ -1,8 +1,7 @@
-import './HomePage.css'
-import NavBar from './components/NavBar.jsx'
-import FooNavBar from './components/FooNavBar.jsx'
-import Carousel from './components/Carousel.jsx'
-import ListCard from './components/ListCard.jsx'
+import NavBar from '../components/NavBar.jsx'
+import FooNavBar from '../components/FooNavBar.jsx'
+import Carousel from '../components/Carousel.jsx'
+import ListCard from '../components/ListCard.jsx'
 function HomePage() {
   const imgLink = [
     'https://picsum.photos/800/1200/?blur?random=1',
