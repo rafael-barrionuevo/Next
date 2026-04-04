@@ -8,5 +8,6 @@ routes.patch("/usuarios/:id", UsuarioController.atualizarPerfil);
 routes.post("/usuarios/:id/assinar", UsuarioController.atualizarAssinatura); 
 routes.patch("/usuarios/:id/lista", UsuarioController.addConteudoWishlist);
 routes.delete("/usuarios/:id/lista", UsuarioController.deletaConteudoWishlist);
+routes.post("/login", UsuarioController.login);
 
 module.exports = routes;

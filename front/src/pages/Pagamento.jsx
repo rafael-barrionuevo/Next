@@ -50,7 +50,7 @@ import ZootopiaImg from "../assets/zootopia.jpg";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { finalizarPagamento } from "../store/userSlice";
+import { atualizarPlano } from "../store/userSlice";
 
 
 export default function Pagamento() {
@@ -76,16 +76,21 @@ export default function Pagamento() {
     });
   }
 
-  // const subscription = useSelector(state => state.subscription);
-
-  // console.log("SUBSCRIPTION:", user.plano);
-
   const user = useSelector(state => state.user);
 
   const dispatch = useDispatch();
 
-  function handlePagamento() {
+  async function handlePagamento() {
+    console.log("USER:", user);
+    if (!user?.id) {
+      alert("Usuário não encontrado. Faça o cadastro ou login novamente.");
+      return;
+    }
 
+    if (!user.assinatura?.tipo_plano) {
+      alert("Selecione um plano antes de iniciar a assinatura.");
+      return;
+    }
  /*  // validação simples
   if (!numeroCartao || numeroCartao.length < 16) {
     alert("Cartão inválido");
@@ -101,17 +106,20 @@ export default function Pagamento() {
     alert("CVV inválido");
     return;
   } */
-
-  // salva no Redux
-  dispatch(finalizarPagamento({
-    id: user.id,
-    tipo_pagamento: "credito",
-  }));
-
-  console.log("pagamento feito com sucesso");
-
-  // redireciona
-  navigate("/perfil");
+try {
+    await dispatch(
+      atualizarPlano({
+        id: user.id,
+        tipo_plano: user.assinatura?.tipo_plano,
+        tipo_pagamento: "credito" // ou vindo do input
+      })
+    ).unwrap();
+     navigate("/perfil");
+    } catch (err) {
+    alert(err);
+  }
+  
+ 
 }
 
   const navigate = useNavigate();

@@ -45,7 +45,7 @@ import YourNameImg from "../assets/yourname.jpg";
 import ZootopiaImg from "../assets/zootopia.jpg";
 
 import { useDispatch } from "react-redux";
-import { atualizarPlano } from "../store/userSlice";
+import { selecionarPlano } from "../store/userSlice";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
  
@@ -59,17 +59,12 @@ export default function Planos() {
   const [planoSelecionado, setPlanoSelecionado] = useState(0);
   
 
-   /* Redux guarda o plano FINAL
-    useState controla o clique visual (UI)
-    Clique = UI (useState)
-    Confirmar = Redux (dispatch)
- */
 
   const dispatch = useDispatch();
 
   // const subscription = useSelector(state => state.subscription);
-  console.log("SUBSCRIPTION:", user.plano);
-
+  console.log("SUBSCRIPTION:", user.assinatura?.tipo_plano);
+ 
   const images = [
      AttackOnTitanImg,
      AvatarImg,
@@ -154,7 +149,7 @@ const planoAtual = planos[planoSelecionado];
 <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
 
     
-    <p>Plano: {user.plano}</p>
+    <p>Plano: {user.assinatura?.tipo_plano}</p>
 
 
   {/* IMAGENS */}
@@ -286,14 +281,12 @@ pointer-events-none
       
         <Button 
         onClick={() => {
-          console.log("CLICOU");
-          console.log("PLANO SELECIONADO:", planos[planoSelecionado]);
+          // console.log("CLICOU");
+          // console.log("PLANO SELECIONADO:", planos[planoSelecionado]);
 
           // dispatch(setPlan(planos[planoSelecionado]));
-          dispatch(atualizarPlano({
-            id: user.id,
-            tipo_plano: planos[planoSelecionado].nome
-          }));
+          dispatch(selecionarPlano(planos[planoSelecionado].nome));
+
 
           navigate("/pagamento");
             }}

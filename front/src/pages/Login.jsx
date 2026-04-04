@@ -60,7 +60,7 @@ export default function Login() {
   async function handleLogin(e){
      e.preventDefault();
 
-     console.log("1 - entrou");
+    //  console.log("1 - entrou");
 
     const result = await dispatch(loginUsuario({ email, senha }));
 

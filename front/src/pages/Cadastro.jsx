@@ -84,10 +84,10 @@ export default function Cadastro() {
     async function handleCadastro(e) {
   e.preventDefault();
 
-  console.log("1 - entrou");
+  // console.log("1 - entrou");
 
   try {
-    const result = await dispatch(cadastrarUsuario({ nome, email, senha })).unwrap();
+    const result = await dispatch(cadastrarUsuario({ nome, email,senha })).unwrap();
 
     console.log("2 - result:", result);
 

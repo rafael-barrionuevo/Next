@@ -6,10 +6,13 @@ export const cadastrarUsuario = createAsyncThunk(
   "user/cadastrarUsuario",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await api.post("/users", userData);
-      return response.data;
+      const response = await api.post("/usuarios", userData);
+      return response.data.user;
     } catch (err) {
-      return rejectWithValue("Erro ao cadastrar usuário",err);
+      console.error(err);
+      return rejectWithValue(
+        err.response?.data?.erro || "Erro ao cadastrar usuário"
+      );
     }
   }
 );
@@ -19,22 +22,14 @@ export const loginUsuario = createAsyncThunk(
   "user/loginUsuario",
   async ({ email, senha }, { rejectWithValue }) => {
     try {
-      const response = await api.get(`/users?email=${email}`);
-      const data = response.data;
-
-      if (data.length === 0) {
-        return rejectWithValue("Usuário não encontrado");
-      }
-
-      const user = data[0];
-
-      if (user.senha !== senha) {
-        return rejectWithValue("Senha incorreta");
-      }
-
-      return user;
+      /* const response = await api.get(`/users?email=${email}`); */
+      const response = await api.post("/login", { email, senha });
+      return response.data.user;
     } catch (err) {
-      return rejectWithValue("Erro no login",err);
+      console.error(err);
+      return rejectWithValue(
+        err.response?.data?.erro || "Erro no login"
+      );
     }
   }
 );
@@ -42,18 +37,24 @@ export const loginUsuario = createAsyncThunk(
 // ATUALIZAR PLANO
 export const atualizarPlano = createAsyncThunk(
   "user/atualizarPlano",
-  async ({ id, tipo_plano }, { rejectWithValue }) => {
+  async ({ id, tipo_plano,tipo_pagamento }, { rejectWithValue }) => {
     try {
-      const response = await api.patch(`/users/${id}`, {
-        tipo_plano
+      /* const response = await api.patch(`/users/${id}`, { */
+      const response = await api.post(`/usuarios/${id}/assinar`, {
+        tipo_plano,
+        tipo_pagamento
       });
 
-      return response.data;
+      return response.data.user;
     } catch (err) {
-      return rejectWithValue("Erro ao atualizar plano",err);
+      console.error(err);
+      return rejectWithValue(
+        err.response?.data?.erro || "Erro ao atualizar assinatura"
+      );
     }
   }
 );
+
     
     //aposentado pelo axios RIP
     /* {
@@ -72,7 +73,7 @@ export const atualizarPlano = createAsyncThunk(
   
 
 // FINALIZAR PAGAMENTO
-export const finalizarPagamento = createAsyncThunk(
+/* export const finalizarPagamento = createAsyncThunk(
   "user/finalizarPagamento",
   async ({ id, tipo_pagamento }, { rejectWithValue }) => {
     try {
@@ -86,7 +87,7 @@ export const finalizarPagamento = createAsyncThunk(
       return rejectWithValue("Erro ao finalizar pagamento",err);
     }
   }
-);
+); */
 
 //  STATE
 const initialState = {
@@ -94,10 +95,12 @@ const initialState = {
   nome: "",
   email: "",
 
-  tipo_plano: null,
-  tipo_pagamento: null,
-  status: "inativo", // status da assinatura
-
+  assinatura: {
+     tipo_plano: null,
+     tipo_pagamento: null,
+     status: "inativo"
+  },
+ 
   isAuthenticated: false,
   statusRequest: "idle", // estado das requisições
   error: null
@@ -108,14 +111,26 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    selecionarPlano: (state, action) => {
+      if (!state.assinatura) {
+        state.assinatura = {
+          tipo_plano: null,
+          tipo_pagamento: null,
+          status: "inativo"
+        };
+      }
+      state.assinatura.tipo_plano = action.payload;
+    },//usamos dispatch(selecionarPlano("premium")); sem chamar a API
     logout: (state) => {
       state.id = null;
       state.nome = "";
       state.email = "";
 
-      state.tipo_plano = null;
-      state.tipo_pagamento = null;
-      state.status = "inativo";
+      state.assinatura = {
+      tipo_plano: null,
+       tipo_pagamento: null,
+      status: "inativo"
+    } ;
 
       state.statusRequest = "idle";
       state.error = null;
@@ -131,12 +146,18 @@ const userSlice = createSlice({
       })
       .addCase(cadastrarUsuario.fulfilled, (state, action) => {
         state.statusRequest = "succeeded";
-        state.id = action.payload.id;
+        state.id = action.payload._id;
         state.nome = action.payload.nome;
         state.email = action.payload.email;
+        state.assinatura = action.payload.assinatura || {
+          tipo_plano: null,
+          tipo_pagamento: null,
+          status: "inativo"
+        };
         state.isAuthenticated = true;
         state.error = null;
       })
+      
       .addCase(cadastrarUsuario.rejected, (state, action) => {
         state.statusRequest = "failed";
         state.error = action.payload || action.error.message;
@@ -148,13 +169,16 @@ const userSlice = createSlice({
       })
       .addCase(loginUsuario.fulfilled, (state, action) => {
         state.statusRequest = "succeeded";
-        state.id = action.payload.id;
+        state.id = action.payload._id;
         state.nome = action.payload.nome;
         state.email = action.payload.email;
 
-        state.tipo_plano = action.payload.tipo_plano || null;
-        state.tipo_pagamento = action.payload.tipo_pagamento || null;
-        state.status = action.payload.status || "inativo";
+         state.assinatura = action.payload.assinatura || {
+          tipo_plano: null,
+          tipo_pagamento: null,
+            status: "inativo"
+          };
+       
 
         state.isAuthenticated = true;
         state.error = null;
@@ -166,17 +190,17 @@ const userSlice = createSlice({
 
       // PLANO
       .addCase(atualizarPlano.fulfilled, (state, action) => {
-        state.tipo_plano = action.payload.tipo_plano;
+        state.assinatura = action.payload.assinatura;
       })
 
       // PAGAMENTO
-      .addCase(finalizarPagamento.fulfilled, (state, action) => {
+      /* .addCase(finalizarPagamento.fulfilled, (state, action) => {
         state.tipo_pagamento = action.payload.tipo_pagamento;
         state.status = action.payload.status;
-      });
+      }); */
   }
 });
 
 // EXPORTS
-export const { logout } = userSlice.actions;
+export const { logout, selecionarPlano } = userSlice.actions;
 export default userSlice.reducer;

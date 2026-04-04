@@ -1,6 +1,25 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./userSlice";
 
+const DEFAULT_ASSINATURA = {
+  tipo_plano: null,
+  tipo_pagamento: null,
+  status: "inativo"
+};
+
+const normalizeState = (state) => {
+  if (!state || typeof state !== "object") return undefined;
+  if (!state.user || typeof state.user !== "object") return undefined;
+
+  return {
+    ...state,
+    user: {
+      ...state.user,
+      assinatura: state.user.assinatura ?? DEFAULT_ASSINATURA
+    }
+  };
+};
+
 
 //store
 
@@ -13,7 +32,7 @@ const loadState = () => {
 
     if(!serializedState) return undefined;
 
-    return JSON.parse(serializedState);
+    return normalizeState(JSON.parse(serializedState));
     
   }catch  {
     return undefined;
@@ -44,7 +63,6 @@ store.subscribe(() => {
     
     localStorage.setItem("appState", JSON.stringify({//salva no localStorage
       user: state.user,
-      subscription: state.subscription
       
     }));
   }catch {

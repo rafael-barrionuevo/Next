@@ -26,7 +26,7 @@ export default function Perfil() {
   const user = useSelector(state => state.user);
   // const subscription = useSelector(state => state.subscription);
 
-  console.log("USER:",user);
+  // console.log("USER:",user);
   // console.log("SUBSCRIPTION",subscription);
 
   // PERFIS
@@ -76,7 +76,7 @@ export default function Perfil() {
       </p>
 
       <p className="mb-6 text-gray-300">
-        Plano: {user.tipo_plano || "Nenhum plano selecionado"}
+        Plano: {user.assinatura?.tipo_plano  || "Nenhum plano selecionado"}
       </p>
 
       {/* PERFIS */}

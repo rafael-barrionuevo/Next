@@ -1,14 +1,4 @@
 {
-  "users": [
-    {
-      "nome": "teste2",
-      "email": "teste2@gmail.com",
-      "senha": "teste2@gmail.com",
-      "id": "MyJBBUmh2fI",
-      "tipo_plano": "Básico",
-      "tipo_pagamento": "credito",
-      "status": "ativo"
-    }
-  ],
+  "users": [],
   "$schema": "./node_modules/json-server/schema.json"
 }
