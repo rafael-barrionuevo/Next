@@ -45,15 +45,19 @@ import YourNameImg from "../assets/yourname.jpg";
 import ZootopiaImg from "../assets/zootopia.jpg";
 
 import { useDispatch } from "react-redux";
-import { setSubscription } from "../store/subscriptionSlice";
+import { atualizarPlano } from "../store/userSlice";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+ 
+
 
 export default function Planos() {
 
   const navigate = useNavigate();
 
-   const [planoSelecionado, setPlanoSelecionado] = useState(0);
+  const user = useSelector(state => state.user);
+  const [planoSelecionado, setPlanoSelecionado] = useState(0);
+  
 
    /* Redux guarda o plano FINAL
     useState controla o clique visual (UI)
@@ -63,8 +67,8 @@ export default function Planos() {
 
   const dispatch = useDispatch();
 
-  const subscription = useSelector(state => state.subscription);
-  console.log("SUBSCRIPTION:", subscription);
+  // const subscription = useSelector(state => state.subscription);
+  console.log("SUBSCRIPTION:", user.plano);
 
   const images = [
      AttackOnTitanImg,
@@ -148,6 +152,10 @@ const planoAtual = planos[planoSelecionado];
 
     {/* FUNDO + OVERLAY */}
 <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+
+    
+    <p>Plano: {user.plano}</p>
+
 
   {/* IMAGENS */}
    <div className="absolute inset-0 overflow-hidden w-full max-w-full pointer-events-none ">
@@ -282,14 +290,13 @@ pointer-events-none
           console.log("PLANO SELECIONADO:", planos[planoSelecionado]);
 
           // dispatch(setPlan(planos[planoSelecionado]));
-          dispatch(setSubscription({
+          dispatch(atualizarPlano({
+            id: user.id,
             tipo_plano: planos[planoSelecionado].nome
           }));
 
-          
-          setTimeout(() => {
-             navigate("/pagamento");
-              }, 0);}}
+          navigate("/pagamento");
+            }}
           
           className="relative z-50 w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg transition font-medium">
           Selecionar plano

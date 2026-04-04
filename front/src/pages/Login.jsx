@@ -44,7 +44,38 @@ import WW84Img from "../assets/ww84.jpg";
 import YourNameImg from "../assets/yourname.jpg";
 import ZootopiaImg from "../assets/zootopia.jpg";
 
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { loginUsuario } from "../store/userSlice.js";
+import { useState } from "react";
+
 export default function Login() {
+
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState(""); 
+  
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  async function handleLogin(e){
+     e.preventDefault();
+
+     console.log("1 - entrou");
+
+    const result = await dispatch(loginUsuario({ email, senha }));
+
+
+    console.log("2 - result:", result);
+    
+    
+    if (result.type === "user/loginUsuario/fulfilled") {
+      console.log("3 - sucesso");
+      navigate("/perfil");
+    }else{
+      console.log("4 - erro:", result.payload);
+      alert(result.payload);
+    }
+  };
 
   
     const images = [
@@ -151,17 +182,19 @@ export default function Login() {
 
         <img src={Logo} className="w-36 sm:w-32 mx-auto mb-6 sm:mb-8" alt="Next Logo" />
 
-        <form className="space-y-4">
+        <form onSubmit={handleLogin} className="space-y-4">
 
           <InputField
             type="email"
             placeholder="E-mail"
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full p-3 rounded-lg bg-black/50 text-white placeholder-gray-400 outline-none focus:ring-2 focus:ring-purple-500 border border-purple-400"
           />
 
           <InputField
             type="password"
             placeholder="Senha"
+            onChange={(e) => setSenha(e.target.value)}
             className="w-full p-3 rounded-lg bg-black/50 text-white placeholder-gray-400 outline-none focus:ring-2 focus:ring-purple-500 border border-purple-400"
           />
 

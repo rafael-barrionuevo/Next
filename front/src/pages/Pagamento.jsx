@@ -50,7 +50,8 @@ import ZootopiaImg from "../assets/zootopia.jpg";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setSubscription } from "../store/subscriptionSlice";
+import { finalizarPagamento } from "../store/userSlice";
+
 
 export default function Pagamento() {
   const [cardData, setCardData] = useState({
@@ -75,11 +76,11 @@ export default function Pagamento() {
     });
   }
 
-  const subscription = useSelector(state => state.subscription);
+  // const subscription = useSelector(state => state.subscription);
 
-  console.log("SUBSCRIPTION:", subscription);
+  // console.log("SUBSCRIPTION:", user.plano);
 
-  
+  const user = useSelector(state => state.user);
 
   const dispatch = useDispatch();
 
@@ -102,10 +103,9 @@ export default function Pagamento() {
   } */
 
   // salva no Redux
-  dispatch(setSubscription({
-    tipo_plano: subscription.tipo_plano,
+  dispatch(finalizarPagamento({
+    id: user.id,
     tipo_pagamento: "credito",
-    status: "ativo"
   }));
 
   console.log("pagamento feito com sucesso");
