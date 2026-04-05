@@ -115,6 +115,23 @@ class UsuarioService {
     }
     return user;
   }
+
+  //login
+  async login(email, senha) {
+  const user = await Usuario.findOne({ email });
+
+  if (!user) {
+    throw new Error("Usuário não encontrado");
+  }
+
+  const senhaValida = await bcrypt.compare(senha, user.senha);
+
+  if (!senhaValida) {
+    throw new Error("Senha incorreta");
+  }
+
+  return user;
+  }
 }
 
 module.exports = new UsuarioService();

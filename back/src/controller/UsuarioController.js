@@ -140,6 +140,24 @@ class UsuarioController {
     }
   }
 
+  async login(req, res) {
+    try {
+      const { email, senha } = req.body;
+
+      if (!email || !senha) {
+        return res.status(400).json({ erro: "Email e senha são obrigatórios." });
+      }
+
+      const usuario = await UsuarioService.login(email, senha);
+      return res.status(200).json({
+        message: "Login realizado com sucesso!",
+        user: usuario
+      });
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
+    }
+  }
+
 }
 
 module.exports = new UsuarioController();
