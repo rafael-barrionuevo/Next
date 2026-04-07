@@ -24,7 +24,7 @@ export const loginUsuario = createAsyncThunk(
     try {
       /* const response = await api.get(`/users?email=${email}`); */
       const response = await api.post("/login", { email, senha });
-      return response.data.user;
+      return response.data.usuario;
     } catch (err) {
       console.error(err);
       return rejectWithValue(
@@ -178,11 +178,11 @@ const userSlice = createSlice({
       })
       .addCase(loginUsuario.fulfilled, (state, action) => {
         state.statusRequest = "succeeded";
-        state.id = action.payload._id;
-        state.nome = action.payload.nome;
-        state.email = action.payload.email;
+        state.id = action.payload?._id || null;
+        state.nome = action.payload?.nome || "";
+        state.email = action.payload?.email || "";
 
-         state.assinatura = action.payload.assinatura || {
+         state.assinatura = action.payload?.assinatura || {
           tipo_plano: null,
           tipo_pagamento: null,
             status: "inativo"
