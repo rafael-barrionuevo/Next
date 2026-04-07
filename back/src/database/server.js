@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const path = require("path");
 const cors = require("cors");
 const connectDB = require("./index");
 const fileUpload = require("express-fileupload");
@@ -11,7 +12,7 @@ connectDB();
 
 const app = express();
 
-app.use("uploads", express.static("../../uploads"));
+app.use("/uploads", express.static(path.resolve(__dirname, "../../uploads")));
 app.use(cors());
 app.use(express.json()); 
 app.use(fileUpload()); 

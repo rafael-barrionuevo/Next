@@ -46,9 +46,9 @@ import YourNameImg from "../assets/yourname.jpg";
 import ZootopiaImg from "../assets/zootopia.jpg";
 
 import { useDispatch } from "react-redux";
-import { setUser } from "../store/userSlice";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { cadastrarUsuario } from "../store/userSlice";
 
 export default function Cadastro() {
 
@@ -56,12 +56,13 @@ export default function Cadastro() {
   //criando os estados
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
 
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  function handleCadastro(e){
+  /* function handleCadastro(e){
     e.preventDefault(); // MUITO IMPORTANTE (form)
 
     //testar o forms
@@ -69,15 +70,35 @@ export default function Cadastro() {
     console.log("Nome:", nome);
     console.log("Email:", email);
 
-    dispatch(setUser({ 
+     dispatch(setUser({ 
       id: Date.now(),
       nome, 
-      email}));
+      email})); 
+      
 
     console.log("DEPOIS DO DISPATCH");
 
     navigate("/planos");
+  } */
+
+    async function handleCadastro(e) {
+  e.preventDefault();
+
+  // console.log("1 - entrou");
+
+  try {
+    const result = await dispatch(cadastrarUsuario({ nome, email,senha })).unwrap();
+
+    console.log("2 - result:", result);
+
+    navigate("/planos");
+
+  } catch (err) {
+    console.error("ERRO:", err);
   }
+
+  console.log("3 - fim");
+}
 
   //testar se o Redux está funcionando
   const user = useSelector(state => state.user);
@@ -211,6 +232,7 @@ export default function Cadastro() {
           />
 
           <InputField
+            onChange={(e)=> setSenha(e.target.value)}
             type="password"
             placeholder="Senha"
             className="w-full p-3 rounded-lg bg-black/50 text-white border border-purple-400 outline-none focus:ring-2 focus:ring-purple-500"
@@ -219,11 +241,11 @@ export default function Cadastro() {
           {/* <Button className="w-full bg-gradient-to-r from-purple-500 to-purple-700 text-white py-3 rounded-lg font-medium">
             <Link to="/planos">Cadastrar</Link>
           </Button> */}
-          <Button 
+          <button 
           type="submit"
            className="w-full bg-gradient-to-r from-purple-500 to-purple-700 text-white py-3 rounded-lg font-medium">
             Cadastrar
-          </Button>
+          </button>
           
 
         </form>

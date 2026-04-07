@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { logout } from "../store/userSlice";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/button";
-import { resetSubscription } from "../store/subscriptionSlice";
+
 
 export default function Perfil() {
 
@@ -17,17 +17,17 @@ export default function Perfil() {
 
   function handleLogout(){
     dispatch(logout());//limpa usuario do Redux
-    dispatch(resetSubscription());//limpa dados do usuario do Redux
+    // dispatch(resetSubscription());//limpa dados do usuario do Redux
     localStorage.removeItem("appState"); //limpa localStorage
     
     navigate("/")
   }
 
   const user = useSelector(state => state.user);
-  const subscription = useSelector(state => state.subscription);
+  // const subscription = useSelector(state => state.subscription);
 
-  console.log("USER:",user);
-  console.log("SUBSCRIPTION",subscription);
+  // console.log("USER:",user);
+  // console.log("SUBSCRIPTION",subscription);
 
   // PERFIS
   const [perfis, setPerfis] = useState([
@@ -71,7 +71,13 @@ export default function Perfil() {
         Quem vai assistir?
       </h1>
 
-      
+      <p className="mb-6 text-gray-300">
+        Usuário: {user.nome} ({user.email})
+      </p>
+
+      <p className="mb-6 text-gray-300">
+        Plano: {user.assinatura?.tipo_plano  || "Nenhum plano selecionado"}
+      </p>
 
       {/* PERFIS */}
       <div className="flex gap-10 flex-wrap justify-center">
