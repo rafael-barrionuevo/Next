@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Logo from "../assets/LogoNext.png";
 import React, { useState } from 'react';
 
-// Filmes / séries
+// Filmes / sÃ©ries
 import JohnWickImg from "../assets/John-Wick.jpg";
 import MatrixImg from "../assets/The-Matrix.jpg";
 import AlquimiaImg from "../assets/alquimia-das-almas.jpg";
@@ -55,6 +55,8 @@ export default function Cadastro() {
   //useState -> REDUX
   //criando os estados
   const [nome, setNome] = useState("");
+  const [sobrenome, setSobrenome] = useState("");
+  const [dataNascimento, setDataNascimento] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
@@ -87,7 +89,7 @@ export default function Cadastro() {
   // console.log("1 - entrou");
 
   try {
-    const result = await dispatch(cadastrarUsuario({ nome, email,senha })).unwrap();
+    const result = await dispatch(cadastrarUsuario({ nome, sobrenome, email, senha, data_nascimento: dataNascimento })).unwrap();
 
     console.log("2 - result:", result);
 
@@ -100,7 +102,7 @@ export default function Cadastro() {
   console.log("3 - fim");
 }
 
-  //testar se o Redux está funcionando
+  //testar se o Redux estÃ¡ funcionando
   const user = useSelector(state => state.user);
 
   console.log("REDUX:", user);
@@ -153,7 +155,7 @@ export default function Cadastro() {
     <div className="relative min-h-screen flex flex-col items-center justify-center bg-black overflow-hidden px-4 pb-16 sm:pb-24">
 
       
-      {/*  FUNDO PADRÃO */}
+      {/*  FUNDO PADRÃƒO */}
 <div className="absolute inset-0 overflow-hidden">
 
   {/*  MOBILE */}
@@ -219,6 +221,19 @@ export default function Cadastro() {
           />
 
           <InputField
+            onChange={(e) => setSobrenome(e.target.value)}
+            type="text"
+            placeholder="Sobrenome"
+            className="w-full p-3 rounded-lg bg-black/50 text-white border border-purple-400 outline-none focus:ring-2 focus:ring-purple-500"
+          />
+
+          <InputField
+            onChange={(e) => setDataNascimento(e.target.value)}
+            type="date"
+            className="w-full p-3 rounded-lg bg-black/50 text-white border border-purple-400 outline-none focus:ring-2 focus:ring-purple-500"
+          />
+
+          <InputField
             onChange={(e) => setEmail(e.target.value)}
             type="email"
             placeholder="E-mail"
@@ -251,7 +266,7 @@ export default function Cadastro() {
         </form>
 
         <p className="text-gray-300 text-bases text-center mt-6">
-          Já tem conta?
+          JÃ¡ tem conta?
           <Link to="/login" className="text-purple-400 ml-1">
             Entrar
           </Link>
