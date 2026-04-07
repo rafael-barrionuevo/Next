@@ -2,48 +2,8 @@ import Button from "../components/button";
 import InputField from "../components/inputField";
 import { Link } from "react-router-dom";
 import Logo from "../assets/LogoNext.png";
-import React, { useState } from 'react';
-
-// Filmes / sÃ©ries
-import JohnWickImg from "../assets/John-Wick.jpg";
-import MatrixImg from "../assets/The-Matrix.jpg";
-import AlquimiaImg from "../assets/alquimia-das-almas.jpg";
-import AttackOnTitanImg from "../assets/Attack-on-Titan.jpg";
-import AvatarImg from "../assets/Avatar.jpg";
-import BatmanImg from "../assets/batman.jpg";
-import BreakingBadImg from "../assets/breaking-bad.jpg";
-import DarkImg from "../assets/Dark.jpg";
-import DevoradoresDeEstrelasImg from "../assets/devoradoresDeEstrelas.jpg";
-import FullmetalImg from "../assets/Fullmetal-Alchemist-Brotherhood.jpg";
-import GameOfThronesImg from "../assets/game-of-thrones.jpg";
-import GladiatorImg from "../assets/Gladiator.jpg";
-import HoraDoMalImg from "../assets/horaDoMal.jpg";
-import HouseDragonImg from "../assets/House-of-the-Dragon.jpg";
-import InceptionImg from "../assets/Inception.jpg";
-import InterestelarImg from "../assets/interestelar.jpg";
-import InvocacaoImg from "../assets/invoca.jpg";
-import JogadorN1Img from "../assets/jogadorn1.jpg";
-import JujutsuImg from "../assets/jujutsuKaisen.jpg";
-import MadMaxImg from "../assets/Mad-Max.jpg";
-import MartyImg from "../assets/martySupreme.jpg";
-import OnePieceImg from "../assets/onePiece.jpg";
-import PeakyBlindersImg from "../assets/Peaky-Blinders.jpg";
-import SpiritedAwayImg from "../assets/Spirited-Away.jpg";
-import StarWarsImg from "../assets/starwars.jpg";
-import StrangerThingsImg from "../assets/stranger-things.jpg";
-import The100Img from "../assets/the-100.jpg";
-import TheCrownImg from "../assets/the-crown.jpg";
-import LastOfUsImg from "../assets/The-Last-of-Us.jpg";
-import MandalorianImg from "../assets/The-Mandalorian.jpg";
-import RevenantImg from "../assets/The-Revenant.jpg";
-import WitcherImg from "../assets/The-Witcher.jpg";
-import TheBoysImg from "../assets/theboys.jpg";
-import GodfatherImg from "../assets/theGodfather.jpg";
-import TitanicImg from "../assets/Titanic.jpg";
-import VikingsImg from "../assets/Vikings.jpg";
-import WW84Img from "../assets/ww84.jpg";
-import YourNameImg from "../assets/yourname.jpg";
-import ZootopiaImg from "../assets/zootopia.jpg";
+import React, { useState } from "react";
+import posterImages from "../constants/posterImages";
 
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -83,114 +43,72 @@ export default function Cadastro() {
     navigate("/planos");
   } */
 
-    async function handleCadastro(e) {
-  e.preventDefault();
+  async function handleCadastro(e) {
+    e.preventDefault();
 
-  // console.log("1 - entrou");
+    // console.log("1 - entrou");
 
-  try {
-    const result = await dispatch(cadastrarUsuario({ nome, sobrenome, email, senha, data_nascimento: dataNascimento })).unwrap();
+    try {
+      const result = await dispatch(cadastrarUsuario({ nome, sobrenome, email, senha, data_nascimento: dataNascimento })).unwrap();
 
-    console.log("2 - result:", result);
+      console.log("2 - result:", result);
 
-    navigate("/planos");
+      navigate("/planos");
 
-  } catch (err) {
-    console.error("ERRO:", err);
+    } catch (err) {
+      console.error("ERRO:", err);
+    }
+
+    console.log("3 - fim");
   }
 
-  console.log("3 - fim");
-}
-
-  //testar se o Redux estÃ¡ funcionando
+  //testar se o Redux está funcionando
   const user = useSelector(state => state.user);
 
   console.log("REDUX:", user);
 
   // console.log(nome, email);
 
-  const images = [
-      AttackOnTitanImg,
-      AvatarImg,
-      DarkImg,
-      FullmetalImg,
-      GladiatorImg,
-      HouseDragonImg,
-      InceptionImg,
-      JohnWickImg,
-      MadMaxImg,
-      MartyImg,
-      PeakyBlindersImg,
-      SpiritedAwayImg,
-      MatrixImg,
-      LastOfUsImg,
-      MandalorianImg,
-      RevenantImg,
-      WitcherImg,
-      TitanicImg,
-      VikingsImg,
-      BatmanImg,
-      BreakingBadImg,
-      DevoradoresDeEstrelasImg,
-      GameOfThronesImg,
-      HoraDoMalImg,
-      InterestelarImg,
-      JujutsuImg,
-      OnePieceImg,
-      StarWarsImg,
-      StrangerThingsImg,
-      The100Img,
-      TheBoysImg,
-      GodfatherImg,
-      WW84Img,
-      YourNameImg,
-      ZootopiaImg,
-      TheCrownImg,
-      JogadorN1Img,
-      InvocacaoImg,
-      AlquimiaImg,
-      ];
-
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center bg-black overflow-hidden px-4 pb-16 sm:pb-24">
 
       
-      {/*  FUNDO PADRÃƒO */}
-<div className="absolute inset-0 overflow-hidden">
+      {/*  FUNDO PADRAO */}
+      <div className="absolute inset-0 overflow-hidden">
 
-  {/*  MOBILE */}
-  <div className="absolute inset-0 flex items-center justify-center md:hidden">
-    <div className="grid grid-cols-4 gap-2 rotate-12 scale-125">
-      {images.map((img, index) => (
-        <img
-          key={index}
-          src={img}
-          className="w-24 h-36 object-cover"
-        />
-      ))}
-    </div>
-  </div>
+        {/*  MOBILE */}
+        <div className="absolute inset-0 flex items-center justify-center md:hidden">
+          <div className="grid grid-cols-4 gap-2 rotate-12 scale-125">
+            {posterImages.map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                className="w-24 h-36 object-cover"
+              />
+            ))}
+          </div>
+        </div>
 
-  {/*  DESKTOP */}
-  <div className="hidden md:block absolute inset-0 overflow-hidden">
-    <div className="
-      grid grid-cols-6 md:grid-cols-8 gap-2
-      rotate-12
-      w-[120%]
-      -translate-x-[10%]
-    ">
-      {images.map((img, index) => (
-        <img
-          key={index}
-          src={img}
-          className="w-full h-full object-cover"
-        />
-      ))}
-    </div>
-  </div>
-</div>
-  {/* OVERLAY */}
-  <div className="absolute inset-0 bg-black/80"></div>
+        {/*  DESKTOP */}
+        <div className="hidden md:block absolute inset-0 overflow-hidden">
+          <div className="
+            grid grid-cols-6 md:grid-cols-8 gap-2
+            rotate-12
+            w-[120%]
+            -translate-x-[10%]
+          ">
+            {posterImages.map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                className="w-full h-full object-cover"
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+      {/* OVERLAY */}
+      <div className="absolute inset-0 bg-black/80"></div>
 
   
       <div className="
@@ -266,7 +184,7 @@ export default function Cadastro() {
         </form>
 
         <p className="text-gray-300 text-bases text-center mt-6">
-          JÃ¡ tem conta?
+          Ja tem conta?
           <Link to="/login" className="text-purple-400 ml-1">
             Entrar
           </Link>
