@@ -28,6 +28,7 @@ class UsuarioController {
         sobrenome,
         email,
         senha,
+        role: 'user',
         data_nascimento,
         foto: imagePath
       };
@@ -43,10 +44,10 @@ class UsuarioController {
     }
   }
 
-  // PATCH /usuarios/:id (Atualizar Perfil)
+  // PATCH /usuarios/changeprofile (Atualizar Perfil)
   async atualizarPerfil(req, res) {
     try {
-      const { id } = req.params;
+      const id = req.id;
       const { nome, 
         sobrenome, 
         data_nascimento } = req.body || {};
@@ -81,12 +82,12 @@ class UsuarioController {
     }
   }
 
-  // POST /usuarios/:id/assinar (Lógica de Assinatura)
+  // POST /usuarios/assinar (Lógica de Assinatura)
   // Melhorar a logica de assinatura depois, 
   // talvez um webhook de pagamento, pedir email e nome do usuário para o pagamento, etc
   async atualizarAssinatura(req, res) {
     try {
-      const { id } = req.params;
+      const id = req.id;
       const { tipo_plano, tipo_pagamento } = req.body;
 
       if (!tipo_plano || !tipo_pagamento) {
@@ -104,20 +105,20 @@ class UsuarioController {
     }
   }
 
-  // GET /usuarios/:id
+  // GET /usuarios/me (Obter dados do usuário autenticado)
   async getUsuarioById(req, res) {
     try {
-      const user = await UsuarioService.getUsuarioById(req.params.id);
+      const user = await UsuarioService.getUsuarioById(req.id);
       return res.json(user);
     } catch (error) {
       return res.status(404).json({ error: error.message });
     }
   }
 
-  // PATCH /usuarios/:id/lista
+  // PATCH /usuarios/lista
   async addConteudoWishlist(req, res) {
     try {
-      const { id } = req.params;
+      const id = req.id; 
       const { conteudoId } = req.body;
       const updatedUser = await UsuarioService.addConteudoWishlist(id, conteudoId);
       return res.json(updatedUser);
@@ -126,10 +127,10 @@ class UsuarioController {
     }
   }
 
-  // DELETE /usuarios/:id/lista
+  // DELETE /usuarios/lista
   async deletaConteudoWishlist(req, res) {
     try {
-      const { id } = req.params;
+      const id = req.id;
       const { conteudoId } = req.body;
 
       const result = await UsuarioService.deletaConteudoWishlist(id, conteudoId);
@@ -140,6 +141,21 @@ class UsuarioController {
     }
   }
 
+  async login(req, res) {
+    try {
+      const { email, senha } = req.body;
+
+      if (!email || !senha) {
+        return res.status(400).json({ erro: "E-mail e senha são obrigatórios." });
+      }
+
+      const result = await UsuarioService.login(email, senha);
+      
+      return res.json(result);
+    } catch (e) {
+      return res.status(401).json({ erro: e.message });
+    }
+  }
 }
 
 module.exports = new UsuarioController();

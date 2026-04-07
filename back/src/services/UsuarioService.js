@@ -1,5 +1,6 @@
 const Usuario = require("../models/Usuario");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 class UsuarioService {
   async criarUsuario(userData) {
@@ -114,6 +115,28 @@ class UsuarioService {
       throw new Error("Usuário não encontrado.");
     }
     return user;
+  }
+
+  async login(email, senha) {
+    const user = await Usuario.findOne({ email });
+
+    if (!user) {
+      throw new Error("Usuário não encontrado.");
+    }
+
+    const compara = bcrypt.compareSync(senha, user.senha);
+    if (!compara) {
+      throw new Error("E-mail ou senha incorretos.");
+    }
+
+    const payload = {
+      id: user._id,
+      role: user.role
+    };
+
+    const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: "24h" });
+
+    return { token, usuario: { nome: user.nome, email: user.email } };
   }
 }
 

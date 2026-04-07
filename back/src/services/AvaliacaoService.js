@@ -2,6 +2,7 @@ const Avaliacao = require("../models/Avaliacao");
 const Usuario = require("../models/Usuario");
 
 class AvaliacaoService {
+  // Criar uma nova avaliação
   async criarAvaliacao(dados) {
     const { usuarioId, conteudoId, nota, comentario } = dados;
 
@@ -17,19 +18,25 @@ class AvaliacaoService {
         comentario
       });
     } catch (error) {
+      // Erro 11000 indica violação de índice único (um user só avalia um conteúdo uma vez)
       if (error.code === 11000) throw new Error("Você já avaliou este conteúdo!");
       throw error;
     }
   }
 
+  // Listar avaliações de um conteúdo específico
   async listarAvaliacoes(idConteudo) {
     return await Avaliacao.find({ conteudoId: idConteudo }).sort({ data: -1 });
   }
 
-  async alterarAvaliacao(avaliacaoId, novosDados) {
+  // Alterar uma avaliação existente
+  async alterarAvaliacao(avaliacaoId, usuarioId, novosDados) {
     const avaliacaoExistente = await Avaliacao.findById(avaliacaoId);
     if (!avaliacaoExistente) {
       throw new Error("Avaliação não encontrada.");
+    }
+    if (!avaliacaoExistente.usuarioId.equals(usuarioId)) {
+      throw new Error("Você não tem permissão para alterar esta avaliação.");
     }
     const { nota, comentario } = novosDados;
     if (nota !== undefined) {
@@ -40,22 +47,25 @@ class AvaliacaoService {
     if (comentario !== undefined && comentario.length > 500) {
       throw new Error("O comentário não pode exceder 500 caracteres.");
     }
-    // Mongoose também checa os tipos e limites definidos no schema (no validate), mas é bom validar antes para saber onde falhou
-    const avaliacaoAtualizada = await Avaliacao.findByIdAndUpdate(
+
+    return await Avaliacao.findByIdAndUpdate(
       avaliacaoId,
       { $set: novosDados },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true } // runValidators garante que o Schema também valide
     );
-
-    return avaliacaoAtualizada;
   }
 
-  async deletarAvaliacao(avaliacaoId) {
-    const deletado = await Avaliacao.findByIdAndDelete(avaliacaoId);
-    if (!deletado) {
-      throw new Error("Erro ao deletar: Avaliação não encontrada.");
+  // Deletar uma avaliação
+  async deletarAvaliacao(avaliacaoId, usuarioId) {
+    const avaliacao = await Avaliacao.findById(avaliacaoId);
+    if (!avaliacao) {
+      throw new Error("Avaliação não encontrada.");
     }
-    return deletado;
+    if (!avaliacao.usuarioId.equals(usuarioId)) {
+      throw new Error("Você não tem permissão para deletar esta avaliação.");
+    }
+
+    return await Avaliacao.findByIdAndDelete(avaliacaoId);
   }
 }
 

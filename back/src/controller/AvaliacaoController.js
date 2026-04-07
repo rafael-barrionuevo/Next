@@ -3,10 +3,10 @@ const AvaliacaoService = require("../services/AvaliacaoService");
 class AvaliacaoController {
   async criarAvaliacao(req, res) {
     try {
-      const { usuarioId, conteudoId, nota, comentario } = req.body;
+      const { conteudoId, nota, comentario } = req.body;
 
       const dadosAvaliacao = {
-        usuarioId,
+        usuarioId: req.id, // Injeta o ID do token
         conteudoId,
         nota: parseInt(nota), 
         comentario
@@ -32,19 +32,21 @@ class AvaliacaoController {
   // PATCH /avaliacoes/:id
   async alterarAvaliacao(req, res) {
     try {
-      const { id } = req.params;
+      const { id } = req.params; // ID da avaliação
       const { nota, comentario } = req.body;
+      const usuarioId = req.id; // Quem está tentando alterar
 
-      // Desacoplamento: Apenas nota e comentário podem ser editados
       const dadosParaAtualizar = {
         ...(nota !== undefined && { nota: parseInt(nota) }),
         ...(comentario !== undefined && { comentario })
       };
 
-      const avaliacao = await AvaliacaoService.alterarAvaliacao(id, dadosParaAtualizar);
+      const avaliacao = await AvaliacaoService.alterarAvaliacao(id, usuarioId, dadosParaAtualizar);
+      
       return res.json({ message: "Avaliação alterada!", avaliacao });
     } catch (error) {
-      return res.status(400).json({ error: error.message });
+      const status = error.message.includes("permissão") ? 403 : 400;
+      return res.status(status).json({ error: error.message });
     }
   }
 
@@ -52,10 +54,14 @@ class AvaliacaoController {
   async deletarAvaliacao(req, res) {
     try {
       const { id } = req.params;
-      await AvaliacaoService.deletarAvaliacao(id);
+      const usuarioId = req.id; // Quem está tentando deletar
+
+      await AvaliacaoService.deletarAvaliacao(id, usuarioId);
+      
       return res.json({ message: "Avaliação removida com sucesso!" });
     } catch (error) {
-      return res.status(404).json({ error: error.message });
+      const status = error.message.includes("permissão") ? 403 : 404;
+      return res.status(status).json({ error: error.message });
     }
   }
 }
