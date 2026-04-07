@@ -7,6 +7,7 @@ const fileUpload = require("express-fileupload");
 const ConteudoRoutes = require("../routes/ConteudoRoutes");
 const UsuarioRoutes = require("../routes/UsuarioRoutes");
 const AvaliacaoRoutes = require("../routes/AvaliacaoRoutes");
+
 connectDB();
 
 const app = express();

@@ -7,7 +7,7 @@ const UsuarioSchema = new mongoose.Schema({
   senha: { type: String, required: true },
   foto: { type: String },
   data_nascimento: Date,
-  
+  role: { type: String, default: 'user' },
   lista_desejos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Conteudo' }], // Array que referencia objetos de Conteudo
 
   assinatura: {

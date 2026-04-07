@@ -1,13 +1,14 @@
 const express = require("express");
 const routes = express.Router();
 const UsuarioController = require("../controller/UsuarioController");
+const auth = require("../middleware/auth");
 
 routes.post("/usuarios", UsuarioController.criarUsuario);
-routes.get("/usuarios/:id", UsuarioController.getUsuarioById);
-routes.patch("/usuarios/:id", UsuarioController.atualizarPerfil); 
-routes.post("/usuarios/:id/assinar", UsuarioController.atualizarAssinatura); 
-routes.patch("/usuarios/:id/lista", UsuarioController.addConteudoWishlist);
-routes.delete("/usuarios/:id/lista", UsuarioController.deletaConteudoWishlist);
 routes.post("/login", UsuarioController.login);
+routes.get("/usuarios/me", auth, UsuarioController.getUsuarioById);
+routes.patch("/usuarios/changeprofile", auth, UsuarioController.atualizarPerfil); 
+routes.post("/usuarios/assinar", auth, UsuarioController.atualizarAssinatura); 
+routes.patch("/usuarios/lista", auth, UsuarioController.addConteudoWishlist);
+routes.delete("/usuarios/lista", auth, UsuarioController.deletaConteudoWishlist);
 
 module.exports = routes;

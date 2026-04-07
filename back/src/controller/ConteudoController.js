@@ -24,7 +24,7 @@ class ConteudoController {
   // PATCH /conteudos/:id/episodios
   async adicionarEpisodio(req, res) {
     try {
-      const { id } = req.params;
+      const { id } = req.params; // ID do conteúdo (Série ou Filme)
       const { numeroTemporada, episodio } = req.body;
 
       const serieAtualizada = await ConteudoService.adicionarEpisodio(id, numeroTemporada, episodio);
@@ -38,7 +38,7 @@ class ConteudoController {
   // DELETE /conteudos/:id
   async deletarConteudo(req, res) {
     try {
-      const { id } = req.params;
+      const { id } = req.params; // ID do conteúdo (Série ou Filme)
       await ConteudoService.deletarConteudo(id);
       return res.status(200).json({ message: "Conteúdo removido com sucesso!" });
     } catch (error) {
@@ -49,7 +49,7 @@ class ConteudoController {
   // DELETE /conteudos/:id/episodios
   async deletarEpisodio(req, res) {
     try {
-      const { id } = req.params;
+      const { id } = req.params; // ID do conteúdo (série)
       const { numeroTemporada, episodioId } = req.body;
       const serieAtualizada = await ConteudoService.deletarEpisodio(id, numeroTemporada, episodioId);
       
