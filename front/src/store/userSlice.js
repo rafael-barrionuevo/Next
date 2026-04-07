@@ -11,7 +11,7 @@ export const cadastrarUsuario = createAsyncThunk(
     } catch (err) {
       console.error(err);
       return rejectWithValue(
-        err.response?.data?.erro || "Erro ao cadastrar usuário"
+        err.response?.data?.erro || "Erro ao cadastrar usuÃ¡rio"
       );
     }
   }
@@ -93,7 +93,10 @@ export const atualizarPlano = createAsyncThunk(
 const initialState = {
   id: null,
   nome: "",
+  sobrenome: "",
   email: "",
+  data_nascimento: null,
+  role: "",
 
   assinatura: {
      tipo_plano: null,
@@ -102,7 +105,7 @@ const initialState = {
   },
  
   isAuthenticated: false,
-  statusRequest: "idle", // estado das requisições
+  statusRequest: "idle", // estado das requisiÃ§Ãµes
   error: null
 };
 
@@ -124,7 +127,10 @@ const userSlice = createSlice({
     logout: (state) => {
       state.id = null;
       state.nome = "";
+      state.sobrenome = "";
       state.email = "";
+      state.data_nascimento = null;
+      state.role = "";
 
       state.assinatura = {
       tipo_plano: null,
@@ -148,7 +154,10 @@ const userSlice = createSlice({
         state.statusRequest = "succeeded";
         state.id = action.payload._id;
         state.nome = action.payload.nome;
+        state.sobrenome = action.payload.sobrenome;
         state.email = action.payload.email;
+        state.data_nascimento = action.payload.data_nascimento;
+        state.role = action.payload.role;
         state.assinatura = action.payload.assinatura || {
           tipo_plano: null,
           tipo_pagamento: null,

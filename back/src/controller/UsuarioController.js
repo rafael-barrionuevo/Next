@@ -87,7 +87,7 @@ class UsuarioController {
   // talvez um webhook de pagamento, pedir email e nome do usuário para o pagamento, etc
   async atualizarAssinatura(req, res) {
     try {
-      const id = req.id;
+      const id = req.params.id;
       const { tipo_plano, tipo_pagamento } = req.body;
 
       if (!tipo_plano || !tipo_pagamento) {
