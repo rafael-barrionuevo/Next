@@ -136,7 +136,14 @@ class UsuarioService {
 
     const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: "24h" });
 
-    return { token, usuario: { nome: user.nome, email: user.email } };
+    return { 
+      token, 
+      usuario: { 
+      id: user._id,
+      nome: user.nome, 
+      email: user.email,
+      role: user.role 
+    }};
   }
 }
 

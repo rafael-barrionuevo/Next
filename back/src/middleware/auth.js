@@ -21,7 +21,7 @@ async function autenticar(req, res, next) {
                 }
             });
     } catch (error) {
-        res.json({message:error.message});
+        res.status(401).json({ message: error.message }); 
     }
 }
 

@@ -22,14 +22,11 @@ export const loginUsuario = createAsyncThunk(
   "user/loginUsuario",
   async ({ email, senha }, { rejectWithValue }) => {
     try {
-      /* const response = await api.get(`/users?email=${email}`); */
       const response = await api.post("/login", { email, senha });
-      return response.data.usuario;
+      return response.data; 
     } catch (err) {
       console.error(err);
-      return rejectWithValue(
-        err.response?.data?.erro || "Erro no login"
-      );
+      return rejectWithValue(err.response?.data?.erro || "Erro no login");
     }
   }
 );
@@ -103,8 +100,10 @@ const initialState = {
      tipo_pagamento: null,
      status: "inativo"
   },
- 
-  isAuthenticated: false,
+  token: sessionStorage.getItem('token') || null,
+  isAuthenticated: !!sessionStorage.getItem('token'), 
+  role: "",
+
   statusRequest: "idle", // estado das requisiÃ§Ãµes
   error: null
 };
@@ -178,23 +177,27 @@ const userSlice = createSlice({
       })
       .addCase(loginUsuario.fulfilled, (state, action) => {
         state.statusRequest = "succeeded";
-        state.id = action.payload?._id || null;
-        state.nome = action.payload?.nome || "";
-        state.email = action.payload?.email || "";
+        
+        const { token, usuario } = action.payload; 
+        
+        if (token) {
+          sessionStorage.setItem('token', token);
+          state.token = token;
+        }
 
-         state.assinatura = action.payload?.assinatura || {
+        state.id = usuario?.id || null;
+        state.nome = usuario?.nome || "";
+        state.email = usuario?.email || "";
+        state.role = usuario?.role || "";
+
+        state.assinatura = usuario?.assinatura || {
           tipo_plano: null,
           tipo_pagamento: null,
-            status: "inativo"
-          };
-       
-
+          status: "inativo"
+        };
+        
         state.isAuthenticated = true;
         state.error = null;
-      })
-      .addCase(loginUsuario.rejected, (state, action) => {
-        state.statusRequest = "failed";
-        state.error = action.payload || action.error.message;
       })
 
       // PLANO

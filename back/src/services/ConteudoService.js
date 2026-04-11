@@ -18,28 +18,36 @@ class ConteudoService {
 
   // Adicionar episódio a uma temporada de uma série
   async adicionarEpisodio(serieId, numeroTemporada, dadosEpisodio) {
-    const existeSerie = await Conteudo.findById(serieId);
-    if (!existeSerie) {
-      throw new Error("Série não encontrada.");
-    }
-    const ExisteTemporada = existeSerie.temporadas.find(temporada => temporada.numero === numeroTemporada);
-    if (!ExisteTemporada) {
-      throw new Error("Temporada não encontrada.");
-    }
-    const existeEpisodio = ExisteTemporada.episodios.find(ep => ep.titulo === dadosEpisodio.titulo); 
-    /*|| (dadosEpisodio._id && ep._id.equals(dadosEpisodio._id) */
-    if (existeEpisodio) {
-      throw new Error(`O episódio "${dadosEpisodio.titulo}" já foi cadastrado.`);
-    }
-    
-    const adicionaEpisodio = await Conteudo.findOneAndUpdate(
-      { _id: serieId, "temporadas.numero": numeroTemporada },
-      { $push: { "temporadas.$.episodios": dadosEpisodio } },
+  const existeSerie = await Conteudo.findById(serieId);
+  if (!existeSerie) {
+    throw new Error("Série não encontrada.");
+  }
+  
+  let temporada = existeSerie.temporadas.find(t => t.numero === numeroTemporada);
+  if (!temporada) {
+    await Conteudo.findByIdAndUpdate(
+      serieId,
+      { $push: { temporadas: { numero: numeroTemporada, episodios: [] } } },
       { new: true }
     );
-
-    return adicionaEpisodio;
   }
+
+  const serieAtualizada = await Conteudo.findById(serieId);
+  const tempAtualizada = serieAtualizada.temporadas.find(t => t.numero === numeroTemporada);
+  
+  const existeEpisodio = tempAtualizada.episodios.find(ep => ep.titulo === dadosEpisodio.titulo);
+  if (existeEpisodio) {
+    throw new Error(`O episódio "${dadosEpisodio.titulo}" já foi cadastrado na Temporada ${numeroTemporada}.`);
+  }
+
+  const resultado = await Conteudo.findOneAndUpdate(
+    { _id: serieId, "temporadas.numero": numeroTemporada },
+    { $push: { "temporadas.$.episodios": dadosEpisodio } },
+    { new: true }
+  );
+
+  return resultado;
+}
 
   // Deletar conteúdo por ID
   async deletarConteudo(id) {
