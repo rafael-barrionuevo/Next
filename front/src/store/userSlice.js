@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../services/api";
+import { data } from "react-router";
 
 // CADASTRO
 export const cadastrarUsuario = createAsyncThunk(
@@ -31,6 +32,26 @@ export const loginUsuario = createAsyncThunk(
   }
 );
 
+//ATUALIZAR USUARIO
+export const atualizarUsuario = createAsyncThunk(
+  "user/atualizarUsuario",
+  async ({ nome, sobrenome, data_nascimento }, { rejectWithValue }) => {
+    try {
+      const response = await api.patch("usuarios/changeprofile", {
+        nome,
+        sobrenome,
+        data_nascimento
+      });
+      return response.data.user;  
+    } catch (err) {
+      console.error(err);
+      return rejectWithValue(
+        err.response?.data?.erro || "Erro ao atualizar usuÃ¡rio"
+      );
+    }
+  }
+);
+
 // ATUALIZAR PLANO
 export const atualizarPlano = createAsyncThunk(
   "user/atualizarPlano",
@@ -51,40 +72,6 @@ export const atualizarPlano = createAsyncThunk(
     }
   }
 );
-
-    
-    //aposentado pelo axios RIP
-    /* {
-      const response = await fetch(`${API_URL}/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ tipo_plano })
-      });
-
-      return await response.json();
-    } catch (err) {
-      return rejectWithValue("Erro ao atualizar plano",err);
-    } */
-  
-
-// FINALIZAR PAGAMENTO
-/* export const finalizarPagamento = createAsyncThunk(
-  "user/finalizarPagamento",
-  async ({ id, tipo_pagamento }, { rejectWithValue }) => {
-    try {
-      const response = await api.patch(`/users/${id}`, {
-        tipo_pagamento,
-        status: "ativo"
-      });
-
-       return response.data;
-    } catch (err) {
-      return rejectWithValue("Erro ao finalizar pagamento",err);
-    }
-  }
-); */
 
 //  STATE
 const initialState = {
@@ -205,11 +192,21 @@ const userSlice = createSlice({
         state.assinatura = action.payload.assinatura;
       })
 
-      // PAGAMENTO
-      /* .addCase(finalizarPagamento.fulfilled, (state, action) => {
-        state.tipo_pagamento = action.payload.tipo_pagamento;
-        state.status = action.payload.status;
-      }); */
+      //atualizar usuario
+      .addCase(atualizarUsuario.fulfilled, (state, action) => {
+        state.nome = action.payload.nome;
+        state.sobrenome = action.payload.sobrenome;
+        state.data_nascimento = action.payload.data_nascimento;
+      })
+
+      .addCase(atualizarUsuario.pending, (state) => {
+        state.statusRequest = "loading";
+      })
+
+      .addCase(atualizarUsuario.rejected, (state, action) => {
+        state.statusRequest = "failed";
+        state.error = action.payload || action.error.message;
+      })  
   }
 });
 

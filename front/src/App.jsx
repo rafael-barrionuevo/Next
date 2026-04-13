@@ -12,6 +12,7 @@ import AdminCadastro from "./pages/AdminCadastro.jsx";
 import AdminHome from "./pages/AdminHome.jsx";
 import AdminEpisodios from "./pages/AdminEpisodios.jsx";
 import AdminRemover from "./pages/adminRemover.jsx";
+import PerfilUser from "./pages/PerfilUser.jsx";
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
         <Route path="/wishlist" element={<WishList />} />
         <Route path="/admin" element={<AdminHome />} />
         <Route path="/admin/cadastro" element={<AdminCadastro />} />
+        <Route path="/perfilUser" element={<PerfilUser />} />
         <Route path="/admin/episodios" element={<AdminEpisodios />} />
         <Route path="/admin/remover" element={<AdminRemover />} />
       </Routes>

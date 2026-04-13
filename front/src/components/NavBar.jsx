@@ -20,6 +20,15 @@ function NavBar() {
           <div className="flex items-center gap-4">
             <IoMdSearch className='text-2xl text-white/70 hover:text-purple-500 cursor-pointer transition-colors'/>
             <PiScreencastBold className='text-2xl text-white/70 hover:text-purple-500 cursor-pointer transition-colors'/>
+
+            <Link to="/perfilUser" className='flex items-center gap-2 cursor-pointer group'>
+              <img 
+                src="https://picsum.photos/32/32?random=profile" 
+                alt="Avatar do Usuário" 
+                className='w-8 h-8 rounded border border-transparent group-hover:border-white transition-colors'
+              />
+            </Link>
+
           </div>
         </div>
         
@@ -69,14 +78,16 @@ function NavBar() {
             </span>
           </div>
 
-          <div className='flex items-center gap-2 cursor-pointer group'>
+          
+
+          <Link to="/perfilUser" className='flex items-center gap-2 cursor-pointer group'>
             <img 
               src="https://picsum.photos/32/32?random=profile" 
               alt="Avatar do Usuário" 
               className='w-8 h-8 rounded border border-transparent group-hover:border-white transition-colors'
             />
             <IoChevronDownOutline className='text-white/80 group-hover:text-white transition-colors' />
-          </div>
+          </Link>
         </div>
       </div>
 
