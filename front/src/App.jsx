@@ -8,6 +8,10 @@ import Landing from "./pages/Landing";
 import HomePage from "./pages/HomePage.jsx";
 import WatchContent from "./pages/WatchContent.jsx";
 import WishList from "./pages/WishList.jsx";
+import AdminCadastro from "./pages/AdminCadastro.jsx";
+import AdminHome from "./pages/AdminHome.jsx";
+import AdminEpisodios from "./pages/AdminEpisodios.jsx";
+import AdminRemover from "./pages/adminRemover.jsx";
 
 function App() {
 
@@ -23,6 +27,10 @@ function App() {
         <Route path="/home" element={<HomePage />} />
         <Route path="/video" element={<WatchContent />} />
         <Route path="/wishlist" element={<WishList />} />
+        <Route path="/admin" element={<AdminHome />} />
+        <Route path="/admin/cadastro" element={<AdminCadastro />} />
+        <Route path="/admin/episodios" element={<AdminEpisodios />} />
+        <Route path="/admin/remover" element={<AdminRemover />} />
       </Routes>
     </BrowserRouter>
   );

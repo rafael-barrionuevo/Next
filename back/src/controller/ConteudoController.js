@@ -25,9 +25,9 @@ class ConteudoController {
   async adicionarEpisodio(req, res) {
     try {
       const { id } = req.params; // ID do conteúdo (Série ou Filme)
-      const { numeroTemporada, episodio } = req.body;
+      const { numeroTemporada, dadosEpisodio } = req.body;
 
-      const serieAtualizada = await ConteudoService.adicionarEpisodio(id, numeroTemporada, episodio);
+      const serieAtualizada = await ConteudoService.adicionarEpisodio(id, numeroTemporada, dadosEpisodio);
       
       return res.status(201).json({serie: serieAtualizada});
     } catch (error) {
