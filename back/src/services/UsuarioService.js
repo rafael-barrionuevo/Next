@@ -142,7 +142,12 @@ class UsuarioService {
       id: user._id,
       nome: user.nome, 
       email: user.email,
-      role: user.role 
+      role: user.role,
+      assinatura: user.assinatura || {
+        tipo_plano: null,
+        tipo_pagamento: null,
+        status: "inativo"
+      }
     }};
   }
 }

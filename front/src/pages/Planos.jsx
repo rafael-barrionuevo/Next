@@ -22,7 +22,7 @@ export default function Planos() {
   const dispatch = useDispatch();
 
   // const subscription = useSelector(state => state.subscription);
-  console.log("SUBSCRIPTION:", user.assinatura?.tipo_plano);
+  //console.log("SUBSCRIPTION:", user.assinatura?.tipo_plano);
  
   const planos = [
   {

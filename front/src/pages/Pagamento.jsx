@@ -195,12 +195,6 @@ try {
               className="w-full p-3 rounded-lg bg-white/10 border border-purple-400 text-white placeholder-gray-300 focus:ring-2 focus:ring-purple-500"
             />
 
-            <InputField
-              name="cep"
-              placeholder="CEP"
-              className="w-full p-3 rounded-lg bg-white/10 border border-purple-400 text-white placeholder-gray-300 focus:ring-2 focus:ring-purple-500"
-            />
-
             <Button
               type="submit"
               

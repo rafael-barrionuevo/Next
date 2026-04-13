@@ -7,7 +7,7 @@ import posterImages from "../constants/posterImages";
 
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+//import { useSelector } from "react-redux";
 import { cadastrarUsuario } from "../store/userSlice";
 
 export default function Cadastro() {
@@ -24,24 +24,7 @@ export default function Cadastro() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  /* function handleCadastro(e){
-    e.preventDefault(); // MUITO IMPORTANTE (form)
-
-    //testar o forms
-    console.log("ANTES DO DISPATCH:");
-    console.log("Nome:", nome);
-    console.log("Email:", email);
-
-     dispatch(setUser({ 
-      id: Date.now(),
-      nome, 
-      email})); 
-      
-
-    console.log("DEPOIS DO DISPATCH");
-
-    navigate("/planos");
-  } */
+ 
 
   async function handleCadastro(e) {
     e.preventDefault();
@@ -49,9 +32,9 @@ export default function Cadastro() {
     // console.log("1 - entrou");
 
     try {
-      const result = await dispatch(cadastrarUsuario({ nome, sobrenome, email, senha, data_nascimento: dataNascimento })).unwrap();
+      const usuario = await dispatch(cadastrarUsuario({ nome, sobrenome, email, senha, data_nascimento: dataNascimento })).unwrap();
 
-      console.log("2 - result:", result);
+      console.log("usuario:", usuario);
 
       navigate("/planos");
 
@@ -59,13 +42,13 @@ export default function Cadastro() {
       console.error("ERRO:", err);
     }
 
-    console.log("3 - fim");
+    //console.log("3 - fim");
   }
 
   //testar se o Redux está funcionando
-  const user = useSelector(state => state.user);
+  //const user = useSelector(state => state.user);
 
-  console.log("REDUX:", user);
+  //console.log("REDUX:", user);
 
   // console.log(nome, email);
 
