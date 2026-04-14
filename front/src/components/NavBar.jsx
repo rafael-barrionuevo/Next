@@ -49,13 +49,11 @@ function NavBar() {
           <img src={logo} alt="Next Logo" className='w-24'/>
           
           <div className='flex items-center gap-6 text-sm font-medium text-white/80'>
-            <Link to="/home">
-            <a className='hover:text-white transition-colors cursor-pointer'>Início</a>
+            <Link to="/home" className='hover:text-white transition-colors cursor-pointer'>Início
             </Link>
             <a className='hover:text-white transition-colors cursor-pointer'>Séries</a>
             <a className='hover:text-white transition-colors cursor-pointer'>Filmes</a>
-            <Link to="/wishList">
-            <a className='hover:text-white transition-colors cursor-pointer'>Minha Lista</a>
+            <Link to="/wishList" className='hover:text-white transition-colors cursor-pointer'>Minha Lista
             </Link>
           </div>
         </div>

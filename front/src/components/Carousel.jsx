@@ -2,8 +2,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { useNavigate } from "react-router-dom";
 
 function Carousel({ imgLink = [] }) {
+
+  const navigate = useNavigate();
   const carouselSize = imgLink.length;
   
   return (
@@ -35,7 +38,8 @@ function Carousel({ imgLink = [] }) {
         >
           {imgLink.map((link, index) => (
             <SwiperSlide key={index} className='overflow-visible'>
-              <div className='relative group cursor-pointer'>
+              <div className='relative group cursor-pointer' 
+                onClick={() => navigate("/video")}>
                 {/* Overlay de gradiente interno para destacar possíveis textos futuros */}
                 <div className='absolute inset-0 bg-linear-to-t from-black/60 to-transparent z-10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>
                 
