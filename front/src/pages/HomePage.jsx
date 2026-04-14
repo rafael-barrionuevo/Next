@@ -2,8 +2,16 @@ import NavBar from '../components/NavBar.jsx'
 import FooNavBar from '../components/FooNavBar.jsx'
 import Carousel from '../components/Carousel.jsx'
 import ListCard from '../components/ListCard.jsx'
+
+import posterImages from '../constants/posterImages'
+
+
 function HomePage() {
-  const imgLink = [
+  const carouselImgLink = posterImages.slice(0, 9)
+  const imgLink = posterImages
+
+
+  /* const imgLink = [
     'https://picsum.photos/800/1200/?blur?random=1',
     'https://picsum.photos/id/870/800/1200?grayscale&',
     'https://picsum.photos/800/1200/?random=2',
@@ -25,7 +33,7 @@ function HomePage() {
     'https://picsum.photos/800/1200/?random=16',
     'https://picsum.photos/800/1200/?random=17',
     'https://picsum.photos/800/1200/?random=18',
-  ]
+  ] */
   return (
     <div className='flex flex-col min-h-screen bg-[#0d1117] relative pb-20'>
       <div className='fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(147,51,234,0.15),transparent_50%)] pointer-events-none'></div>

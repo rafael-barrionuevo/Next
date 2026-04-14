@@ -6,9 +6,9 @@ import { atualizarUsuario } from "../store/userSlice";
 import { useNavigate } from "react-router-dom";
 
 const PLANOS = [
-  { id: "Basic", preco: "R$ 19,90", qualidade: "HD", telas: "1 tela" },
-  { id: "Standard", preco: "R$ 29,90", qualidade: "Full HD", telas: "2 telas" },
-  { id: "Premium", preco: "R$ 39,90", qualidade: "4K + HDR", telas: "4 telas" }
+  { id: "Básico", preco: "R$ 19,90", qualidade: "HD", telas: "1 tela" },
+  { id: "Padrão", preco: "R$ 39,90", qualidade: "Full HD", telas: "2 telas" },
+  { id: "Premium", preco: "R$ 54,90", qualidade: "4K + HDR", telas: "4 telas" }
 ];
 
 export default function PerfilUser() {
@@ -180,6 +180,7 @@ export default function PerfilUser() {
               onClick={handleAtualizarPlano}
               
               disabled={!novoPlano || novoPlano === planoAtual}
+              
               className="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               Confirmar alteração

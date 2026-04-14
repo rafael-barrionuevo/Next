@@ -8,7 +8,7 @@ export const cadastrarUsuario = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const response = await api.post("/usuarios", userData);
-      return response.data.user;
+      return response.data.user;//resultado do back end, dps chama a função "fulfilled" e passa o user para o state
     } catch (err) {
       console.error(err);
       return rejectWithValue(
@@ -131,11 +131,14 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      
+      //esse resultado vem do "return response.data.user" lá no "cadastrarUsuario"
 
       // CADASTRO
       .addCase(cadastrarUsuario.pending, (state) => {
         state.statusRequest = "loading";
       })
+
       .addCase(cadastrarUsuario.fulfilled, (state, action) => {
         state.statusRequest = "succeeded";
         state.id = action.payload._id;
@@ -152,6 +155,7 @@ const userSlice = createSlice({
         state.isAuthenticated = true;
         state.error = null;
       })
+      //como houve uma mudança no Redux, ele vai executar o "store.subscribe" lá no "index.js" e atualizar o localStorage. Depois volta para o "Cadastro.jsx" e executa o "navigate("/planos")"
       
       .addCase(cadastrarUsuario.rejected, (state, action) => {
         state.statusRequest = "failed";
