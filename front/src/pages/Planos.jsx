@@ -15,6 +15,7 @@ export default function Planos() {
   const navigate = useNavigate();
 
   const user = useSelector(state => state.user);
+
   const [planoSelecionado, setPlanoSelecionado] = useState(0);
   
 
@@ -79,7 +80,7 @@ const planoAtual = planos[planoSelecionado];
 -translate-x-[10%] -translate-y-[10%]
 pointer-events-none 
 ">
-      {posterImages.map((img, index) => (
+      {posterImages.map((img, index) => ( 
         <img
           key={index}
           src={img}

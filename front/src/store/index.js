@@ -20,9 +20,6 @@ const normalizeState = (state) => {
   };
 };
 
-
-//store
-
 //criando o localStorage
 
 //pega os dados do localStorage
@@ -56,8 +53,21 @@ store.subscribe(() => {
     const state = store.getState();//pega o estado atual
     //pega exatamente 
     /* {
-      user,
-      subscription
+     id: null;
+        nome: string;
+        sobrenome: string;
+        email: string;
+        data_nascimento: null;
+        role: string;
+        assinatura: {
+            tipo_plano: null;
+            tipo_pagamento: null;
+            status: string;
+        };
+        token: string | null;
+        isAuthenticated: boolean;
+        statusRequest: string;
+        error: null;
     } */
 
     

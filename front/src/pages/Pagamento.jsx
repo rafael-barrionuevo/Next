@@ -74,7 +74,7 @@ try {
         tipo_pagamento: "credito" // ou vindo do input
       })
     ).unwrap();
-     navigate("/perfil");
+     navigate("/login");
     } catch (err) {
     alert(err);
   }
