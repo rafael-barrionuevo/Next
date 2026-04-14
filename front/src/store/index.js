@@ -33,6 +33,7 @@ const loadState = () => {
     
   }catch  {
     return undefined;
+    //se voltar undefined, o Redux irá usar o estado inicial definido no userSlice.js
   }
 }
 
@@ -41,7 +42,7 @@ export const store = configureStore({
     user: userReducer
   },
   //usando o localStorage
-  preloadedState: loadState()
+  preloadedState: loadState()//se tiver algo no localStorage, ele vai usar, se não, ele vai usar o estado inicial do userSlice.js
 });
 
 

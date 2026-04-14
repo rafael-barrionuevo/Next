@@ -24,7 +24,7 @@ export const loginUsuario = createAsyncThunk(
   async ({ email, senha }, { rejectWithValue }) => {
     try {
       const response = await api.post("/login", { email, senha });
-      return response.data; 
+      return response.data; //retorna token e usuario 
     } catch (err) {
       console.error(err);
       return rejectWithValue(err.response?.data?.erro || "Erro no login");
@@ -88,7 +88,7 @@ const initialState = {
      status: "inativo"
   },
   token: sessionStorage.getItem('token') || null,
-  isAuthenticated: !!sessionStorage.getItem('token'), 
+  isAuthenticated: !!sessionStorage.getItem('token'),
   role: "",
 
   statusRequest: "idle", // estado das requisiÃ§Ãµes
