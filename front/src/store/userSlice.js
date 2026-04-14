@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../services/api";
-import { data } from "react-router";
+
 
 // CADASTRO
 export const cadastrarUsuario = createAsyncThunk(
@@ -73,6 +73,47 @@ export const atualizarPlano = createAsyncThunk(
   }
 );
 
+//buscar wishlist
+export const buscarWishlist = createAsyncThunk(
+  "user/buscarWishlist",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get("/usuarios/me");
+      return response.data.lista_desejos;
+    } catch (err) {
+      return rejectWithValue("Erro ao buscar wishlist",err);
+    }
+  }
+);
+
+//adicionar conteúdo à wishlist
+export const adicionarWishlist = createAsyncThunk(
+  "user/adicionarWishlist",
+  async (conteudoId, { rejectWithValue }) => {
+    try {
+      const response = await api.patch("/usuarios/lista", { conteudoId });
+      return response.data.lista_desejos;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.error);
+    }
+  }
+);
+
+//remover conteúdo da wishlist
+export const removerWishlist = createAsyncThunk(
+  "user/removerWishlist",
+  async (conteudoId, { rejectWithValue }) => {
+    try {
+      const response = await api.delete("/usuarios/lista", {
+        data: { conteudoId }
+      });
+      return response.data.lista_desejos;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.error);
+    }
+  }
+);
+
 //  STATE
 const initialState = {
   id: null,
@@ -81,6 +122,8 @@ const initialState = {
   email: "",
   data_nascimento: null,
   role: "",
+  lista_desejos: [],
+
 
   assinatura: {
      tipo_plano: null,
@@ -89,7 +132,7 @@ const initialState = {
   },
   token: sessionStorage.getItem('token') || null,
   isAuthenticated: !!sessionStorage.getItem('token'),
-  role: "",
+
 
   statusRequest: "idle", // estado das requisiÃ§Ãµes
   error: null
@@ -131,7 +174,6 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      
       //esse resultado vem do "return response.data.user" lá no "cadastrarUsuario"
 
       // CADASTRO
@@ -211,6 +253,23 @@ const userSlice = createSlice({
         state.statusRequest = "failed";
         state.error = action.payload || action.error.message;
       })  
+
+
+      // BUSCAR
+      .addCase(buscarWishlist.fulfilled, (state, action) => {
+        state.lista_desejos = action.payload;
+      })
+
+      // ADICIONAR
+      .addCase(adicionarWishlist.fulfilled, (state, action) => {
+        state.lista_desejos = action.payload;
+      })
+
+      // REMOVER
+      .addCase(removerWishlist.fulfilled, (state, action) => {
+        state.lista_desejos = action.payload;
+      })
+
   }
 });
 
