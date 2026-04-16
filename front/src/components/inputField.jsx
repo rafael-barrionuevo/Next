@@ -1,4 +1,3 @@
-
 export default function InputField({
     id,
     type = 'text',
@@ -7,19 +6,21 @@ export default function InputField({
     onChange = () => {},
     required = false,
     onFocus,
-    className =""
+    className = "",
+    ...props 
 }) {
     return (          
         <div className="input-field"> 
             <input
-                id = {id}
-                name = {name}
+                id={id}
+                name={name}
                 type={type}
                 placeholder={placeholder}
                 onChange={onChange}
                 onFocus={onFocus}
                 required={required}
                 className={className}
+                {...props} 
             />
         </div>
     );

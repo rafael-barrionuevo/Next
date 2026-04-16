@@ -1,15 +1,92 @@
 import { IoMdSearch } from "react-icons/io";
 import { PiScreencastBold } from "react-icons/pi";
 import { IoNotificationsOutline, IoChevronDownOutline } from "react-icons/io5";
-import { Link } from "react-router-dom"; // Importante usar Link para não resetar o Redux
-import { useSelector } from "react-redux";
+import { FiEdit2, FiUser, FiHelpCircle } from 'react-icons/fi'; 
+import { BiTransfer } from 'react-icons/bi'; 
+import { Link, useNavigate } from "react-router-dom"; 
+import { useSelector, useDispatch } from "react-redux";
+import { logout, selecionarPerfilAtivo } from "../store/userSlice";
 import logo from '../assets/logo.png';
 
 function NavBar() {
   const user = useSelector(state => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  console.log("Dados do usuário no Redux:", user);
-  console.log("Role atual:", user.role);
+  const perfis = user.perfis || [];
+  const perfilAtivo = user.perfilAtivo || perfis[0]; 
+  const outrosPerfis = perfis.filter(p => p.id !== perfilAtivo?.id);
+
+ 
+  const handleLogout = () => {
+    dispatch(logout()); 
+    sessionStorage.removeItem("token"); 
+    navigate("/"); 
+  };
+
+  const trocarPerfil = (perfil) => {
+    dispatch(selecionarPerfilAtivo(perfil));
+    navigate("/home"); 
+  };
+
+ 
+  const MenuDropdown = () => (
+    <div className="absolute right-0 top-full pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 w-56">
+      <div className="absolute top-2 right-4 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-black/95"></div>
+      <div className="bg-black/95 border border-gray-800 flex flex-col py-2 font-medium">
+        
+        {/* Lista de Outros Perfis */}
+        {outrosPerfis.map(perfil => (
+          <div 
+            key={perfil._id} 
+            onClick={() => trocarPerfil(perfil)}
+            className="flex items-center gap-3 px-4 py-2 hover:underline cursor-pointer"
+          >
+            <img src={perfil.avatar} alt={perfil.nome} className="w-8 h-8 rounded object-cover" />
+            <span className="text-sm text-gray-300">{perfil.nome}</span>
+          </div>
+        ))}
+
+        {/* Gerenciar Perfis */}
+        <div 
+          onClick={() => navigate("/gerenciar-perfis")}
+          className="flex items-center gap-3 px-4 py-2 mt-2 hover:underline text-gray-300 cursor-pointer"
+        >
+          <FiEdit2 className="text-xl" />
+          <span className="text-sm">Gerenciar perfis</span>
+        </div>
+
+        {/* Transferir Perfil */}
+        <div
+        onClick={() => navigate("/perfil")}
+         className="flex items-center gap-3 px-4 py-2 hover:underline text-gray-300 cursor-pointer">
+          <BiTransfer className="text-xl" />
+          <span className="text-sm">Transferir perfil</span>
+        </div>
+
+        {/* Conta */}
+        <div
+         onClick={() => navigate("/perfilUser")}
+         className="flex items-center gap-3 px-4 py-2 hover:underline text-gray-300 cursor-pointer">
+          <FiUser className="text-xl" />
+          <span className="text-sm">Conta</span>
+        </div>
+
+
+        <hr className="border-gray-600 my-2" />
+
+        {/* Sair */}
+        <div 
+          onClick={handleLogout}
+          className="px-4 py-2 text-center text-sm text-gray-300 hover:underline cursor-pointer"
+        >
+          Sair da Next
+        </div>
+
+      </div>
+    </div>
+  );
+
   return (
     <nav className='bg-[#0d1117]/80 backdrop-blur-md sticky top-0 z-50 border-b border-white/5'>
       
@@ -21,13 +98,15 @@ function NavBar() {
             <IoMdSearch className='text-2xl text-white/70 hover:text-purple-500 cursor-pointer transition-colors'/>
             <PiScreencastBold className='text-2xl text-white/70 hover:text-purple-500 cursor-pointer transition-colors'/>
 
-            <Link to="/perfilUser" className='flex items-center gap-2 cursor-pointer group'>
+            {/* AVATAR MOBILE COM HOVER */}
+            <div className='relative flex items-center gap-2 cursor-pointer group'>
               <img 
-                src="https://picsum.photos/32/32?random=profile" 
-                alt="Avatar do Usuário" 
+                src={perfilAtivo?.avatar || "https://picsum.photos/32/32?random=profile"} 
+                alt="Avatar" 
                 className='w-8 h-8 rounded border border-transparent group-hover:border-white transition-colors'
               />
-            </Link>
+              <MenuDropdown />
+            </div>
 
           </div>
         </div>
@@ -36,7 +115,6 @@ function NavBar() {
           <a className='hover:text-white transition-all cursor-pointer border-b-2 border-transparent hover:border-purple-600 pb-1'>Filmes</a>
           <a className='hover:text-white transition-all cursor-pointer border-b-2 border-transparent hover:border-purple-600 pb-1'>Séries</a>
           <a className='hover:text-white transition-all cursor-pointer border-b-2 border-transparent hover:border-purple-600 pb-1'>Animes</a>
-          {/* Admin Mobile */}
           {user.role === 'admin' && (
             <Link to="/admin" className='text-purple-500 font-bold border-b-2 border-transparent hover:border-purple-600 pb-1'>Admin</Link>
           )}
@@ -49,12 +127,10 @@ function NavBar() {
           <img src={logo} alt="Next Logo" className='w-24'/>
           
           <div className='flex items-center gap-6 text-sm font-medium text-white/80'>
-            <Link to="/home" className='hover:text-white transition-colors cursor-pointer'>Início
-            </Link>
+            <Link to="/home" className='hover:text-white transition-colors cursor-pointer'>Início</Link>
             <a className='hover:text-white transition-colors cursor-pointer'>Séries</a>
             <a className='hover:text-white transition-colors cursor-pointer'>Filmes</a>
-            <Link to="/wishList" className='hover:text-white transition-colors cursor-pointer'>Minha Lista
-            </Link>
+            <Link to="/wishList" className='hover:text-white transition-colors cursor-pointer'>Minha Lista</Link>
           </div>
         </div>
 
@@ -63,12 +139,8 @@ function NavBar() {
           
           <a className='hover:text-white transition-colors cursor-pointer'>Gêneros</a>
           
-          {/* PAINEL ADMIN AO LADO DAS NOTIFICACOES */}
           {user.role === 'admin' && (
-            <Link 
-              to="/admin" 
-              className='text-purple-500 font-bold hover:text-purple-400 transition-colors'
-            >
+            <Link to="/admin" className='text-purple-500 font-bold hover:text-purple-400 transition-colors'>
               Painel Admin
             </Link>
           )}
@@ -80,16 +152,18 @@ function NavBar() {
             </span>
           </div>
 
-          
-
-          <Link to="/perfilUser" className='flex items-center gap-2 cursor-pointer group'>
+          {/* AVATAR DESKTOP COM HOVER E SETA ROTACIONAL */}
+          <div className='relative flex items-center gap-2 cursor-pointer group py-2'>
             <img 
-              src="https://picsum.photos/32/32?random=profile" 
-              alt="Avatar do Usuário" 
+              src={perfilAtivo?.avatar || "https://picsum.photos/32/32?random=profile"} 
+              alt="Avatar" 
               className='w-8 h-8 rounded border border-transparent group-hover:border-white transition-colors'
             />
-            <IoChevronDownOutline className='text-white/80 group-hover:text-white transition-colors' />
-          </Link>
+            {/* A Seta rotaciona no hover */}
+            <IoChevronDownOutline className='text-white/80 transition-transform duration-300 group-hover:rotate-180 group-hover:text-white' />
+            
+            <MenuDropdown />
+          </div>
         </div>
       </div>
 
