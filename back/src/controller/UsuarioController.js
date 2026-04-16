@@ -82,6 +82,45 @@ class UsuarioController {
     }
   }
 
+  
+  // POST /usuarios/perfis (Adicionar novo perfil à conta)
+  async adicionarPerfil(req, res) {
+    try {
+      const id = req.id; 
+      const { nome, avatar } = req.body;
+
+      if (!nome || !avatar) {
+        return res.status(400).json({ erro: "Nome e avatar são obrigatórios." });
+      }
+
+      const usuarioAtualizado = await UsuarioService.adicionarPerfil(id, { nome, avatar });
+
+      return res.status(201).json({ 
+        message: "Perfil criado com sucesso!", 
+        perfis: usuarioAtualizado.perfis 
+      });
+    } catch (e) {
+      return res.status(400).json({ erro: e.message });
+    }
+  }
+
+  // PATCH /usuarios/perfis/:perfilId (Editar perfil existente)
+  async editarPerfil(req, res) {
+    try {
+      const userId = req.id; 
+      const perfilId = req.params.perfilId; 
+      const { nome, avatar } = req.body;
+
+      const usuarioAtualizado = await UsuarioService.editarPerfil(userId, perfilId, { nome, avatar });
+
+      return res.status(200).json({ 
+        message: "Perfil atualizado com sucesso!", 
+        perfis: usuarioAtualizado.perfis 
+      });
+    } catch (e) {
+      return res.status(400).json({ erro: e.message });
+    }
+  }
   // POST /usuarios/assinar (Lógica de Assinatura)
   // Melhorar a logica de assinatura depois, 
   // talvez um webhook de pagamento, pedir email e nome do usuário para o pagamento, etc

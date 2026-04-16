@@ -10,5 +10,7 @@ routes.patch("/usuarios/changeprofile", auth, UsuarioController.atualizarPerfil)
 routes.post("/usuarios/:id/assinar", UsuarioController.atualizarAssinatura); 
 routes.patch("/usuarios/lista", auth, UsuarioController.addConteudoWishlist);
 routes.delete("/usuarios/lista", auth, UsuarioController.deletaConteudoWishlist);
+routes.post("/usuarios/perfis", auth, UsuarioController.adicionarPerfil);
+routes.patch("/usuarios/perfis/:perfilId", auth, UsuarioController.editarPerfil);
 
 module.exports = routes;

@@ -41,6 +41,51 @@ class UsuarioService {
     return usuarioAtualizado;
   }
 
+
+  async adicionarPerfil(userId, perfilData) {
+    const usuario = await Usuario.findById(userId);
+    
+    if (!usuario) {
+      throw new Error("Usuário não encontrado.");
+    }
+
+    const tipoPlano = usuario.assinatura?.tipo_plano?.toLowerCase() || 'basico';
+    const LIMITES_POR_PLANO = { basico: 1, padrao: 2, premium: 4 };
+    const limite = LIMITES_POR_PLANO[tipoPlano] || 1;
+
+    if (usuario.perfis.length >= limite) { 
+      throw new Error("Você atingiu o limite de perfis do seu plano.");
+    }
+
+    usuario.perfis.push(perfilData);
+    await usuario.save();
+
+    return usuario;
+  }
+
+  // Lógica para editar um perfil existente
+  async editarPerfil(userId, perfilId, novosDados) {
+    const usuario = await Usuario.findById(userId);
+    
+    if (!usuario) {
+      throw new Error("Usuário não encontrado.");
+    }
+
+    const perfil = usuario.perfis.id(perfilId); 
+    
+    if (!perfil) {
+      throw new Error("Perfil não encontrado.");
+    }
+
+    
+    if (novosDados.nome) perfil.nome = novosDados.nome;
+    if (novosDados.avatar) perfil.avatar = novosDados.avatar;
+
+    await usuario.save(); 
+
+    return usuario;
+  }
+
   async getUsuarioById(userId) {
     const existeUsuario = await Usuario.findById(userId).populate("lista_desejos", "titulo img_capa");
     if (!existeUsuario) {
@@ -143,6 +188,7 @@ class UsuarioService {
       nome: user.nome, 
       email: user.email,
       role: user.role,
+      perfis: user.perfis,
       assinatura: user.assinatura || {
         tipo_plano: null,
         tipo_pagamento: null,

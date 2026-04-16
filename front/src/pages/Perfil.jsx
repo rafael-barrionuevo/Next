@@ -1,76 +1,99 @@
 import PerfilFeminino from "../assets/perfil-feminino.png";
-
 import { useSelector } from "react-redux";
-
-//import { useDispatch } from "react-redux";
-//import { logout } from "../store/userSlice";
 import { useNavigate } from "react-router-dom";
-import Button from "../components/button";
-
+import { FiPlus } from "react-icons/fi"; // Ícone de + (lembre de instalar react-icons se não tiver)
+import { useDispatch } from "react-redux";
+import { selecionarPerfilAtivo } from "../store/userSlice";
 
 export default function Perfil() {
-
-  //const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
 
-  /* function handleLogout(){
-    dispatch(logout());//limpa usuario do Redux
-    // dispatch(resetSubscription());//limpa dados do usuario do Redux
-    localStorage.removeItem("appState"); //limpa localStorage
-    
-    navigate("/")
-  } */
+  
+  const LIMITES_POR_PLANO = {
+    basico: 1,
+    padrao: 2,
+    premium: 4,
+  };
 
-  function handleUser(){
-    
-    
+  
+  const planoAtual = user.assinatura?.tipo_plano?.toLowerCase() || "basico";
+  const limiteDePerfis = LIMITES_POR_PLANO[planoAtual] || 1;
+
+ 
+  const perfisAtuais = user.perfis || [
+    { id: 1, nome: user.nome || "Principal", avatar: PerfilFeminino }
+  ];
+
+  
+  const podeAdicionarPerfil = limiteDePerfis > 1 && perfisAtuais.length < limiteDePerfis;
+
+  function handleSelectUser(perfilSelecionado) {
+    dispatch(selecionarPerfilAtivo(perfilSelecionado));
     navigate("/home");
   }
 
-  const user = useSelector(state => state.user);
-  // const subscription = useSelector(state => state.subscription);
-
-  // console.log("USER:",user);
-  // console.log("SUBSCRIPTION",subscription);
-
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-[#1f2a44] to-black text-white">
-
-  
-     {/*  <Button onClick={handleLogout} className="absolute top-4 right-4 bg-red-600 px-4 py-2 rounded hover:bg-red-700 transition">
-        Sair da conta
-      </Button> */}
-    
-
-      {/* TÃTULO */}
-      <h1 className="text-2xl font-semibold mb-10">
-        Quem vai assistir?
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#141414] text-white font-sans">
+      
+      {/* TÍTULO */}
+      <h1 className="text-3xl md:text-5xl font-medium mb-8 md:mb-12 tracking-wide">
+        Quem está assistindo?
       </h1>
 
-      {/* <p className="mb-6 text-gray-300">
-        UsuÃ¡rio: {user.nome} ({user.email})
-      </p> */}
-
-      {/* <p className="mb-6 text-gray-300">
-        Plano: {user.assinatura?.tipo_plano  || "Nenhum plano selecionado"}
-      </p> */}
-
-      {/* PERFIL */}
-      <div onClick={handleUser} className="flex gap-10 flex-wrap justify-center">
-        <div className="flex flex-col items-center cursor-pointer group">
-          <div className="w-20 h-20 sm:w-32 sm:h-32 rounded-full overflow-hidden border-2 border-transparent group-hover:border-purple-500 transition">
-            <img
-              src={PerfilFeminino}
-              alt={user.nome}
-              className="w-full h-full object-cover"
-            />
+      {/* GRID DE PERFIS */}
+      <div className="flex gap-4 md:gap-8 flex-wrap justify-center max-w-4xl px-4">
+        
+        {/* Renderiza os perfis existentes */}
+        {perfisAtuais.map((perfil) => (
+          <div 
+            key={perfil._id || perfil.id} 
+            onClick={() => handleSelectUser(perfil)}
+            className="flex flex-col items-center cursor-pointer group w-24 sm:w-32"
+          >
+            {/* Avatar Quadrado */}
+            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-md overflow-hidden border-2 border-transparent group-hover:border-white transition-all duration-300 relative">
+              {}
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors z-10"></div>
+              <img
+                src={perfil.avatar}
+                alt={perfil.nome}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            {/* Nome do perfil */}
+            <p className="mt-4 text-sm sm:text-base text-gray-400 group-hover:text-white transition-colors text-center line-clamp-3">
+              {perfil.nome}
+            </p>
           </div>
+        ))}
 
-          <p className="mt-2 text-sm text-gray-300 group-hover:text-white">
-            {user.nome}
-          </p>
-        </div>
+        {/* BOTÃO ADICIONAR PERFIL ) */}
+        {podeAdicionarPerfil && (
+          <div 
+            onClick={() => navigate("/adicionar-perfil")} 
+            className="flex flex-col items-center cursor-pointer group w-24 sm:w-32"
+          >
+            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-md flex items-center justify-center border-2 border-transparent group-hover:bg-white/10 transition-all duration-300">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-white/10 flex items-center justify-center text-white/50 group-hover:text-white group-hover:bg-white/20 transition-all">
+                <FiPlus className="text-3xl sm:text-5xl" />
+              </div>
+            </div>
+            <p className="mt-4 text-sm sm:text-base text-gray-400 group-hover:text-white transition-colors text-center">
+              Adicionar perfil
+            </p>
+          </div>
+        )}
       </div>
+
+      {/* BOTÃO GERENCIAR PERFIS */}
+      <button 
+        onClick={() => navigate("/gerenciar-perfis")}
+        className="mt-16 px-6 py-2 border border-gray-500 text-gray-500 uppercase tracking-widest text-sm hover:border-white hover:text-white transition-colors"
+      >
+        Gerenciar perfis
+      </button>
 
     </div>
   );

@@ -1,19 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../services/api";
 
-
 // CADASTRO
 export const cadastrarUsuario = createAsyncThunk(
   "user/cadastrarUsuario",
   async (userData, { rejectWithValue }) => {
     try {
       const response = await api.post("/usuarios", userData);
-      return response.data.user;//resultado do back end, dps chama a função "fulfilled" e passa o user para o state
+      return response.data.user;
     } catch (err) {
       console.error(err);
-      return rejectWithValue(
-        err.response?.data?.erro || "Erro ao cadastrar usuÃ¡rio"
-      );
+      return rejectWithValue(err.response?.data?.erro || "Erro ao cadastrar usuário");
     }
   }
 );
@@ -24,7 +21,7 @@ export const loginUsuario = createAsyncThunk(
   async ({ email, senha }, { rejectWithValue }) => {
     try {
       const response = await api.post("/login", { email, senha });
-      return response.data; //retorna token e usuario 
+      return response.data; 
     } catch (err) {
       console.error(err);
       return rejectWithValue(err.response?.data?.erro || "Erro no login");
@@ -32,7 +29,7 @@ export const loginUsuario = createAsyncThunk(
   }
 );
 
-//ATUALIZAR USUARIO
+// ATUALIZAR USUARIO
 export const atualizarUsuario = createAsyncThunk(
   "user/atualizarUsuario",
   async ({ nome, sobrenome, data_nascimento }, { rejectWithValue }) => {
@@ -45,9 +42,7 @@ export const atualizarUsuario = createAsyncThunk(
       return response.data.user;  
     } catch (err) {
       console.error(err);
-      return rejectWithValue(
-        err.response?.data?.erro || "Erro ao atualizar usuÃ¡rio"
-      );
+      return rejectWithValue(err.response?.data?.erro || "Erro ao atualizar usuário");
     }
   }
 );
@@ -55,25 +50,21 @@ export const atualizarUsuario = createAsyncThunk(
 // ATUALIZAR PLANO
 export const atualizarPlano = createAsyncThunk(
   "user/atualizarPlano",
-  async ({ id, tipo_plano,tipo_pagamento }, { rejectWithValue }) => {
+  async ({ id, tipo_plano, tipo_pagamento }, { rejectWithValue }) => {
     try {
-      /* const response = await api.patch(`/users/${id}`, { */
       const response = await api.post(`/usuarios/${id}/assinar`, {
         tipo_plano,
         tipo_pagamento
       });
-
       return response.data.user;
     } catch (err) {
       console.error(err);
-      return rejectWithValue(
-        err.response?.data?.erro || "Erro ao atualizar assinatura"
-      );
+      return rejectWithValue(err.response?.data?.erro || "Erro ao atualizar assinatura");
     }
   }
 );
 
-//buscar wishlist
+// BUSCAR WISHLIST
 export const buscarWishlist = createAsyncThunk(
   "user/buscarWishlist",
   async (_, { rejectWithValue }) => {
@@ -81,12 +72,12 @@ export const buscarWishlist = createAsyncThunk(
       const response = await api.get("/usuarios/me");
       return response.data.lista_desejos;
     } catch (err) {
-      return rejectWithValue("Erro ao buscar wishlist",err);
+      return rejectWithValue("Erro ao buscar wishlist", err);
     }
   }
 );
 
-//adicionar conteúdo à wishlist
+// ADICIONAR WISHLIST
 export const adicionarWishlist = createAsyncThunk(
   "user/adicionarWishlist",
   async (conteudoId, { rejectWithValue }) => {
@@ -99,7 +90,7 @@ export const adicionarWishlist = createAsyncThunk(
   }
 );
 
-//remover conteúdo da wishlist
+// REMOVER WISHLIST
 export const removerWishlist = createAsyncThunk(
   "user/removerWishlist",
   async (conteudoId, { rejectWithValue }) => {
@@ -114,7 +105,49 @@ export const removerWishlist = createAsyncThunk(
   }
 );
 
-//  STATE
+// GERENCIAMENTO DE PERFIS
+
+export const adicionarPerfil = createAsyncThunk(
+  "user/adicionarPerfil",
+  async ({ nome, avatar }, { rejectWithValue }) => {
+    try {
+  
+      const response = await api.post("/usuarios/perfis", { nome, avatar });
+      return response.data.perfis; 
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.erro || "Erro ao criar perfil");
+    }
+  }
+);
+
+export const editarPerfil = createAsyncThunk(
+  "user/editarPerfil",
+  async ({ perfilId, nome, avatar }, { rejectWithValue }) => {
+    try {
+      const response = await api.patch(`/usuarios/perfis/${perfilId}`, { nome, avatar });
+      return response.data.perfis; 
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.erro || "Erro ao editar perfil");
+    }
+  }
+);
+
+// REMOVER PERFIL
+export const removerPerfil = createAsyncThunk(
+  "user/removerPerfil",
+  async (perfilId, { rejectWithValue }) => {
+    try {
+      const response = await api.delete(`/usuarios/perfis/${perfilId}`);
+      return response.data.perfis; 
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.erro || "Erro ao remover perfil");
+    }
+  }
+);
+
+
+
+// STATE
 const initialState = {
   id: null,
   nome: "",
@@ -123,8 +156,10 @@ const initialState = {
   data_nascimento: null,
   role: "",
   lista_desejos: [],
-
-
+  
+  
+  perfis: [],
+  perfilAtivo: null, 
   assinatura: {
      tipo_plano: null,
      tipo_pagamento: null,
@@ -133,8 +168,7 @@ const initialState = {
   token: sessionStorage.getItem('token') || null,
   isAuthenticated: !!sessionStorage.getItem('token'),
 
-
-  statusRequest: "idle", // estado das requisiÃ§Ãµes
+  statusRequest: "idle", 
   error: null
 };
 
@@ -152,7 +186,13 @@ const userSlice = createSlice({
         };
       }
       state.assinatura.tipo_plano = action.payload;
-    },//usamos dispatch(selecionarPlano("premium")); sem chamar a API
+    },
+    
+
+    selecionarPerfilAtivo: (state, action) => {
+      state.perfilAtivo = action.payload;
+    },
+
     logout: (state) => {
       state.id = null;
       state.nome = "";
@@ -160,12 +200,14 @@ const userSlice = createSlice({
       state.email = "";
       state.data_nascimento = null;
       state.role = "";
+      state.perfis = [];
+      state.perfilAtivo = null;
 
       state.assinatura = {
-      tipo_plano: null,
-       tipo_pagamento: null,
-      status: "inativo"
-    } ;
+        tipo_plano: null,
+        tipo_pagamento: null,
+        status: "inativo"
+      };
 
       state.statusRequest = "idle";
       state.error = null;
@@ -174,13 +216,10 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      //esse resultado vem do "return response.data.user" lá no "cadastrarUsuario"
-
       // CADASTRO
       .addCase(cadastrarUsuario.pending, (state) => {
         state.statusRequest = "loading";
       })
-
       .addCase(cadastrarUsuario.fulfilled, (state, action) => {
         state.statusRequest = "succeeded";
         state.id = action.payload._id;
@@ -189,6 +228,8 @@ const userSlice = createSlice({
         state.email = action.payload.email;
         state.data_nascimento = action.payload.data_nascimento;
         state.role = action.payload.role;
+        state.perfis = action.payload.perfis || []; // Adicionado
+        
         state.assinatura = action.payload.assinatura || {
           tipo_plano: null,
           tipo_pagamento: null,
@@ -197,8 +238,6 @@ const userSlice = createSlice({
         state.isAuthenticated = true;
         state.error = null;
       })
-      //como houve uma mudança no Redux, ele vai executar o "store.subscribe" lá no "index.js" e atualizar o localStorage. Depois volta para o "Cadastro.jsx" e executa o "navigate("/planos")"
-      
       .addCase(cadastrarUsuario.rejected, (state, action) => {
         state.statusRequest = "failed";
         state.error = action.payload || action.error.message;
@@ -222,6 +261,7 @@ const userSlice = createSlice({
         state.nome = usuario?.nome || "";
         state.email = usuario?.email || "";
         state.role = usuario?.role || "";
+        state.perfis = usuario?.perfis || []; 
 
         state.assinatura = usuario?.assinatura || {
           tipo_plano: null,
@@ -233,46 +273,49 @@ const userSlice = createSlice({
         state.error = null;
       })
 
-      // PLANO
+      // PLANO E USUARIO
       .addCase(atualizarPlano.fulfilled, (state, action) => {
         state.assinatura = action.payload.assinatura;
       })
-
-      //atualizar usuario
       .addCase(atualizarUsuario.fulfilled, (state, action) => {
         state.nome = action.payload.nome;
         state.sobrenome = action.payload.sobrenome;
         state.data_nascimento = action.payload.data_nascimento;
       })
-
       .addCase(atualizarUsuario.pending, (state) => {
         state.statusRequest = "loading";
       })
-
       .addCase(atualizarUsuario.rejected, (state, action) => {
         state.statusRequest = "failed";
         state.error = action.payload || action.error.message;
       })  
 
-
-      // BUSCAR
+      // WISHLIST
       .addCase(buscarWishlist.fulfilled, (state, action) => {
         state.lista_desejos = action.payload;
       })
-
-      // ADICIONAR
       .addCase(adicionarWishlist.fulfilled, (state, action) => {
         state.lista_desejos = action.payload;
       })
-
-      // REMOVER
       .addCase(removerWishlist.fulfilled, (state, action) => {
         state.lista_desejos = action.payload;
       })
 
+      .addCase(adicionarPerfil.fulfilled, (state, action) => {
+        state.perfis = action.payload; 
+      })
+      .addCase(editarPerfil.fulfilled, (state, action) => {
+        state.perfis = action.payload;
+      })
+      .addCase(removerPerfil.fulfilled, (state, action) => {
+        state.perfis = action.payload;
+        if (state.perfilAtivo && !action.payload.find(p => p._id === state.perfilAtivo._id)) {
+            state.perfilAtivo = null;
+        }
+      });
   }
 });
 
 // EXPORTS
-export const { logout, selecionarPlano } = userSlice.actions;
+export const { logout, selecionarPlano, selecionarPerfilAtivo } = userSlice.actions;
 export default userSlice.reducer;

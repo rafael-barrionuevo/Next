@@ -9,6 +9,13 @@ const UsuarioSchema = new mongoose.Schema({
   data_nascimento: Date,
   role: { type: String, default: 'user' },
   lista_desejos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Conteudo' }], // Array que referencia objetos de Conteudo
+  
+  perfis: [
+  {
+    nome: { type: String, required: true },
+    avatar: { type: String, required: true }
+  }
+],
 
   assinatura: {
     tipo_plano: String,     // Ex: "Premium", "Basic"
