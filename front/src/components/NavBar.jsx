@@ -78,7 +78,7 @@ function NavBar() {
         {/* Sair */}
         <div 
           onClick={handleLogout}
-          className="px-4 py-2 text-center text-sm text-gray-300 hover:underline cursor-pointer"
+          className="px-4 py-2 text-center text-sm text-gray-300 hover:underline cursor-pointer text-red-600 font-bold"
         >
           Sair da Next
         </div>
@@ -112,9 +112,9 @@ function NavBar() {
         </div>
         
         <div className='flex flex-wrap justify-center gap-x-6 gap-y-2 items-center pb-4 px-4 text-sm font-medium text-white/60'>
-          <a className='hover:text-white transition-all cursor-pointer border-b-2 border-transparent hover:border-purple-600 pb-1'>Filmes</a>
-          <a className='hover:text-white transition-all cursor-pointer border-b-2 border-transparent hover:border-purple-600 pb-1'>Séries</a>
-          <a className='hover:text-white transition-all cursor-pointer border-b-2 border-transparent hover:border-purple-600 pb-1'>Animes</a>
+          <Link to="/series" className='hover:text-white transition-all cursor-pointer border-b-2 border-transparent hover:border-purple-600 pb-1'>Filmes</Link>
+          <Link to="/filmes" className='hover:text-white transition-all cursor-pointer border-b-2 border-transparent hover:border-purple-600 pb-1'>Séries</Link>
+          <Link to="#" className='hover:text-white transition-all cursor-pointer border-b-2 border-transparent hover:border-purple-600 pb-1'>Animes</Link>
           {user.role === 'admin' && (
             <Link to="/admin" className='text-purple-500 font-bold border-b-2 border-transparent hover:border-purple-600 pb-1'>Admin</Link>
           )}
@@ -128,8 +128,8 @@ function NavBar() {
           
           <div className='flex items-center gap-6 text-sm font-medium text-white/80'>
             <Link to="/home" className='hover:text-white transition-colors cursor-pointer'>Início</Link>
-            <a className='hover:text-white transition-colors cursor-pointer'>Séries</a>
-            <a className='hover:text-white transition-colors cursor-pointer'>Filmes</a>
+            <Link to="/filmes" className='hover:text-white transition-colors cursor-pointer'>Filmes</Link>
+            <Link to="/series" className='hover:text-white transition-colors cursor-pointer'>Séries</Link>
             <Link to="/wishList" className='hover:text-white transition-colors cursor-pointer'>Minha Lista</Link>
           </div>
         </div>
