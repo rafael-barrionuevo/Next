@@ -15,6 +15,9 @@ import AdminRemover from "./pages/adminRemover.jsx";
 import PerfilUser from "./pages/PerfilUser.jsx";
 import GerenciarPerfis from "./pages/GerenciarPerfis.jsx";
 import AdicionarPerfil from "./pages/AdicionarPerfil.jsx";
+import Serie from "./pages/Serie.jsx";
+import Filme from "./pages/Filme.jsx";
+
 
 function App() {
 
@@ -37,7 +40,8 @@ function App() {
         <Route path="/admin/remover" element={<AdminRemover />} />
         <Route path="/gerenciar-perfis" element={<GerenciarPerfis />} />
         <Route path="/adicionar-perfil" element={<AdicionarPerfil />} />
-      
+        <Route path="/serie" element={<Serie />} />
+        <Route path="/filme" element={<Filme />} />
       </Routes>
     </BrowserRouter>
   );
