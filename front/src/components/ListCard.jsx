@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 
 function gridColSize() {
-  const [columns, setColumns] = useState(2);
+  const [columns, setColumns] = useState(1);
   const updateColumns = () => {
     const width = window.innerWidth;
     if (width >= 1280) setColumns(5);
     else if (width >= 1024) setColumns(4);
     else if (width >= 500) setColumns(3);
-    else setColumns(2);
+    else setColumns(1);
   };
 
   useEffect(() => {
@@ -31,7 +31,7 @@ function ListCard({ imgLink = [] }) {
       <div
         className={`
           grid gap-3 transition-all duration-700 ease-in-out overflow-hidden
-          grid-cols-2 min-[500px]:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5
+          grid-cols-1 min-[500px]:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5
           ${!isExpanded ? 'max-h-[50vh]' : 'max-h-500'} 
         `}
       >
