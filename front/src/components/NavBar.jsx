@@ -128,8 +128,8 @@ function NavBar() {
           
           <div className='flex items-center gap-6 text-sm font-medium text-white/80'>
             <Link to="/home" className='hover:text-white transition-colors cursor-pointer'>Início</Link>
-            <a className='hover:text-white transition-colors cursor-pointer'>Séries</a>
-            <a className='hover:text-white transition-colors cursor-pointer'>Filmes</a>
+            <Link to="/serie" className="seu-codigo-de-estilizacao-aqui">Séries</Link>
+            <Link to="/filme" className="seu-codigo-de-estilizacao-aqui">Filmes</Link>
             <Link to="/wishList" className='hover:text-white transition-colors cursor-pointer'>Minha Lista</Link>
           </div>
         </div>
