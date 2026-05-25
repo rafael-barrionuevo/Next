@@ -17,6 +17,7 @@ import AdicionarPerfil from "./pages/AdicionarPerfil.jsx";
 import AdminPlanos from "./pages/AdminPlanos.jsx";
 import Serie from "./pages/Serie.jsx";
 import Filme from "./pages/Filme.jsx";
+import Downloads from "./pages/Downloads.jsx";
 
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
         <Route path="/adicionar-perfil" element={<AdicionarPerfil />} />
         <Route path="/serie" element={<Serie />} />
         <Route path="/filme" element={<Filme />} />
+        <Route path="/downloads" element={<Downloads />} />
       </Routes>
     </BrowserRouter>
   );

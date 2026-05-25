@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import api from "../services/api";
 
@@ -15,6 +16,7 @@ const initialForm = {
 };
 
 export default function AdminPlanos() {
+  const navigate = useNavigate();
   const [planos, setPlanos] = useState([]);
   const [form, setForm] = useState(initialForm);
   const [editandoId, setEditandoId] = useState(null);
@@ -102,7 +104,18 @@ export default function AdminPlanos() {
       <NavBar />
 
       <main className="max-w-5xl mx-auto px-6 py-10">
-        <h1 className="text-3xl font-bold mb-8">Gerenciar Planos</h1>
+        <div className="flex items-center gap-4 mb-8">
+          <button
+            onClick={() => navigate('/admin')}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg border border-white/10 text-gray-300 hover:bg-white/5 hover:text-white transition-all text-sm font-medium"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Voltar ao painel
+          </button>
+          <h1 className="text-3xl font-bold">Gerenciar Planos</h1>
+        </div>
 
         <form onSubmit={handleSubmit} className="bg-[#161b22] p-6 rounded-xl space-y-4 mb-8">
           <div className="grid md:grid-cols-2 gap-4">

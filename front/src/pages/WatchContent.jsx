@@ -9,6 +9,9 @@ import {
   MediaPlayButton,
   MediaMuteButton,
   MediaFullscreenButton,
+  MediaCaptionsButton,
+  MediaSeekBackwardButton,
+  MediaSeekForwardButton,
 } from "media-chrome/react";
 
 import { useParams, useNavigate } from "react-router-dom";
@@ -25,6 +28,14 @@ function WatchContent() {
   const status = useSelector(state => state.content.status);
   
   const [src, setSrc] = useState('');
+
+  // Se for URL do Google Drive, converte para o proxy do backend
+  const toProxiedUrl = (url) => {
+    if (url?.includes('drive.google.com')) {
+      return `http://localhost:3000/proxy/video?url=${encodeURIComponent(url)}`;
+    }
+    return url;
+  };
 
   useEffect(() => {
     if (contents.length === 0 && status === 'idle') {
@@ -46,9 +57,9 @@ function WatchContent() {
           if (foundUrl) break;
         }
       }
-      
-      // Fallback url se não encontrar (ou para testes se o BD não tiver urls válidas)
-      setSrc(foundUrl || 'https://www.youtube.com/watch?v=C5tn1MvXsLw');
+
+      const finalUrl = foundUrl || 'https://www.youtube.com/watch?v=C5tn1MvXsLw';
+      setSrc(toProxiedUrl(finalUrl));
     }
   }, [id, contents, status, dispatch]);
 
@@ -56,7 +67,7 @@ function WatchContent() {
     <div className="w-full h-screen bg-black flex items-center justify-center font-sans">
       
       <MediaController 
-        className="w-full max-w-5xl aspect-video relative group"
+        className="w-full h-full relative group"
         style={{
           "--media-primary-color": "#ffffff",
           "--media-secondary-color": "rgba(255, 255, 255, 0.7)",
@@ -81,17 +92,31 @@ function WatchContent() {
           }}
         />
 
-        {}
+        {/* Botão Sair - canto superior esquerdo */}
+        <div className="absolute top-0 left-0 w-full px-6 pt-6 pb-16 bg-gradient-to-b from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none">
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 text-white hover:text-white/80 transition-colors pointer-events-auto"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+        </div>
+
         <MediaControlBar 
           className="absolute bottom-0 w-full flex items-center px-4 pt-12 pb-4 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         >
           <MediaPlayButton className="mr-2" />
+          <MediaSeekBackwardButton seekOffset={10} className="mr-1" />
+          <MediaSeekForwardButton seekOffset={10} className="mr-2" />
           
           <MediaTimeRange className="flex-grow mx-3" />
           
           <MediaTimeDisplay className="text-sm font-medium mr-4" />
           <MediaMuteButton />
           <MediaVolumeRange className="w-24 mr-2" />
+          <MediaCaptionsButton className="mr-2" />
           <MediaPlaybackRateButton className="mr-2" />
           <MediaFullscreenButton />
         </MediaControlBar>

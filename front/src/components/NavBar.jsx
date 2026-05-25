@@ -113,9 +113,8 @@ function NavBar() {
         </div>
 
         <div className='flex flex-wrap justify-center gap-x-6 gap-y-2 items-center pb-4 px-4 text-sm font-medium text-white/60'>
-          <Link to="/series" className='hover:text-white transition-all cursor-pointer border-b-2 border-transparent hover:border-purple-600 pb-1'>Filmes</Link>
-          <Link to="/filmes" className='hover:text-white transition-all cursor-pointer border-b-2 border-transparent hover:border-purple-600 pb-1'>Séries</Link>
-          <Link to="#" className='hover:text-white transition-all cursor-pointer border-b-2 border-transparent hover:border-purple-600 pb-1'>Animes</Link>
+          <Link to="/filme" className='hover:text-white transition-all cursor-pointer border-b-2 border-transparent hover:border-purple-600 pb-1'>Filmes</Link>
+          <Link to="/serie" className='hover:text-white transition-all cursor-pointer border-b-2 border-transparent hover:border-purple-600 pb-1'>Séries</Link>
           {user.role === 'admin' && (
             <Link to="/admin" className='text-purple-500 font-bold border-b-2 border-transparent hover:border-purple-600 pb-1'>Admin</Link>
           )}
@@ -127,12 +126,12 @@ function NavBar() {
         <div className='flex items-center gap-10'>
           <img src={logo} alt="Next Logo" className='w-24' />
 
-          <div className='flex items-center gap-6 text-sm font-medium text-white/80'>
+          {<div className='flex items-center gap-6 text-sm font-medium text-white/80'>
             <Link to="/home" className='hover:text-white transition-colors cursor-pointer'>Início</Link>
             <Link to="/serie" className="seu-codigo-de-estilizacao-aqui">Séries</Link>
             <Link to="/filme" className="seu-codigo-de-estilizacao-aqui">Filmes</Link>
             <Link to="/wishList" className='hover:text-white transition-colors cursor-pointer'>Minha Lista</Link>
-          </div>
+          </div>}
         </div>
 
         <div className='flex items-center gap-6 text-sm font-medium text-white/80'>
