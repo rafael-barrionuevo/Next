@@ -3,26 +3,24 @@ const jwt = require("jsonwebtoken");
 
 async function autenticar(req, res, next) {
     const auth = req.headers.authorization;
-    if(!auth) {
-        throw new Error("Não possui token");
+    if (!auth) {
+        return res.status(401).json({ message: "Não possui token" });
     }
 
-    const [,token] = auth.split(" ");
-    
-    try {
-        jwt.verify(token, process.env.JWT_KEY,
-            (error, decoded) => {
-                if(error) {
-                    throw new Error("Token inválido" + error.message);
-                } else {
-                    req.id = decoded.id;
-                    req.role = decoded.role;
-                    next();
-                }
-            });
-    } catch (error) {
-        res.status(401).json({ message: error.message }); 
+    const [, token] = auth.split(" ");
+    if (!token) {
+        return res.status(401).json({ message: "Token ausente" });
     }
+
+    jwt.verify(token, process.env.JWT_KEY, (error, decoded) => {
+        if (error) {
+            return res.status(401).json({ message: "Token inválido" });
+        }
+
+        req.id = decoded.id;
+        req.role = decoded.role;
+        next();
+    });
 }
 
 module.exports = autenticar;

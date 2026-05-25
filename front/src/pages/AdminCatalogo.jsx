@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { listarConteudos, criarConteudo, atualizarConteudo, adicionarEpisodio, atualizarEpisodio } from '../store/contentSlice';
 import api from '../services/api';
@@ -6,9 +6,10 @@ import NavBar from '../components/NavBar';
 import { IoAddCircleOutline, IoTrashOutline, IoChevronDownOutline, IoChevronUpOutline, IoPencilOutline } from "react-icons/io5";
 import { getImageUrl } from "../utils/getImageUrl";
 import Button from "../components/button";
-import InputField from "../components/inputField";
+import { useCloudinaryUpload } from '../hooks/useCloudinaryUpload';
 
 export default function AdminCatalogo() {
+  const { upload } = useCloudinaryUpload('conteudos');
   const dispatch = useDispatch();
   const { items: conteudos, status } = useSelector(state => state.content);
 
@@ -209,8 +210,8 @@ export default function AdminCatalogo() {
       </main>
 
       {/* MODAIS */}
-      {modalConteudo.isOpen && <ModalConteudo modal={modalConteudo} setModal={setModalConteudo} dispatch={dispatch} />}
-      {modalEpisodio.isOpen && <ModalEpisodio modal={modalEpisodio} setModal={setModalEpisodio} dispatch={dispatch} />}
+      {modalConteudo.isOpen && <ModalConteudo modal={modalConteudo} setModal={setModalConteudo} dispatch={dispatch} upload={upload} />}
+      {modalEpisodio.isOpen && <ModalEpisodio modal={modalEpisodio} setModal={setModalEpisodio} dispatch={dispatch} upload={upload} />}
 
       <style>{`
         .custom-scrollbar::-webkit-scrollbar { height: 8px; }
@@ -223,7 +224,7 @@ export default function AdminCatalogo() {
 }
 
 // ------------------- MODAL CONTEUDO (Filme/Série) -------------------
-function ModalConteudo({ modal, setModal, dispatch }) {
+function ModalConteudo({ modal, setModal, dispatch, upload }) {
   const { mode, data, type } = modal;
 
   const [titulo, setTitulo] = useState(data?.titulo || '');
@@ -232,14 +233,60 @@ function ModalConteudo({ modal, setModal, dispatch }) {
   const [duracao, setDuracao] = useState(data?.filme?.duracao || '');
   const [urlVideo, setUrlVideo] = useState(data?.filme?.url_filme || '');
   const [imgCapa, setImgCapa] = useState(null);
+  const [imgCapaUrl, setImgCapaUrl] = useState(data?.img_capa ? getImageUrl(data.img_capa) : null);
   const [imgCapaPreview, setImgCapaPreview] = useState(data?.img_capa ? getImageUrl(data.img_capa) : null);
+  const [uploadingCapa, setUploadingCapa] = useState(false);
+  const [uploadingVideo, setUploadingVideo] = useState(false);
+  const [uploadErrorMsg, setUploadErrorMsg] = useState('');
+  const videoFileInputRef = useRef(null);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setImgCapa(file);
+      setImgCapaUrl(null);
+      setUploadErrorMsg('');
       setImgCapaPreview(URL.createObjectURL(file));
     }
+  };
+
+  const handleImageUpload = async () => {
+    if (!imgCapa) {
+      setUploadErrorMsg('Selecione uma imagem antes de enviar.');
+      return;
+    }
+
+    try {
+      setUploadingCapa(true);
+      setUploadErrorMsg('');
+      const result = await upload(imgCapa);
+      setImgCapaUrl(result.url);
+      setImgCapaPreview(result.url);
+    } catch (err) {
+      setUploadErrorMsg(err.message || 'Falha ao enviar a imagem');
+    } finally {
+      setUploadingCapa(false);
+    }
+  };
+
+  const handleVideoFileSelect = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setUploadingVideo(true);
+      setUploadErrorMsg('');
+      const result = await upload(file);
+      setUrlVideo(result.url);
+    } catch (err) {
+      setUploadErrorMsg(err.message || 'Falha ao enviar o vídeo');
+    } finally {
+      setUploadingVideo(false);
+    }
+  };
+
+  const triggerVideoFileSelect = () => {
+    videoFileInputRef.current?.click();
   };
 
   const handleSubmit = (e) => {
@@ -253,7 +300,12 @@ function ModalConteudo({ modal, setModal, dispatch }) {
       formData.append("duracao", duracao);
       formData.append("url_filme", urlVideo);
     }
-    if (imgCapa) formData.append("img_capa", imgCapa);
+
+    if (imgCapaUrl) {
+      formData.append("img_capa", imgCapaUrl);
+    } else if (imgCapa) {
+      formData.append("img_capa", imgCapa);
+    }
 
     const action = mode === 'create' ? criarConteudo(formData) : atualizarConteudo({ id: data._id, formData });
 
@@ -287,6 +339,13 @@ function ModalConteudo({ modal, setModal, dispatch }) {
               )}
               <input type="file" accept="image/*" onChange={handleImageChange} className="absolute inset-0 opacity-0 cursor-pointer" />
             </div>
+            <div className="flex flex-col gap-2">
+              <button type="button" onClick={handleImageUpload} disabled={!imgCapa || uploadingCapa} className="w-full sm:w-auto max-w-[180px] py-2 text-sm bg-purple-600 hover:bg-purple-500 rounded-lg transition-colors disabled:opacity-50">
+                {uploadingCapa ? 'Enviando...' : 'Upload imagem'}
+              </button>
+              {uploadErrorMsg && <p className="text-xs text-red-400">{uploadErrorMsg}</p>}
+              {imgCapaUrl && !uploadingCapa && <p className="text-xs text-green-400">Imagem enviada: Cloudinary pronta para salvar</p>}
+            </div>
           </div>
 
           {/* Lado direito: Campos */}
@@ -302,14 +361,22 @@ function ModalConteudo({ modal, setModal, dispatch }) {
             </div>
 
             {type === "filme" && (
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex flex-col">
                   <label className="text-sm font-bold text-gray-400 mb-1">Duração</label>
                   <input type="text" value={duracao} onChange={(e) => setDuracao(e.target.value)} className="w-full p-2 rounded-lg bg-black/50 border border-purple-400/50 text-white outline-none focus:ring-2 focus:ring-purple-500" />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col gap-2">
                   <label className="text-sm font-bold text-gray-400 mb-1">URL do Vídeo</label>
-                  <input type="text" value={urlVideo} onChange={(e) => setUrlVideo(e.target.value)} className="w-full p-2 rounded-lg bg-black/50 border border-purple-400/50 text-white outline-none focus:ring-2 focus:ring-purple-500" />
+                  <div className="flex flex-col sm:flex-row sm:items-end gap-2">
+                    <input type="text" value={urlVideo} onChange={(e) => setUrlVideo(e.target.value)} className="w-full p-2 rounded-lg bg-black/50 border border-purple-400/50 text-white outline-none focus:ring-2 focus:ring-purple-500" />
+                    <button type="button" onClick={triggerVideoFileSelect} disabled={uploadingVideo} className="w-full sm:w-auto max-w-[160px] px-4 py-2 text-sm bg-purple-600 hover:bg-purple-500 rounded-lg transition-colors disabled:opacity-50">
+                      {uploadingVideo ? 'Enviando...' : 'Subir arquivo'}
+                    </button>
+                  </div>
+                  <input ref={videoFileInputRef} type="file" accept="video/*" className="hidden" onChange={handleVideoFileSelect} />
+                  {uploadErrorMsg && <p className="text-xs text-red-400">{uploadErrorMsg}</p>}
+                  {urlVideo && urlVideo.startsWith('http') && !uploadingVideo && <p className="text-xs text-green-400">URL pronta para salvar</p>}
                 </div>
               </div>
             )}
@@ -331,7 +398,7 @@ function ModalConteudo({ modal, setModal, dispatch }) {
 }
 
 // ------------------- MODAL EPISODIO -------------------
-function ModalEpisodio({ modal, setModal, dispatch }) {
+function ModalEpisodio({ modal, setModal, dispatch, upload }) {
   const { mode, data, serieId } = modal;
 
   const [numeroTemporada, setNumeroTemporada] = useState(modal.tempNumero || 1);
@@ -340,14 +407,60 @@ function ModalEpisodio({ modal, setModal, dispatch }) {
   const [descricao, setDescricao] = useState(data?.descricao || '');
   const [urlVideo, setUrlVideo] = useState(data?.url_ep || '');
   const [imgEp, setImgEp] = useState(null);
+  const [imgEpUrl, setImgEpUrl] = useState(data?.img_ep ? getImageUrl(data.img_ep) : null);
   const [imgEpPreview, setImgEpPreview] = useState(data?.img_ep ? getImageUrl(data.img_ep) : null);
+  const [uploadingEpImage, setUploadingEpImage] = useState(false);
+  const [uploadingEpVideo, setUploadingEpVideo] = useState(false);
+  const [uploadEpErrorMsg, setUploadEpErrorMsg] = useState('');
+  const episodeVideoFileInputRef = useRef(null);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setImgEp(file);
+      setImgEpUrl(null);
+      setUploadEpErrorMsg('');
       setImgEpPreview(URL.createObjectURL(file));
     }
+  };
+
+  const handleImageUpload = async () => {
+    if (!imgEp) {
+      setUploadEpErrorMsg('Selecione uma imagem antes de enviar.');
+      return;
+    }
+
+    try {
+      setUploadingEpImage(true);
+      setUploadEpErrorMsg('');
+      const result = await upload(imgEp);
+      setImgEpUrl(result.url);
+      setImgEpPreview(result.url);
+    } catch (err) {
+      setUploadEpErrorMsg(err.message || 'Falha ao enviar a imagem');
+    } finally {
+      setUploadingEpImage(false);
+    }
+  };
+
+  const handleVideoFileSelect = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setUploadingEpVideo(true);
+      setUploadEpErrorMsg('');
+      const result = await upload(file);
+      setUrlVideo(result.url);
+    } catch (err) {
+      setUploadEpErrorMsg(err.message || 'Falha ao enviar o vídeo');
+    } finally {
+      setUploadingEpVideo(false);
+    }
+  };
+
+  const triggerEpisodeVideoSelect = () => {
+    episodeVideoFileInputRef.current?.click();
   };
 
   const handleSubmit = (e) => {
@@ -358,7 +471,12 @@ function ModalEpisodio({ modal, setModal, dispatch }) {
     formData.append("titulo", titulo);
     formData.append("descricao", descricao);
     formData.append("url_video", urlVideo);
-    if (imgEp) formData.append("img_ep", imgEp);
+
+    if (imgEpUrl) {
+      formData.append("img_ep", imgEpUrl);
+    } else if (imgEp) {
+      formData.append("img_ep", imgEp);
+    }
 
     const action = mode === 'create'
       ? adicionarEpisodio({ serieId, numeroTemporada, dadosEpisodio: formData })
@@ -394,6 +512,11 @@ function ModalEpisodio({ modal, setModal, dispatch }) {
               )}
               <input type="file" accept="image/*" onChange={handleImageChange} className="absolute inset-0 opacity-0 cursor-pointer" />
             </div>
+            <button type="button" onClick={handleImageUpload} disabled={!imgEp || uploadingEpImage} className="w-full sm:w-auto max-w-[180px] py-2 text-sm bg-purple-600 hover:bg-purple-500 rounded-lg transition-colors disabled:opacity-50">
+              {uploadingEpImage ? 'Enviando...' : 'Upload imagem'}
+            </button>
+            {uploadEpErrorMsg && <p className="text-xs text-red-400">{uploadEpErrorMsg}</p>}
+            {imgEpUrl && !uploadingEpImage && <p className="text-xs text-green-400">Imagem enviada: Cloudinary pronta para salvar</p>}
           </div>
 
           {/* Lado direito: Campos */}
@@ -414,9 +537,17 @@ function ModalEpisodio({ modal, setModal, dispatch }) {
               <input type="text" value={titulo} onChange={(e) => setTitulo(e.target.value)} required className="w-full p-2 rounded-lg bg-black/50 border border-purple-400/50 text-white outline-none focus:ring-2 focus:ring-purple-500" />
             </div>
 
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-2">
               <label className="text-sm font-bold text-gray-400 mb-1">URL do Vídeo</label>
-              <input type="text" value={urlVideo} onChange={(e) => setUrlVideo(e.target.value)} required className="w-full p-2 rounded-lg bg-black/50 border border-purple-400/50 text-white outline-none focus:ring-2 focus:ring-purple-500" />
+              <div className="flex gap-2 items-end">
+                <input type="text" value={urlVideo} onChange={(e) => setUrlVideo(e.target.value)} required className="flex-1 p-2 rounded-lg bg-black/50 border border-purple-400/50 text-white outline-none focus:ring-2 focus:ring-purple-500" />
+                <button type="button" onClick={triggerEpisodeVideoSelect} disabled={uploadingEpVideo} className="shrink-0 px-4 py-2 text-sm bg-purple-600 hover:bg-purple-500 rounded-lg transition-colors disabled:opacity-50">
+                  {uploadingEpVideo ? 'Enviando...' : 'Subir arquivo'}
+                </button>
+              </div>
+              <input ref={episodeVideoFileInputRef} type="file" accept="video/*" className="hidden" onChange={handleVideoFileSelect} />
+              {uploadEpErrorMsg && <p className="text-xs text-red-400">{uploadEpErrorMsg}</p>}
+              {urlVideo && urlVideo.startsWith('http') && <p className="text-xs text-green-400">URL pronta para salvar</p>}
             </div>
 
             <div className="flex flex-col flex-1">

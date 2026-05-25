@@ -22,6 +22,8 @@ class ConteudoController {
         const caminho = `uploads/conteudos/${Date.now()}_${foto.name}`;
         await foto.mv(caminho);
         imagePath = `/${caminho}`;
+      } else if (req.body.img_capa) {
+        imagePath = req.body.img_capa;
       }
 
       const conteudoData = {
@@ -61,6 +63,8 @@ class ConteudoController {
         const caminho = `uploads/conteudos/${Date.now()}_${foto.name}`;
         await foto.mv(caminho);
         imagePath = `/${caminho}`;
+      } else if (req.body.img_ep) {
+        imagePath = req.body.img_ep;
       }
 
       const dadosEpisodio = {
@@ -115,6 +119,8 @@ class ConteudoController {
         const caminho = `uploads/conteudos/${Date.now()}_${foto.name}`;
         await foto.mv(caminho);
         imagePath = `/${caminho}`;
+      } else if (req.body.img_capa) {
+        imagePath = req.body.img_capa;
       }
 
       const conteudoData = {
@@ -153,6 +159,8 @@ class ConteudoController {
         const caminho = `uploads/conteudos/${Date.now()}_${foto.name}`;
         await foto.mv(caminho);
         imagePath = `/${caminho}`;
+      } else if (req.body.img_ep) {
+        imagePath = req.body.img_ep;
       }
 
       const dadosEpisodio = {
