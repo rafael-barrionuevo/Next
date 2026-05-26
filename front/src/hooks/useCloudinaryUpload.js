@@ -22,10 +22,10 @@ export const useCloudinaryUpload = (folder = 'conteudos') => {
         throw new Error('Por favor, selecione um arquivo válido');
       }
 
-      // Valida o tamanho (máx 100MB)
-      const maxSize = 100 * 1024 * 1024;
+      // Valida o tamanho (máx 500MB)
+      const maxSize = 500 * 1024 * 1024;
       if (file.size > maxSize) {
-        throw new Error('Arquivo muito grande (máximo 100MB)');
+        throw new Error('Arquivo muito grande (máximo 500MB)');
       }
 
       // Tipos permitidos

@@ -18,26 +18,14 @@ export const getUploadSignature = async (folder = 'conteudos') => {
   }
 };
 
-/**
- * Faz upload de arquivo para Cloudinary de forma segura
- * @param {File} file - O arquivo a ser enviado
- * @param {string} folder - Pasta no Cloudinary ('conteudos' ou 'usuarios')
- * @returns {Promise} - {public_id, secure_url, resource_type, ...}
- */
 export const uploadToCloudinary = async (file, folder = 'conteudos') => {
   try {
-    const signatureData = await getUploadSignature(folder);
-
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('api_key', signatureData.apiKey);
-    formData.append('signature', signatureData.signature);
-    formData.append('timestamp', signatureData.timestamp);
     formData.append('folder', folder);
-    formData.append('resource_type', 'auto');
 
-    const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${signatureData.cloudName}/auto/upload`;
-    const response = await axios.post(cloudinaryUrl, formData, {
+    // Envia o arquivo para o próprio backend, que fará a compressão antes de salvar no Cloudinary
+    const response = await api.post('/api/upload-media', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -54,7 +42,7 @@ export const uploadToCloudinary = async (file, folder = 'conteudos') => {
       bytes: response.data.bytes,
     };
   } catch (error) {
-    console.error('Erro no upload:', error);
-    throw new Error(error.response?.data?.error?.message || 'Erro ao fazer upload');
+    console.error('Erro no upload via backend:', error);
+    throw new Error(error.response?.data?.error || 'Erro ao fazer upload pelo backend');
   }
 };
