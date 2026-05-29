@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { listarConteudos, criarConteudo, atualizarConteudo, adicionarEpisodio, atualizarEpisodio } from '../store/contentSlice';
+import { listarConteudos } from '../store/contentSlice';
 import api from '../services/api';
 import NavBar from '../components/NavBar';
 import { IoAddCircleOutline, IoTrashOutline, IoChevronDownOutline, IoChevronUpOutline, IoPencilOutline } from "react-icons/io5";
 import { getImageUrl } from "../utils/getImageUrl";
 import Button from "../components/button";
 import { useCloudinaryUpload } from '../hooks/useCloudinaryUpload';
+import ModalConteudo from '../components/admin/ModalConteudo';
+import ModalEpisodio from '../components/admin/ModalEpisodio';
 
 export default function AdminCatalogo() {
   const { upload } = useCloudinaryUpload('conteudos');
@@ -15,7 +17,6 @@ export default function AdminCatalogo() {
 
   const [activeTab, setActiveTab] = useState('filmes');
   const [expandedSerie, setExpandedSerie] = useState(null);
-
 
   const [modalConteudo, setModalConteudo] = useState({ isOpen: false, mode: 'create', data: null, type: 'filme' });
   const [modalEpisodio, setModalEpisodio] = useState({ isOpen: false, mode: 'create', data: null, serieId: null, tempNumero: null });
@@ -109,7 +110,6 @@ export default function AdminCatalogo() {
         {/* SÉRIES */}
         {activeTab === 'series' && (
           <div className="space-y-4">
-            {/* Card para Adicionar Série */}
             <div className="flex justify-end mb-4">
               <Button onClick={() => setModalConteudo({ isOpen: true, mode: 'create', data: null, type: 'serie' })} className="bg-purple-600 hover:bg-purple-500 py-2 px-4 rounded-lg font-bold flex items-center gap-2">
                 <IoAddCircleOutline className="text-xl" /> Adicionar Série
@@ -149,7 +149,6 @@ export default function AdminCatalogo() {
                 {/* Temporadas & Episodios */}
                 {expandedSerie === serie._id && (
                   <div className="bg-black/40 p-6 border-t border-white/5">
-                    {/* Botão de adicionar temporada/episódio genérico */}
                     <div className="flex justify-between items-center mb-6">
                       <h4 className="text-lg font-bold text-white">Episódios</h4>
                       <Button onClick={() => setModalEpisodio({ isOpen: true, mode: 'create', data: null, serieId: serie._id, tempNumero: (serie.temporadas?.[0]?.numero || 1) })} className="bg-green-600 hover:bg-green-500 py-1.5 px-4 rounded-lg text-sm font-bold flex items-center gap-2">
@@ -219,358 +218,6 @@ export default function AdminCatalogo() {
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(147,51,234,0.5); }
       `}</style>
-    </div>
-  );
-}
-
-// ------------------- MODAL CONTEUDO (Filme/Série) -------------------
-function ModalConteudo({ modal, setModal, dispatch, upload }) {
-  const { mode, data, type } = modal;
-
-  const [titulo, setTitulo] = useState(data?.titulo || '');
-  const [genero, setGenero] = useState(data?.genero ? data.genero.join(', ') : '');
-  const [ano, setAno] = useState(data?.ano || '');
-  const [sinopse, setSinopse] = useState(data?.sinopse || '');
-  const [duracao, setDuracao] = useState(data?.filme?.duracao || '');
-  const [urlVideo, setUrlVideo] = useState(data?.filme?.url_filme || '');
-  const [imgCapa, setImgCapa] = useState(null);
-  const [imgCapaUrl, setImgCapaUrl] = useState(data?.img_capa ? getImageUrl(data.img_capa) : null);
-  const [imgCapaPreview, setImgCapaPreview] = useState(data?.img_capa ? getImageUrl(data.img_capa) : null);
-  const [uploadingCapa, setUploadingCapa] = useState(false);
-  const [uploadingVideo, setUploadingVideo] = useState(false);
-  const [uploadErrorMsg, setUploadErrorMsg] = useState('');
-  const videoFileInputRef = useRef(null);
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImgCapa(file);
-      setImgCapaUrl(null);
-      setUploadErrorMsg('');
-      setImgCapaPreview(URL.createObjectURL(file));
-    }
-  };
-
-  const handleImageUpload = async () => {
-    if (!imgCapa) {
-      setUploadErrorMsg('Selecione uma imagem antes de enviar.');
-      return;
-    }
-
-    try {
-      setUploadingCapa(true);
-      setUploadErrorMsg('');
-      const result = await upload(imgCapa);
-      setImgCapaUrl(result.url);
-      setImgCapaPreview(result.url);
-    } catch (err) {
-      setUploadErrorMsg(err.message || 'Falha ao enviar a imagem');
-    } finally {
-      setUploadingCapa(false);
-    }
-  };
-
-  const handleVideoFileSelect = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      setUploadingVideo(true);
-      setUploadErrorMsg('');
-      const result = await upload(file);
-      setUrlVideo(result.url);
-    } catch (err) {
-      setUploadErrorMsg(err.message || 'Falha ao enviar o vídeo');
-    } finally {
-      setUploadingVideo(false);
-    }
-  };
-
-  const triggerVideoFileSelect = () => {
-    videoFileInputRef.current?.click();
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("titulo", titulo);
-    formData.append("tipo_midia", type);
-    formData.append("genero", genero);
-    formData.append("sinopse", sinopse);
-    formData.append("ano", ano);
-    if (type === "filme") {
-      formData.append("duracao", duracao);
-      formData.append("url_filme", urlVideo);
-    }
-
-    if (imgCapaUrl) {
-      formData.append("img_capa", imgCapaUrl);
-    } else if (imgCapa) {
-      formData.append("img_capa", imgCapa);
-    }
-
-    const action = mode === 'create' ? criarConteudo(formData) : atualizarConteudo({ id: data._id, formData });
-
-    dispatch(action).unwrap()
-      .then(() => {
-        dispatch(listarConteudos());
-        setModal({ isOpen: false });
-      })
-      .catch(err => alert("Erro: " + err));
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-[#161b22] border border-white/10 rounded-2xl w-full max-w-4xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-        <div className="p-6 border-b border-white/10 flex justify-between items-center shrink-0">
-          <h2 className="text-2xl font-bold">{mode === 'create' ? `Adicionar ${type === 'filme' ? 'Filme' : 'Série'}` : `Editar ${type === 'filme' ? 'Filme' : 'Série'} - ${data?.titulo}`}</h2>
-          <button onClick={() => setModal({ isOpen: false })} className="text-gray-400 hover:text-white text-2xl">&times;</button>
-        </div>
-        <form onSubmit={handleSubmit} className="p-6 flex flex-col md:flex-row gap-6 overflow-y-auto">
-          {/* Lado esquerdo: Selecionador de Imagem */}
-          <div className="w-full md:w-1/3 flex flex-col gap-2 shrink-0">
-            <label className="text-sm font-bold text-gray-400">Capa do Conteúdo</label>
-            <div className="relative aspect-[2/3] rounded-xl bg-black/50 border-2 border-dashed border-purple-400/50 hover:border-purple-500 flex flex-col items-center justify-center cursor-pointer overflow-hidden group transition-colors">
-              {imgCapaPreview ? (
-                <img src={imgCapaPreview} alt="Preview" className="w-full h-full object-cover group-hover:opacity-50 transition-opacity" />
-              ) : (
-                <div className="flex flex-col items-center text-gray-500 group-hover:text-purple-400">
-                  <IoAddCircleOutline className="text-5xl mb-2" />
-                  <span className="text-sm font-bold">Escolher Imagem</span>
-                </div>
-              )}
-              <input type="file" accept="image/*" onChange={handleImageChange} className="absolute inset-0 opacity-0 cursor-pointer" />
-            </div>
-            <div className="flex flex-col gap-2">
-              <button type="button" onClick={handleImageUpload} disabled={!imgCapa || uploadingCapa} className="w-full sm:w-auto max-w-[180px] py-2 text-sm bg-purple-600 hover:bg-purple-500 rounded-lg transition-colors disabled:opacity-50">
-                {uploadingCapa ? 'Enviando...' : 'Upload imagem'}
-              </button>
-              {uploadErrorMsg && <p className="text-xs text-red-400">{uploadErrorMsg}</p>}
-              {imgCapaUrl && !uploadingCapa && <p className="text-xs text-green-400">Imagem enviada: Cloudinary pronta para salvar</p>}
-            </div>
-          </div>
-
-          {/* Lado direito: Campos */}
-          <div className="w-full md:w-2/3 flex flex-col gap-4">
-            <div className="flex flex-col">
-              <label className="text-sm font-bold text-gray-400 mb-1">Título</label>
-              <input type="text" value={titulo} onChange={(e) => setTitulo(e.target.value)} required className="w-full p-2 rounded-lg bg-black/50 border border-purple-400/50 text-white outline-none focus:ring-2 focus:ring-purple-500" />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex flex-col">
-                <label className="text-sm font-bold text-gray-400 mb-1">Ano de Lançamento</label>
-                <input type="number" value={ano} onChange={(e) => setAno(e.target.value)} required className="w-full p-2 rounded-lg bg-black/50 border border-purple-400/50 text-white outline-none focus:ring-2 focus:ring-purple-500" />
-              </div>
-
-              <div className="flex flex-col">
-                <label className="text-sm font-bold text-gray-400 mb-1">Gêneros (separados por vírgula)</label>
-                <input type="text" value={genero} onChange={(e) => setGenero(e.target.value)} className="w-full p-2 rounded-lg bg-black/50 border border-purple-400/50 text-white outline-none focus:ring-2 focus:ring-purple-500" />
-              </div>
-            </div>
-
-            {type === "filme" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex flex-col">
-                  <label className="text-sm font-bold text-gray-400 mb-1">Duração</label>
-                  <input type="text" value={duracao} onChange={(e) => setDuracao(e.target.value)} className="w-full p-2 rounded-lg bg-black/50 border border-purple-400/50 text-white outline-none focus:ring-2 focus:ring-purple-500" />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-gray-400 mb-1">URL do Vídeo</label>
-                  <div className="flex flex-col sm:flex-row sm:items-end gap-2">
-                    <input type="text" value={urlVideo} onChange={(e) => setUrlVideo(e.target.value)} className="w-full p-2 rounded-lg bg-black/50 border border-purple-400/50 text-white outline-none focus:ring-2 focus:ring-purple-500" />
-                    <button type="button" onClick={triggerVideoFileSelect} disabled={uploadingVideo} className="w-full sm:w-auto max-w-[160px] px-4 py-2 text-sm bg-purple-600 hover:bg-purple-500 rounded-lg transition-colors disabled:opacity-50">
-                      {uploadingVideo ? 'Enviando...' : 'Subir arquivo'}
-                    </button>
-                  </div>
-                  <input ref={videoFileInputRef} type="file" accept="video/*" className="hidden" onChange={handleVideoFileSelect} />
-                  {uploadErrorMsg && <p className="text-xs text-red-400">{uploadErrorMsg}</p>}
-                  {urlVideo && urlVideo.startsWith('http') && !uploadingVideo && <p className="text-xs text-green-400">URL pronta para salvar</p>}
-                </div>
-              </div>
-            )}
-
-            <div className="flex flex-col flex-1">
-              <label className="text-sm font-bold text-gray-400 mb-1">Sinopse</label>
-              <textarea value={sinopse} onChange={(e) => setSinopse(e.target.value)} className="w-full p-3 flex-1 min-h-[120px] rounded-lg bg-black/50 border border-purple-400/50 text-white outline-none focus:ring-2 focus:ring-purple-500 resize-none" />
-            </div>
-
-            <div className="pt-4 flex justify-end gap-3 mt-auto">
-              <Button type="button" onClick={() => setModal({ isOpen: false })} className="bg-transparent border border-white/20 hover:bg-white/5 py-2 px-6 rounded-xl">Cancelar</Button>
-              <Button type="submit" className="bg-purple-600 hover:bg-purple-500 py-2 px-6 rounded-xl font-bold shadow-lg shadow-purple-500/20">{mode === 'create' ? 'Criar' : 'Salvar Alterações'}</Button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
-
-// ------------------- MODAL EPISODIO -------------------
-function ModalEpisodio({ modal, setModal, dispatch, upload }) {
-  const { mode, data, serieId } = modal;
-
-  const [numeroTemporada, setNumeroTemporada] = useState(modal.tempNumero || 1);
-  const [numero, setNumero] = useState(data?.numero || '');
-  const [titulo, setTitulo] = useState(data?.titulo || '');
-  const [descricao, setDescricao] = useState(data?.descricao || '');
-  const [urlVideo, setUrlVideo] = useState(data?.url_ep || '');
-  const [imgEp, setImgEp] = useState(null);
-  const [imgEpUrl, setImgEpUrl] = useState(data?.img_ep ? getImageUrl(data.img_ep) : null);
-  const [imgEpPreview, setImgEpPreview] = useState(data?.img_ep ? getImageUrl(data.img_ep) : null);
-  const [uploadingEpImage, setUploadingEpImage] = useState(false);
-  const [uploadingEpVideo, setUploadingEpVideo] = useState(false);
-  const [uploadEpErrorMsg, setUploadEpErrorMsg] = useState('');
-  const episodeVideoFileInputRef = useRef(null);
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImgEp(file);
-      setImgEpUrl(null);
-      setUploadEpErrorMsg('');
-      setImgEpPreview(URL.createObjectURL(file));
-    }
-  };
-
-  const handleImageUpload = async () => {
-    if (!imgEp) {
-      setUploadEpErrorMsg('Selecione uma imagem antes de enviar.');
-      return;
-    }
-
-    try {
-      setUploadingEpImage(true);
-      setUploadEpErrorMsg('');
-      const result = await upload(imgEp);
-      setImgEpUrl(result.url);
-      setImgEpPreview(result.url);
-    } catch (err) {
-      setUploadEpErrorMsg(err.message || 'Falha ao enviar a imagem');
-    } finally {
-      setUploadingEpImage(false);
-    }
-  };
-
-  const handleVideoFileSelect = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      setUploadingEpVideo(true);
-      setUploadEpErrorMsg('');
-      const result = await upload(file);
-      setUrlVideo(result.url);
-    } catch (err) {
-      setUploadEpErrorMsg(err.message || 'Falha ao enviar o vídeo');
-    } finally {
-      setUploadingEpVideo(false);
-    }
-  };
-
-  const triggerEpisodeVideoSelect = () => {
-    episodeVideoFileInputRef.current?.click();
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("numeroTemporada", numeroTemporada);
-    formData.append("numero", numero);
-    formData.append("titulo", titulo);
-    formData.append("descricao", descricao);
-    formData.append("url_video", urlVideo);
-
-    if (imgEpUrl) {
-      formData.append("img_ep", imgEpUrl);
-    } else if (imgEp) {
-      formData.append("img_ep", imgEp);
-    }
-
-    const action = mode === 'create'
-      ? adicionarEpisodio({ serieId, numeroTemporada, dadosEpisodio: formData })
-      : atualizarEpisodio({ serieId, episodioId: data._id, formData });
-
-    dispatch(action).unwrap()
-      .then(() => {
-        dispatch(listarConteudos());
-        setModal({ isOpen: false });
-      })
-      .catch(err => alert("Erro: " + err));
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-[#161b22] border border-white/10 rounded-2xl w-full max-w-4xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-        <div className="p-6 border-b border-white/10 flex justify-between items-center shrink-0">
-          <h2 className="text-2xl font-bold">{mode === 'create' ? 'Adicionar Episódio' : `Editar Episódio - ${data?.titulo}`}</h2>
-          <button onClick={() => setModal({ isOpen: false })} className="text-gray-400 hover:text-white text-2xl">&times;</button>
-        </div>
-        <form onSubmit={handleSubmit} className="p-6 flex flex-col md:flex-row gap-6 overflow-y-auto">
-          {/* Lado esquerdo: Selecionador de Imagem */}
-          <div className="w-full md:w-1/3 flex flex-col gap-2 shrink-0">
-            <label className="text-sm font-bold text-gray-400">Thumbnail</label>
-            <div className="relative aspect-video rounded-xl bg-black/50 border-2 border-dashed border-purple-400/50 hover:border-purple-500 flex flex-col items-center justify-center cursor-pointer overflow-hidden group transition-colors">
-              {imgEpPreview ? (
-                <img src={imgEpPreview} alt="Preview" className="w-full h-full object-cover group-hover:opacity-50 transition-opacity" />
-              ) : (
-                <div className="flex flex-col items-center text-gray-500 group-hover:text-purple-400">
-                  <IoAddCircleOutline className="text-4xl mb-2" />
-                  <span className="text-sm font-bold">Escolher Imagem</span>
-                </div>
-              )}
-              <input type="file" accept="image/*" onChange={handleImageChange} className="absolute inset-0 opacity-0 cursor-pointer" />
-            </div>
-            <button type="button" onClick={handleImageUpload} disabled={!imgEp || uploadingEpImage} className="w-full sm:w-auto max-w-[180px] py-2 text-sm bg-purple-600 hover:bg-purple-500 rounded-lg transition-colors disabled:opacity-50">
-              {uploadingEpImage ? 'Enviando...' : 'Upload imagem'}
-            </button>
-            {uploadEpErrorMsg && <p className="text-xs text-red-400">{uploadEpErrorMsg}</p>}
-            {imgEpUrl && !uploadingEpImage && <p className="text-xs text-green-400">Imagem enviada: Cloudinary pronta para salvar</p>}
-          </div>
-
-          {/* Lado direito: Campos */}
-          <div className="w-full md:w-2/3 flex flex-col gap-4">
-            <div className="flex gap-4">
-              <div className="flex-1 flex flex-col">
-                <label className="text-sm font-bold text-gray-400 mb-1">Nº Temporada</label>
-                <input type="number" value={numeroTemporada} onChange={(e) => setNumeroTemporada(e.target.value)} required disabled={mode === 'edit'} className="p-2 rounded-lg bg-black/50 border border-purple-400/50 text-white outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50" />
-              </div>
-              <div className="flex-1 flex flex-col">
-                <label className="text-sm font-bold text-gray-400 mb-1">Nº Episódio</label>
-                <input type="number" value={numero} onChange={(e) => setNumero(e.target.value)} required className="p-2 rounded-lg bg-black/50 border border-purple-400/50 text-white outline-none focus:ring-2 focus:ring-purple-500" />
-              </div>
-            </div>
-
-            <div className="flex flex-col">
-              <label className="text-sm font-bold text-gray-400 mb-1">Título</label>
-              <input type="text" value={titulo} onChange={(e) => setTitulo(e.target.value)} required className="w-full p-2 rounded-lg bg-black/50 border border-purple-400/50 text-white outline-none focus:ring-2 focus:ring-purple-500" />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-sm font-bold text-gray-400 mb-1">URL do Vídeo</label>
-              <div className="flex gap-2 items-end">
-                <input type="text" value={urlVideo} onChange={(e) => setUrlVideo(e.target.value)} required className="flex-1 p-2 rounded-lg bg-black/50 border border-purple-400/50 text-white outline-none focus:ring-2 focus:ring-purple-500" />
-                <button type="button" onClick={triggerEpisodeVideoSelect} disabled={uploadingEpVideo} className="shrink-0 px-4 py-2 text-sm bg-purple-600 hover:bg-purple-500 rounded-lg transition-colors disabled:opacity-50">
-                  {uploadingEpVideo ? 'Enviando...' : 'Subir arquivo'}
-                </button>
-              </div>
-              <input ref={episodeVideoFileInputRef} type="file" accept="video/*" className="hidden" onChange={handleVideoFileSelect} />
-              {uploadEpErrorMsg && <p className="text-xs text-red-400">{uploadEpErrorMsg}</p>}
-              {urlVideo && urlVideo.startsWith('http') && <p className="text-xs text-green-400">URL pronta para salvar</p>}
-            </div>
-
-            <div className="flex flex-col flex-1">
-              <label className="text-sm font-bold text-gray-400 mb-1">Descrição</label>
-              <textarea value={descricao} onChange={(e) => setDescricao(e.target.value)} className="w-full p-3 flex-1 min-h-[100px] rounded-lg bg-black/50 border border-purple-400/50 text-white outline-none focus:ring-2 focus:ring-purple-500 resize-none" />
-            </div>
-
-            <div className="pt-2 flex justify-end gap-3 mt-auto">
-              <Button type="button" onClick={() => setModal({ isOpen: false })} className="bg-transparent border border-white/20 hover:bg-white/5 py-2 px-6 rounded-xl">Cancelar</Button>
-              <Button type="submit" className="bg-purple-600 hover:bg-purple-500 py-2 px-6 rounded-xl font-bold shadow-lg shadow-purple-500/20">{mode === 'create' ? 'Criar' : 'Salvar Alterações'}</Button>
-            </div>
-          </div>
-        </form>
-      </div>
     </div>
   );
 }
