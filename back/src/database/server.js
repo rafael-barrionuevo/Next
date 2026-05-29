@@ -15,7 +15,7 @@ connectDB();
 const app = express();
 
 app.use("/uploads", express.static(path.resolve(__dirname, "../../uploads")));
-app.use(cors());
+app.use(cors({origin: process.env.FRONT_URL}));
 app.use(express.json()); 
 app.use(fileUpload()); 
 app.use(ConteudoRoutes);

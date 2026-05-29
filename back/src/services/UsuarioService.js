@@ -10,8 +10,9 @@ class UsuarioService {
     if (existeEmail) {
       throw new Error("Este e-mail já está em uso."); 
     }
-    const salt = bcrypt.genSaltSync(10);
-    const senhaHash = bcrypt.hashSync(userData.senha, salt);
+    /* const salt = bcrypt.genSaltSync(10);
+    const senhaHash = bcrypt.hashSync(userData.senha, salt); */
+    const senhaHash = await bcrypt.hash(userData.senha, 10);
 
     const novoUsuario = await Usuario.create({
   ...userData,
@@ -252,13 +253,12 @@ return {
     }
 
   async login(email, senha) {
-    const user = await Usuario.findOne({ email }).populate("assinatura");
-
+    const user = await Usuario.findOne({ email }).select("+senha").populate("assinatura");
     if (!user) {
       throw new Error("Usuário não encontrado.");
     }
 
-    const compara = bcrypt.compareSync(senha, user.senha);
+    const compara = await bcrypt.compare(senha, user.senha);
     if (!compara) {
       throw new Error("E-mail ou senha incorretos.");
     }
