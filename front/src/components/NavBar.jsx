@@ -145,13 +145,6 @@ function NavBar() {
             </Link>
           )}
 
-          <div className='relative cursor-pointer hover:text-white transition-colors'>
-            <IoNotificationsOutline className='text-2xl' />
-            <span className='absolute -top-1 -right-1 bg-purple-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full'>
-              14
-            </span>
-          </div>
-
           {/* AVATAR DESKTOP COM HOVER E SETA ROTACIONAL */}
           <div className='relative flex items-center gap-2 cursor-pointer group py-2'>
             <img

@@ -229,6 +229,7 @@ function ModalConteudo({ modal, setModal, dispatch, upload }) {
 
   const [titulo, setTitulo] = useState(data?.titulo || '');
   const [genero, setGenero] = useState(data?.genero ? data.genero.join(', ') : '');
+  const [ano, setAno] = useState(data?.ano || '');
   const [sinopse, setSinopse] = useState(data?.sinopse || '');
   const [duracao, setDuracao] = useState(data?.filme?.duracao || '');
   const [urlVideo, setUrlVideo] = useState(data?.filme?.url_filme || '');
@@ -296,6 +297,7 @@ function ModalConteudo({ modal, setModal, dispatch, upload }) {
     formData.append("tipo_midia", type);
     formData.append("genero", genero);
     formData.append("sinopse", sinopse);
+    formData.append("ano", ano);
     if (type === "filme") {
       formData.append("duracao", duracao);
       formData.append("url_filme", urlVideo);
@@ -355,9 +357,16 @@ function ModalConteudo({ modal, setModal, dispatch, upload }) {
               <input type="text" value={titulo} onChange={(e) => setTitulo(e.target.value)} required className="w-full p-2 rounded-lg bg-black/50 border border-purple-400/50 text-white outline-none focus:ring-2 focus:ring-purple-500" />
             </div>
 
-            <div className="flex flex-col">
-              <label className="text-sm font-bold text-gray-400 mb-1">Gêneros (separados por vírgula)</label>
-              <input type="text" value={genero} onChange={(e) => setGenero(e.target.value)} className="w-full p-2 rounded-lg bg-black/50 border border-purple-400/50 text-white outline-none focus:ring-2 focus:ring-purple-500" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex flex-col">
+                <label className="text-sm font-bold text-gray-400 mb-1">Ano de Lançamento</label>
+                <input type="number" value={ano} onChange={(e) => setAno(e.target.value)} required className="w-full p-2 rounded-lg bg-black/50 border border-purple-400/50 text-white outline-none focus:ring-2 focus:ring-purple-500" />
+              </div>
+
+              <div className="flex flex-col">
+                <label className="text-sm font-bold text-gray-400 mb-1">Gêneros (separados por vírgula)</label>
+                <input type="text" value={genero} onChange={(e) => setGenero(e.target.value)} className="w-full p-2 rounded-lg bg-black/50 border border-purple-400/50 text-white outline-none focus:ring-2 focus:ring-purple-500" />
+              </div>
             </div>
 
             {type === "filme" && (

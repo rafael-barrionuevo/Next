@@ -14,7 +14,11 @@ class ConteudoController {
   // POST /conteudos
   async criarConteudo(req, res) {
     try {
-      const { titulo, tipo_midia, genero, sinopse, duracao, url_filme } = req.body;
+      const { titulo, tipo_midia, genero, sinopse, duracao, url_filme, ano } = req.body;
+
+      if (!ano) {
+        throw new Error("O campo 'ano' é obrigatório.");
+      }
 
       let imagePath = null;
       if (req.files && req.files.img_capa) {
@@ -30,6 +34,7 @@ class ConteudoController {
         titulo,
         tipo_midia,
         sinopse,
+        ano: Number(ano),
         ...(imagePath && { img_capa: imagePath })
       };
 
@@ -111,7 +116,7 @@ class ConteudoController {
   async atualizarConteudo(req, res) {
     try {
       const { id } = req.params;
-      const { titulo, tipo_midia, genero, sinopse, duracao, url_filme } = req.body;
+      const { titulo, tipo_midia, genero, sinopse, duracao, url_filme, ano } = req.body;
 
       let imagePath = null;
       if (req.files && req.files.img_capa) {
@@ -127,6 +132,7 @@ class ConteudoController {
         ...(titulo && { titulo }),
         ...(tipo_midia && { tipo_midia }),
         ...(sinopse && { sinopse }),
+        ...(ano && { ano: Number(ano) }),
         ...(imagePath && { img_capa: imagePath })
       };
 
