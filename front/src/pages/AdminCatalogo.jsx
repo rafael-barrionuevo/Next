@@ -53,7 +53,7 @@ export default function AdminCatalogo() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0d1117] text-white">
+    <div className="min-h-screen bg-slate-900 text-white">
       <NavBar />
 
       <main className="max-w-6xl mx-auto p-6 py-12">
@@ -84,7 +84,7 @@ export default function AdminCatalogo() {
         {activeTab === 'filmes' && (
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
             {filmes.map(filme => (
-              <div key={filme._id} className="relative group cursor-pointer aspect-[2/3] rounded-xl overflow-hidden bg-[#161b22] border border-white/5 hover:border-purple-500/50 transition-all">
+              <div key={filme._id} className="relative group cursor-pointer aspect-[2/3] rounded-xl overflow-hidden bg-slate-800 border border-white/5 hover:border-purple-500/50 transition-all">
                 <img src={getImageUrl(filme.img_capa)} alt={filme.titulo} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-3">
                   <button onClick={() => setModalConteudo({ isOpen: true, mode: 'edit', data: filme, type: 'filme' })} className="px-4 py-2 bg-purple-600 rounded-lg font-bold hover:bg-purple-500 transition-colors">Editar</button>
@@ -99,7 +99,7 @@ export default function AdminCatalogo() {
             {/* Card para Adicionar Filme */}
             <div
               onClick={() => setModalConteudo({ isOpen: true, mode: 'create', data: null, type: 'filme' })}
-              className="aspect-[2/3] rounded-xl bg-[#161b22] border-2 border-dashed border-white/10 hover:border-purple-500/50 hover:bg-purple-900/10 transition-all cursor-pointer flex flex-col items-center justify-center gap-2 group"
+              className="aspect-[2/3] rounded-xl bg-slate-800 border-2 border-dashed border-white/10 hover:border-purple-500/50 hover:bg-purple-900/10 transition-all cursor-pointer flex flex-col items-center justify-center gap-2 group"
             >
               <IoAddCircleOutline className="text-4xl text-gray-500 group-hover:text-purple-400 transition-colors" />
               <span className="text-gray-500 group-hover:text-purple-400 font-bold transition-colors">Adicionar Filme</span>
@@ -117,7 +117,7 @@ export default function AdminCatalogo() {
             </div>
 
             {series.map(serie => (
-              <div key={serie._id} className="bg-[#161b22] border border-white/5 rounded-xl overflow-hidden transition-all">
+              <div key={serie._id} className="bg-slate-800 border border-white/5 rounded-xl overflow-hidden transition-all">
                 <div
                   className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-colors"
                   onClick={() => setExpandedSerie(expandedSerie === serie._id ? null : serie._id)}
@@ -173,7 +173,7 @@ export default function AdminCatalogo() {
                             </h5>
                             <div className="flex gap-4 overflow-x-auto pb-4 custom-scrollbar">
                               {temp.episodios.map(ep => (
-                                <div key={ep._id} className="min-w-[240px] max-w-[240px] bg-[#1a1a1c] border border-white/10 rounded-xl overflow-hidden group">
+                                <div key={ep._id} className="min-w-[240px] max-w-[240px] bg-zinc-900 border border-white/10 rounded-xl overflow-hidden group">
                                   <div className="relative aspect-video">
                                     <img src={getImageUrl(ep.img_ep)} alt={ep.titulo} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">

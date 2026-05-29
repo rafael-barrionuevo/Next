@@ -55,17 +55,17 @@ export default function ModalEpisodio({ modal, setModal, dispatch, upload }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-[#161b22] border border-white/10 rounded-2xl w-full max-w-4xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-        <div className="p-6 border-b border-white/10 flex justify-between items-center shrink-0">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
+      <div className="flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-slate-800 shadow-2xl">
+        <div className="flex shrink-0 items-center justify-between border-b border-white/10 p-6">
           <h2 className="text-2xl font-bold">{mode === 'create' ? 'Adicionar Episódio' : `Editar Episódio - ${data?.titulo}`}</h2>
           <button onClick={() => setModal({ isOpen: false })} className="text-gray-400 hover:text-white text-2xl">&times;</button>
         </div>
-        <form onSubmit={handleSubmit} className="p-6 flex flex-col md:flex-row gap-6 overflow-y-auto">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6 overflow-y-auto p-6 md:flex-row">
           {/* Lado esquerdo: Selecionador de Imagem */}
-          <div className="w-full md:w-1/3 flex flex-col gap-2 shrink-0">
+          <div className="flex w-full shrink-0 flex-col gap-2 md:w-1/3">
             <label className="text-sm font-bold text-gray-400">Thumbnail</label>
-            <div className="relative aspect-video rounded-xl bg-black/50 border-2 border-dashed border-purple-400/50 hover:border-purple-500 flex flex-col items-center justify-center cursor-pointer overflow-hidden group transition-colors">
+            <div className="group relative flex aspect-video cursor-pointer flex-col items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-purple-400/50 bg-black/50 transition-colors hover:border-purple-500">
               {imgPreview ? (
                 <img src={imgPreview} alt="Preview" className="w-full h-full object-cover group-hover:opacity-50 transition-opacity" />
               ) : (

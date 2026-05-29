@@ -23,14 +23,14 @@ useEffect(() => {
   dispatch(buscarWishlist());
 }, [dispatch]);
  return (
-    <div className='flex flex-col min-h-screen bg-[#0d1117] relative pb-20 md:pb-0'>
+    <div className='flex min-h-screen flex-col bg-slate-900 pb-20 md:pb-0'>
       
       {/* Background */}
       <div className='fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(147,51,234,0.15),transparent_50%)] pointer-events-none'></div>
 
       <NavBar />
 
-      <main className='flex-1 relative z-10 px-4 md:px-8 max-w-7xl mx-auto w-full pt-6 md:pt-10'>
+      <main className='relative z-10 mx-auto w-full max-w-7xl flex-1 px-4 pt-6 md:px-8 md:pt-10'>
         
         <h1 className='text-2xl md:text-4xl font-bold text-white mb-6 md:mb-10'>
           Minha lista
@@ -58,15 +58,15 @@ useEffect(() => {
           {lista?.map((item) => (
             <div 
               key={item._id} 
-              className='flex items-center gap-4 md:block group cursor-pointer'
+              className='group flex cursor-pointer items-center gap-4 md:block'
             >
               
               {/* IMAGEM */}
-              <div className='w-40 md:w-full flex-shrink-0 aspect-video rounded-md overflow-hidden relative'>
+              <div className='aspect-video w-40 shrink-0 overflow-hidden rounded-md md:w-full'>
                 <img 
                   src={getImageUrl(item.img_capa)} 
                   alt={item.titulo} 
-                  className='w-full h-full object-cover transition-transform duration-300 md:group-hover:scale-105' 
+                  className='h-full w-full object-cover transition-transform duration-300 md:group-hover:scale-105' 
                 />
               </div>
 

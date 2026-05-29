@@ -15,7 +15,7 @@ export default function EpisodeList({
       <div className='flex items-center justify-between mb-6'>
         <h2 className='text-2xl font-bold text-white border-l-4 border-purple-600 pl-3'>Episódios</h2>
         <select
-          className='bg-[#1a1a1c] text-white border border-white/10 rounded-lg px-4 py-2 focus:outline-none focus:border-purple-500 cursor-pointer'
+          className='bg-zinc-900 text-white border border-white/10 rounded-lg px-4 py-2 focus:outline-none focus:border-purple-500 cursor-pointer'
           value={selectedSeason || ''}
           onChange={onSeasonChange}
         >
@@ -32,7 +32,7 @@ export default function EpisodeList({
           episodes.map(ep => {
             const downloadId = `ep_${ep._id}`;
             return (
-              <div key={ep._id} className='bg-[#1a1a1c] border border-white/5 rounded-xl overflow-hidden group hover:border-purple-600/50 transition-all duration-300 flex flex-col'>
+              <div key={ep._id} className='bg-zinc-900 border border-white/5 rounded-xl overflow-hidden group hover:border-purple-600/50 transition-all duration-300 flex flex-col'>
                 <div className='relative aspect-video overflow-hidden'>
                   <img
                     src={ep.img_ep ? getImageUrl(ep.img_ep) : 'https://via.placeholder.com/320x180'}

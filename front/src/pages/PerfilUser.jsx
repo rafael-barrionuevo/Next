@@ -118,7 +118,7 @@ async function carregarPlanos() {
      
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0f172a] to-black text-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-black text-white">
       <NavBar />
 
       <div className="max-w-6xl mx-auto px-6 py-10">
@@ -135,13 +135,13 @@ async function carregarPlanos() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Left: avatar + summary */}
-          <aside className="col-span-1 rounded-2xl border border-white/10 bg-gradient-to-br from-black/5 to-black/10 p-6 space-y-6 shadow-md">
+          <aside className="col-span-1 space-y-6 rounded-2xl border border-white/10 bg-gradient-to-br from-black/5 to-black/10 p-6 shadow-md">
             <div className="flex flex-col items-center text-center">
-              <div className="w-36 h-36 rounded-full p-1 bg-gradient-to-br from-purple-600 to-pink-500 shadow-inner">
+              <div className="h-36 w-36 rounded-full bg-gradient-to-br from-purple-600 to-pink-500 p-1 shadow-inner">
                 <img
                   src={getImageUrl(user?.avatar || user?.perfilAtivo?.avatar || "/usuarios/default.png")}
                   alt={user.nome}
-                  className="w-full h-full rounded-full object-cover border-2 border-black/40"
+                  className="h-full w-full rounded-full border-2 border-black/40 object-cover"
                 />
               </div>
 

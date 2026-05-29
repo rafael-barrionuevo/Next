@@ -101,7 +101,7 @@ export default function Planos() {
 // const planoAtual = planos[planoSelecionado];
 
   return (
-    <div className="relative h-screen bg-black overflow-hidden flex flex-col items-center py-10 text-white">
+    <div className="relative flex h-screen flex-col items-center overflow-hidden bg-black py-10 text-white">
 
     {/* FUNDO + OVERLAY */}
 <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
@@ -111,15 +111,8 @@ export default function Planos() {
 
 
   {/* IMAGENS */}
-   <div className="absolute inset-0 overflow-hidden w-full max-w-full pointer-events-none ">
-
-   <div className="
-   grid grid-cols-6 md:grid-cols-8 gap-2
-  rotate-12
- w-[120%] h-[120%]
--translate-x-[10%] -translate-y-[10%]
-pointer-events-none 
-">
+   <div className="pointer-events-none absolute inset-0 w-full max-w-full overflow-hidden">
+   <div className="pointer-events-none grid h-[120%] w-[120%] -translate-x-[10%] -translate-y-[10%] rotate-12 grid-cols-6 gap-2 md:grid-cols-8">
       {posterImages.map((img, index) => ( 
         <img
           key={index}
@@ -131,36 +124,17 @@ pointer-events-none
   </div>
 
   {/* OVERLAY */}
-  <div className="absolute inset-0 bg-black/80 pointer-events-none"></div>
+  <div className="pointer-events-none absolute inset-0 bg-black/80"></div>
 
 </div>
 
       {/* CONTAINER DESKTOP */}
- <div className="
-  relative z-10
-  w-full
-  max-w-md
-  mx-auto
-
-  bg-black/30        
-  p-6                
-
-  md:max-w-3xl
-  md:bg-black/10
-  md:backdrop-blur-xl
-  border border-white/10 
-  rounded-3xl
-  backdrop-blur-xl
-  md:border md:border-white/10 
-  md:rounded-2xl 
-  md:p-8
-">
-
-      <h2 className="text-xl sm:text-2xl font-bold mb-8 text-center  text-white">
+ <div className="relative z-10 mx-auto w-full max-w-md rounded-3xl border border-white/10 bg-black/30 p-6 backdrop-blur-xl md:max-w-3xl md:rounded-2xl md:bg-black/10 md:p-8">
+      <h2 className="mb-8 text-center text-xl font-bold text-white sm:text-2xl">
         Escolha o melhor plano para você
       </h2>
 
-      <div className="grid grid-cols-3 gap-3 w-full  mb-10">
+      <div className="mb-10 grid w-full grid-cols-3 gap-3">
 
         {planos.map((plano) => {
 
@@ -175,13 +149,12 @@ pointer-events-none
                 setPlanoSelecionado(plano);;
               }}
               className={`
-                p-4 sm:p-5 rounded-xl text-center cursor-pointer
+                cursor-pointer rounded-xl p-4 text-center sm:p-5
                 transition duration-300 ease-in-out
-                hover:scale-100  hover:shadow-xl hover:-translate-y-1 
+                hover:-translate-y-1 hover:scale-100 hover:shadow-xl 
                 ${selecionado
                 ? "bg-blue-600 text-white shadow-lg"
                 : "border border-gray-600 bg-black/40 text-gray-300"}
-
               `}
             >
 
@@ -251,7 +224,7 @@ pointer-events-none
           navigate("/pagamento");
             }}
           
-          className="relative z-50 w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg transition font-medium">
+          className="relative z-50 w-full rounded-lg bg-purple-600 py-3 font-medium text-white transition hover:bg-purple-700">
           Selecionar plano
         </Button>
       

@@ -27,7 +27,7 @@ export default function AvaliacaoSection({
       {isAuthenticated && !minhaAvaliacao && (
         <form
           onSubmit={handleSubmitAvaliacao}
-          className='bg-[#1a1a1c] border border-white/5 rounded-2xl p-6 mb-10'
+          className='bg-zinc-900 border border-white/5 rounded-2xl p-6 mb-10'
         >
           <h3 className='text-lg font-semibold text-white mb-5'>Deixe sua avaliação</h3>
 
@@ -58,7 +58,7 @@ export default function AvaliacaoSection({
               onChange={e => setFormComentario(e.target.value)}
               maxLength={500} rows={3}
               placeholder='Conte o que achou deste conteúdo...'
-              className='w-full bg-[#0d1117] border border-white/10 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500 placeholder-gray-600 resize-none text-sm transition-colors duration-200'
+              className='w-full bg-slate-900 border border-white/10 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500 placeholder-gray-600 resize-none text-sm transition-colors duration-200'
             />
             <p className='text-xs text-gray-600 text-right mt-1'>{formComentario.length}/500</p>
           </div>
@@ -76,7 +76,7 @@ export default function AvaliacaoSection({
       )}
 
       {!isAuthenticated && (
-        <div className='bg-[#1a1a1c] border border-white/5 rounded-2xl p-6 mb-10 text-center'>
+        <div className='bg-zinc-900 border border-white/5 rounded-2xl p-6 mb-10 text-center'>
           <p className='text-gray-400 text-sm'>
             <button onClick={() => navigate('/login')} className='text-purple-400 hover:text-purple-300 font-semibold underline underline-offset-2 cursor-pointer'>
               Faça login
@@ -126,7 +126,7 @@ function AvaliacaoCard({
   onEdit, onCancelEdit, onSubmit,
 }) {
   return (
-    <div className='bg-[#1a1a1c] border border-white/5 rounded-2xl p-5 hover:border-purple-600/30 transition-all duration-200'>
+    <div className='bg-zinc-900 border border-white/5 rounded-2xl p-5 hover:border-purple-600/30 transition-all duration-200'>
       <div className='flex gap-4'>
         {/* Avatar */}
         <div
@@ -209,7 +209,7 @@ function AvaliacaoCard({
             onChange={e => setFormComentario(e.target.value)}
             maxLength={500} rows={3}
             placeholder='Seu comentário...'
-            className='w-full bg-[#0d1117] border border-white/10 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500 placeholder-gray-600 resize-none text-sm mb-3'
+            className='w-full bg-slate-900 border border-white/10 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500 placeholder-gray-600 resize-none text-sm mb-3'
           />
 
           <SubmitFeedback status={submitStatus} error={submitError} successText='Avaliação atualizada!' />

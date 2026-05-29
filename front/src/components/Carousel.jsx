@@ -13,7 +13,7 @@ function Carousel({ items = [] }) {
   return (
     <div className='w-full'>
       {carouselSize === 0 ? (
-        <div className='flex items-center justify-center h-48 bg-[#1a1a1c] rounded-2xl border border-dashed border-white/10'>
+        <div className='flex items-center justify-center h-48 bg-zinc-900 rounded-2xl border border-dashed border-white/10'>
           <p className='text-gray-500 font-medium'>Não há filmes no catálogo</p>
         </div>
       ) : (

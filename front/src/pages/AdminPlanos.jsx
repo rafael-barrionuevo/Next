@@ -100,14 +100,14 @@ export default function AdminPlanos() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0d1117] text-white">
+    <div className="min-h-screen bg-slate-900 text-white">
       <NavBar />
 
-      <main className="max-w-5xl mx-auto px-6 py-10">
-        <div className="flex items-center gap-4 mb-8">
+      <main className="mx-auto max-w-5xl px-6 py-10">
+        <div className="mb-8 flex items-center gap-4">
           <button
             onClick={() => navigate('/admin')}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg border border-white/10 text-gray-300 hover:bg-white/5 hover:text-white transition-all text-sm font-medium"
+            className="flex items-center gap-2 rounded-lg border border-white/10 px-4 py-2 text-sm font-medium text-gray-300 transition-all hover:bg-white/5 hover:text-white"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -117,8 +117,8 @@ export default function AdminPlanos() {
           <h1 className="text-3xl font-bold">Gerenciar Planos</h1>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-[#161b22] p-6 rounded-xl space-y-4 mb-8">
-          <div className="grid md:grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="mb-8 space-y-4 rounded-xl bg-slate-800 p-6">
+          <div className="grid gap-4 md:grid-cols-2">
             <input name="nome" value={form.nome} onChange={handleChange} placeholder="Nome" className="p-3 rounded bg-black/30 border border-white/10" />
             <input name="preco" value={form.preco} onChange={handleChange} placeholder="Preço" type="number" step="0.01" className="p-3 rounded bg-black/30 border border-white/10" />
 
@@ -129,7 +129,7 @@ export default function AdminPlanos() {
             <input name="ordem" value={form.ordem} onChange={handleChange} placeholder="Ordem" type="number" className="p-3 rounded bg-black/30 border border-white/10" />
           </div>
 
-          <div className="flex gap-6 flex-wrap">
+          <div className="flex flex-wrap gap-6">
             <label className="flex items-center gap-2">
               <input type="checkbox" name="permite_download" checked={form.permite_download} onChange={handleChange} />
               Permite download
@@ -166,7 +166,7 @@ export default function AdminPlanos() {
 
         <div className="space-y-4">
           {planos.map((plano) => (
-            <div key={plano._id} className="bg-[#161b22] p-4 rounded-xl border border-white/5 flex items-center justify-between">
+            <div key={plano._id} className="flex items-center justify-between rounded-xl border border-white/5 bg-slate-800 p-4">
               <div>
                 <p className="font-semibold">
                   {plano.nome} {!plano.ativo && <span className="text-red-400">(inativo)</span>}

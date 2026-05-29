@@ -58,7 +58,7 @@ function ContentInfo() {
 
   if (!content) {
     return (
-      <div className='flex flex-col min-h-screen bg-[#0d1117]'>
+      <div className='flex flex-col min-h-screen bg-slate-900'>
         <NavBar />
         <div className='flex-1 flex items-center justify-center'>
           <p className='text-white'>Carregando...</p>
@@ -72,12 +72,12 @@ function ContentInfo() {
   const filmeDownloadId = `filme_${content._id}`;
 
   return (
-    <div className='flex flex-col min-h-screen bg-[#0d1117] relative pb-20'>
+    <div className='flex flex-col min-h-screen bg-slate-900 pb-20'>
       <div className='fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(147,51,234,0.15),transparent_50%)] pointer-events-none'></div>
       <NavBar />
 
       <div className='flex-1 relative z-10 px-4 max-w-7xl mx-auto w-full mt-8'>
-        <div className='flex flex-col md:flex-row gap-8 bg-[#1a1a1c] p-6 rounded-2xl border border-white/5 relative'>
+        <div className='flex flex-col md:flex-row gap-8 bg-zinc-900 p-6 rounded-2xl border border-white/5'>
           {/* Botão fechar */}
           <button
             onClick={() => navigate(-1)}
@@ -132,7 +132,7 @@ function ContentInfo() {
               {content.sinopse || 'Nenhuma sinopse disponível para este conteúdo.'}
             </p>
 
-            {content.tipo_midia === 'filme' && (
+            {content.tipo_midia === 'filme' ? (
               <div className='mt-auto flex flex-wrap gap-3 items-center'>
                 <button
                   onClick={() => navigate(`/video/${content._id}`)}
@@ -150,15 +150,22 @@ function ContentInfo() {
                   variant='full'
                 />
               </div>
+            ) : (
+              <div className='mt-auto flex flex-wrap gap-3 items-center'>
+                <button
+                  onClick={() => document.getElementById('temporadas-section')?.scrollIntoView({ behavior: 'smooth' })}
+                  className='bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 px-8 rounded-lg shadow-[0_0_20px_rgba(147,51,234,0.3)] transition-all duration-300 hover:scale-105 cursor-pointer'
+                >
+                  Assistir Série
+                </button>
+                <WishlistButton contentId={content._id} isInList={naLista} />
+              </div>
             )}
           </div>
         </div>
 
         {content.tipo_midia === 'serie' && (
-          <>
-            <div className='mt-12 mb-6'>
-              <WishlistButton contentId={content._id} isInList={naLista} className='inline-block' />
-            </div>
+          <div id='temporadas-section' className='mt-12'>
             <EpisodeList
               content={content}
               selectedSeason={selectedSeason}
@@ -170,7 +177,7 @@ function ContentInfo() {
               downloadProgress={downloadProgress}
               onDownloadEpisode={(ep) => handleDownloadEpisodio(content, ep, selectedSeason)}
             />
-          </>
+          </div>
         )}
       </div>
 

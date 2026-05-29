@@ -41,7 +41,7 @@ function ListCard({ items = [] }) {
         {visibleImages.map((item, index) => (
           <div 
             key={item._id || index} 
-            className='aspect-video bg-[#1a1a1c] rounded-lg overflow-hidden group border border-white/5 hover:border-purple-600/50 transition-colors duration-300 cursor-pointer'
+            className='aspect-video bg-zinc-900 rounded-lg overflow-hidden group border border-white/5 hover:border-purple-600/50 transition-colors duration-300 cursor-pointer'
             onClick={() => navigate(`/info/${item._id}`)}
           >
             <img
@@ -54,7 +54,7 @@ function ListCard({ items = [] }) {
       </div>
 
       {!isExpanded && (
-        <div className='absolute bottom-0 w-full h-40 bg-linear-to-t from-[#0d1117] via-[#0d1117]/80 to-transparent flex items-end justify-center pb-4'>
+        <div className='absolute bottom-0 w-full h-40 bg-linear-to-t from-slate-900 via-slate-900/80 to-transparent flex items-end justify-center pb-4'>
           <button
             onClick={() => setIsExpanded(true)}
             className='font-bold text-white py-2.5 px-8 bg-purple-600 rounded-lg hover:bg-purple-500 hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(147,51,234,0.3)] cursor-pointer'

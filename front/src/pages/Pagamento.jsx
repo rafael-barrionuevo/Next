@@ -128,20 +128,20 @@ export default function Pagamento() {
     <div className="relative min-h-screen bg-black text-white">
       {/* FUNDO */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="grid grid-cols-6 md:grid-cols-8 gap-2 rotate-12 w-[120%] -translate-x-[10%]">
+        <div className="grid w-[120%] -translate-x-[10%] rotate-12 grid-cols-6 gap-2 md:grid-cols-8">
           {posterImages.map((img, index) => (
-            <img key={index} src={img} className="w-full h-full object-cover" alt="" />
+            <img key={index} src={img} className="h-full w-full object-cover" alt="" />
           ))}
         </div>
         <div className="absolute inset-0 bg-black/80"></div>
       </div>
 
       {/* CONTEÚDO */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
-        <div className="w-full max-w-md md:max-w-lg md:bg-black/40 bg-black/20 md:backdrop-blur-xl backdrop-blur-xl md:border md:border-white/10 border border-white/10 rounded-2xl p-8">
+      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4">
+        <div className="w-full max-w-md rounded-2xl border border-white/10 bg-black/20 p-8 backdrop-blur-xl md:max-w-lg md:border-white/10 md:bg-black/40 md:backdrop-blur-xl">
 
           {/* CARTÃO */}
-          <div className="flex justify-center mb-6">
+          <div className="mb-6 flex justify-center">
             <div className="scale-90 sm:scale-100">
               <Cards
                 number={cardData.number}
@@ -153,7 +153,7 @@ export default function Pagamento() {
             </div>
           </div>
 
-          <p className="text-lg font-semibold text-center mb-6">
+          <p className="mb-6 text-center text-lg font-semibold">
             Informe os dados do seu cartão
           </p>
 
@@ -164,7 +164,7 @@ export default function Pagamento() {
               value={cardData.number}
               placeholder="Número do cartão"
               maxLength={16} 
-              className="w-full p-3 rounded-lg bg-white/10 border border-purple-400 text-white placeholder-gray-300 focus:ring-2 focus:ring-purple-500 outline-none"
+              className="w-full rounded-lg border border-purple-400 bg-white/10 p-3 text-white placeholder-gray-300 outline-none focus:ring-2 focus:ring-purple-500"
               onChange={handleInput}
               onFocus={handleFocus}
             />
@@ -174,7 +174,7 @@ export default function Pagamento() {
               value={cardData.name}
               placeholder="Nome no cartão"
               maxLength={50} 
-              className="w-full p-3 rounded-lg bg-white/10 border border-purple-400 text-white placeholder-gray-300 focus:ring-2 focus:ring-purple-500 outline-none"
+              className="w-full rounded-lg border border-purple-400 bg-white/10 p-3 text-white placeholder-gray-300 outline-none focus:ring-2 focus:ring-purple-500"
               onChange={handleInput}
               onFocus={handleFocus}
             />
@@ -185,7 +185,7 @@ export default function Pagamento() {
                 value={cardData.expiry}
                 placeholder="MM/AA"
                 maxLength={5} 
-                className="w-full p-3 rounded-lg bg-white/10 border border-purple-400 text-white placeholder-gray-300 focus:ring-2 focus:ring-purple-500 outline-none"
+                className="w-full rounded-lg border border-purple-400 bg-white/10 p-3 text-white placeholder-gray-300 outline-none focus:ring-2 focus:ring-purple-500"
                 onChange={handleInput}
                 onFocus={handleFocus}
               />
@@ -196,7 +196,7 @@ export default function Pagamento() {
                 value={cardData.cvc}
                 placeholder="CVV"
                 maxLength={4} 
-                className="w-full p-3 rounded-lg bg-white/10 border border-purple-400 text-white placeholder-gray-300 focus:ring-2 focus:ring-purple-500 outline-none"
+                className="w-full rounded-lg border border-purple-400 bg-white/10 p-3 text-white placeholder-gray-300 outline-none focus:ring-2 focus:ring-purple-500"
                 onChange={handleInput}
                 onFocus={handleFocus}
               />
@@ -207,13 +207,13 @@ export default function Pagamento() {
               value={cpf}
               placeholder="CPF do titular"
               maxLength={14} 
-              className="w-full p-3 rounded-lg bg-white/10 border border-purple-400 text-white placeholder-gray-300 focus:ring-2 focus:ring-purple-500 outline-none"
+              className="w-full rounded-lg border border-purple-400 bg-white/10 p-3 text-white placeholder-gray-300 outline-none focus:ring-2 focus:ring-purple-500"
               onChange={handleCpf}
             />
 
             <Button
               type="submit"
-              className="w-full bg-gradient-to-r from-purple-500 to-purple-700 text-white py-3 rounded-lg font-medium transition hover:from-purple-600 hover:to-purple-800"
+              className="w-full rounded-lg bg-gradient-to-r from-purple-500 to-purple-700 py-3 font-medium text-white transition hover:from-purple-600 hover:to-purple-800"
             >
               Iniciar assinatura
             </Button>
