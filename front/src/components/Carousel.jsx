@@ -35,20 +35,23 @@ function Carousel({ items = [] }) {
             1280: { slidesPerView: 4, spaceBetween: 20 },
           }}
           spaceBetween={10}
-          className='rounded-2xl pb-10 custom-swiper'
+          className='custom-swiper'
         >
           {items.map((item, index) => (
             <SwiperSlide key={item._id || index} className='overflow-visible'>
-              <div className='relative group cursor-pointer' 
+              <div className='aspect-video relative bg-zinc-900 rounded-2xl overflow-hidden group border border-white/5 hover:border-purple-600/50 shadow-lg hover:shadow-purple-600/20 transition-all duration-500 cursor-pointer' 
                 onClick={() => navigate(`/info/${item._id}`)}>
-                {/* Overlay de gradiente interno para destacar possíveis textos futuros */}
-                <div className='absolute inset-0 bg-linear-to-t from-black/60 to-transparent z-10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>
-                
                 <img 
-                  className='w-full aspect-video object-cover rounded-2xl border border-white/5 group-hover:border-purple-600/50 shadow-lg group-hover:shadow-purple-600/20 transition-all duration-500' 
+                  className='w-full h-full object-cover group-hover:scale-110 transition-transform duration-500' 
                   src={getImageUrl(item.img_capa)} 
                   alt={item.titulo || `Slide ${index + 1}`} 
                 />
+                {/* Gradient overlay for better text contrast */}
+                <div className='absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none' />
+                {/* Title with z-index and subtle hover lift micro-animation */}
+                <p className='absolute bottom-0 left-0 w-full font-bold text-md p-4 text-gray-100 z-20 transform translate-y-0 group-hover:-translate-y-1 transition-transform duration-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'>
+                  {item.titulo}
+                </p>
               </div>
             </SwiperSlide>
           ))}
@@ -57,6 +60,16 @@ function Carousel({ items = [] }) {
 
       {/* Estilizacao do swiper */}
       <style>{`
+        .custom-swiper {
+          padding-top: 12px !important;
+          padding-bottom: 48px !important;
+        }
+        .custom-swiper .swiper-wrapper {
+          align-items: flex-start;
+        }
+        .custom-swiper .swiper-pagination {
+          bottom: 12px !important;
+        }
         .custom-swiper .swiper-pagination-bullet {
           background: rgba(255, 255, 255, 0.3);
           opacity: 1;

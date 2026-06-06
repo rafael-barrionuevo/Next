@@ -28,19 +28,19 @@ function Filme() {
   const sections = [
     {
       title: "Lançamentos",
-      data: filmes.slice(0, 6)
+      data: filmes
     },
     {
       title: "Ação e Aventura",
-      data: filmes.filter(c => c.genero?.includes('Ação') || c.genero?.includes('Aventura')).slice(0, 6)
+      data: filmes.filter(c => c.genero?.includes('Ação') || c.genero?.includes('Aventura'))
     },
     {
       title: "Ficção Científica",
-      data: filmes.filter(c => c.genero?.includes('Ficção Científica')).slice(0, 6)
+      data: filmes.filter(c => c.genero?.includes('Ficção Científica'))
     },
     {
-      title: "Filmes Clássicos",
-      data: filmes.slice(4, 10) // Just to have different slices
+      title: "Drama",
+      data: filmes.filter(c => c.genero?.includes('Drama'))
     }
   ]
 

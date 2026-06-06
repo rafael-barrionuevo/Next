@@ -26,20 +26,24 @@ function HomePage() {
   
   const sections = [
     {
-      title: "Filmes novos",
-      data: contents.filter(c => c.tipo_midia === 'filme').slice(0, 6)
+      title: "Filmes",
+      data: contents.filter(c => c.tipo_midia === 'filme'),
+      link: '/filme'
     },
     {
-      title: "Bombando",
-      data: contents.slice(0, 6)
+      title: "Séries",
+      data: contents.filter(c => c.tipo_midia === 'serie'),
+      link: '/serie'
     },
     {
       title: "Ação",
-      data: contents.filter(c => c.genero?.includes('Ação')).slice(0, 6)
+      data: contents.filter(c => c.genero?.includes('Ação')),
+      link: '/filme'
     },
     {
-      title: "Recomendados para você",
-      data: contents.slice(2, 8)
+      title: "Drama",
+      data: contents.filter(c => c.genero?.includes('Drama')),
+      link: '/filme'
     }
   ]
 
@@ -72,6 +76,7 @@ function HomePage() {
             <ListCard 
               items={section.data} 
               onAddWishlist={handleAddWishlist}
+              linkTo={section.link}
             />
           </section>
         ))}

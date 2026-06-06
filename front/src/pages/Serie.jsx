@@ -28,19 +28,19 @@ function Serie() {
   const sections = [
     {
       title: "Séries de Anime",
-      data: series.filter(c => c.genero?.includes('Anime')).slice(0, 6)
+      data: series.filter(c => c.genero?.includes('Anime'))
     },
     {
       title: "Séries Dramáticas",
-      data: series.filter(c => c.genero?.includes('Drama')).slice(0, 6)
+      data: series.filter(c => c.genero?.includes('Drama'))
     },
     {
-      title: "Desenhos Animados",
-      data: series.filter(c => c.genero?.includes('Animação')).slice(0, 6)
+      title: "Ficção Científica",
+      data: series.filter(c => c.genero?.includes('Ficção Científica'))
     },
     {
-      title: "Recomendados para você",
-      data: series.slice(0, 6)
+      title: "Todas as Séries",
+      data: series
     }
   ]
 
