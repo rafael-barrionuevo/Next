@@ -89,13 +89,12 @@ export default function Login() {
   ];
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-black text-white">
+    <div className="relative h-screen w-full overflow-hidden bg-black text-white">
 
       {/* FUNDO MOBILE */}
       <div className="absolute inset-0 flex items-center justify-center md:hidden">
         <div className="
-          grid grid-cols-4 gap-2
-          rotate-12 scale-150
+          grid grid-cols-4 gap-2 scale-150 rotate-12
         ">
           {images.map((img, index) => (
             <img
@@ -110,10 +109,7 @@ export default function Login() {
       {/* DESKTOP */}
       <div className="hidden md:block absolute inset-0 overflow-hidden">
         <div className="
-          grid grid-cols-6 md:grid-cols-8 gap-2
-          rotate-12 scale-110
-          w-[110%] h-[110%]
-          -translate-x-[10%] -translate-y-[10%]
+          grid h-[110%] w-[110%] -translate-x-[10%] -translate-y-[10%] scale-110 rotate-12 grid-cols-6 gap-2 md:grid-cols-8
         ">
           {images.map((img, index) => (
             <img
@@ -135,13 +131,10 @@ export default function Login() {
       <div className="md:hidden absolute bottom-0 w-full h-96 bg-gradient-to-t from-black via-black/100 to-transparent"></div>
 
       {/* HEADER (só desktop) */}
-      <div className="hidden md:flex absolute top-0 left-0 w-full justify-between items-center px-12 py-6 z-20">
+      <div className="absolute left-0 top-0 z-20 hidden w-full items-center justify-between px-12 py-6 md:flex">
         <img src={Logo} className="w-32" />
 
-        <button className="bg-gradient-to-r from-violet-500 to-fuchsia-600
-        text-white px-5 py-2 rounded font-semibold
-        hover:from-purple-600 hover:to-purple-800   shadow-md shadow-fuchsia-500/20
-          transition">
+        <button className="rounded bg-gradient-to-r from-violet-500 to-fuchsia-600 px-5 py-2 font-semibold text-white shadow-md shadow-fuchsia-500/20 transition hover:from-purple-600 hover:to-purple-800">
           <Link to="/login">Entrar</Link>
         </button>
       </div>
@@ -202,33 +195,28 @@ export default function Login() {
   </p>
 
   {/* FORM DESKTOP (fica escondido no mobile) */}
-  <div className="hidden md:flex w-full max-w-xl gap-3 mb-4 justify-center">
+  <div className="hidden w-full max-w-xl justify-center gap-3 mb-4 md:flex">
     <input
     type="email"
     placeholder="Email"
     className="
     flex-1 max-w-xl
+    rounded border
+    border-violet-400 bg-black/60
     px-5 py-4
-    rounded
-    bg-black/60
-    border border-violet-400
-    text-white text-lg
-    focus:outline-none
-    focus:ring-2 focus:ring-fuchsia-500
-    focus:border-fuchsia-500
-    placeholder:text-gray-400
-    transition
+    text-lg text-white
+    transition placeholder:text-gray-400
+    focus:border-fuchsia-500 focus:outline-none focus:ring-2 focus:ring-fuchsia-500
     "
     />
 
     <button className="
-      bg-gradient-to-r from-violet-500 to-fuchsia-600
-      px-8 py-4 rounded
-      font-semibold text-lg
-      text-white
+      rounded bg-gradient-to-r
+      from-violet-500 to-fuchsia-600 px-8
+      py-4 text-lg
+      font-semibold text-white
+      shadow-lg shadow-fuchsia-500/30 transition
       hover:from-violet-600 hover:to-fuchsia-700
-      shadow-lg shadow-fuchsia-500/30
-      transition
       ">
         <Link to="/login">Vamos lá →</Link>
     </button>
@@ -236,11 +224,11 @@ export default function Login() {
 
   {/* BOTÕES MOBILE (esconde no desktop) */}
   <div className="w-full md:hidden">
-    <button className="w-full bg-gradient-to-r from-violet-500 to-fuchsia-600 text-white font-semibold py-3 rounded-md mb-3"><Link to="/cadastro">Experimente o Teste Gratuito</Link>
+    <button className="mb-3 w-full rounded-md bg-gradient-to-r from-violet-500 to-fuchsia-600 py-3 font-semibold text-white"><Link to="/cadastro">Experimente o Teste Gratuito</Link>
       
     </button>
 
-    <button className="w-full border border-violet-400 text-violet-400 hover:bg-violet-500/10 py-3 rounded-md mb-3">
+    <button className="mb-3 w-full rounded-md border border-violet-400 py-3 text-violet-400 hover:bg-violet-500/10">
       <Link to="/login">Login</Link>
     </button>
 

@@ -64,10 +64,10 @@ function WatchContent() {
   }, [id, contents, status, dispatch]);
 
   return (
-    <div className="w-full h-screen bg-black flex items-center justify-center font-sans">
+    <div className="flex h-screen w-full items-center justify-center bg-black font-sans">
       
       <MediaController 
-        className="w-full h-full relative group"
+        className="group relative h-full w-full"
         style={{
           "--media-primary-color": "#ffffff",
           "--media-secondary-color": "rgba(255, 255, 255, 0.7)",
@@ -93,10 +93,10 @@ function WatchContent() {
         />
 
         {/* Botão Sair - canto superior esquerdo */}
-        <div className="absolute top-0 left-0 w-full px-6 pt-6 pb-16 bg-gradient-to-b from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none">
+        <div className="pointer-events-none absolute left-0 top-0 z-10 w-full bg-gradient-to-b from-black/80 to-transparent px-6 pb-16 pt-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-white hover:text-white/80 transition-colors pointer-events-auto"
+            className="pointer-events-auto flex items-center gap-2 text-white transition-colors hover:text-white/80"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -105,7 +105,7 @@ function WatchContent() {
         </div>
 
         <MediaControlBar 
-          className="absolute bottom-0 w-full flex items-center px-4 pt-12 pb-4 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          className="absolute bottom-0 flex w-full items-center bg-gradient-to-t from-black/90 via-black/40 to-transparent px-4 pb-4 pt-12 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         >
           <MediaPlayButton className="mr-2" />
           <MediaSeekBackwardButton seekOffset={10} className="mr-1" />

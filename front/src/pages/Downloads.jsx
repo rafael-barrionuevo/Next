@@ -31,11 +31,11 @@ function Downloads() {
   const totalSize = downloads.length * 1.2; // Simulação de tamanho em GB
 
   return (
-    <div className='flex flex-col min-h-screen bg-[#0d1117] pb-24'>
+    <div className='flex min-h-screen flex-col bg-slate-900 pb-24'>
       <div className='fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(147,51,234,0.1),transparent_50%)] pointer-events-none' />
       <NavBar />
 
-      <div className='flex-1 relative z-10 px-4 max-w-3xl mx-auto w-full mt-6'>
+      <div className='relative z-10 mx-auto mt-6 w-full max-w-3xl flex-1 px-4'>
 
         {/* Header */}
         <div className='flex items-center justify-between mb-6'>
@@ -66,8 +66,8 @@ function Downloads() {
 
         {/* Modal de confirmação */}
         {showConfirmClear && (
-          <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-6'>
-            <div className='bg-[#1a1a1c] border border-white/10 rounded-2xl p-6 w-full max-w-sm shadow-xl'>
+          <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-6 backdrop-blur-sm'>
+            <div className='w-full max-w-sm rounded-2xl border border-white/10 bg-zinc-900 p-6 shadow-xl'>
               <h2 className='text-white font-bold text-lg mb-2'>Remover todos os downloads?</h2>
               <p className='text-gray-400 text-sm mb-6'>Todos os {downloads.length} itens serão removidos. Esta ação não pode ser desfeita.</p>
               <div className='flex gap-3'>
@@ -95,7 +95,7 @@ function Downloads() {
               <div className='w-24 h-24 rounded-full bg-purple-600/10 flex items-center justify-center'>
                 <MdOutlineFileDownload className='text-purple-500/40 text-5xl' />
               </div>
-              <div className='absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-[#1a1a1c] border border-white/10 flex items-center justify-center'>
+              <div className='absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center'>
                 <span className='text-gray-500 text-lg font-bold'>0</span>
               </div>
             </div>
@@ -115,11 +115,11 @@ function Downloads() {
             {downloads.map(item => (
               <div
                 key={item.downloadId}
-                className='flex items-center gap-4 bg-[#1a1a1c] border border-white/5 rounded-2xl p-4 hover:border-purple-600/30 transition-all duration-300 group'
+                className='group flex items-center gap-4 rounded-2xl border border-white/5 bg-zinc-900 p-4 transition-all duration-300 hover:border-purple-600/30'
               >
                 {/* Capa */}
                 <div
-                  className='relative w-20 h-28 rounded-xl overflow-hidden flex-shrink-0 cursor-pointer'
+                  className='relative h-28 w-20 shrink-0 cursor-pointer overflow-hidden rounded-xl'
                   onClick={() => navigate(`/info/${item.contentId}`)}
                 >
                   <img

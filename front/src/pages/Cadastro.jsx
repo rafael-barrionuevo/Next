@@ -86,7 +86,7 @@ export default function Cadastro() {
   }
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center bg-black overflow-hidden px-4 pb-16 sm:pb-24">
+    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-black px-4 pb-16 sm:pb-24">
 
       {/* FUNDO PADRAO */}
       <div className="absolute inset-0 overflow-hidden">
@@ -106,7 +106,7 @@ export default function Cadastro() {
 
         {/* DESKTOP */}
         <div className="hidden md:block absolute inset-0 overflow-hidden">
-          <div className="grid grid-cols-6 md:grid-cols-8 gap-2 rotate-12 w-[120%] -translate-x-[10%]">
+          <div className="grid w-[120%] -translate-x-[10%] rotate-12 grid-cols-6 gap-2 md:grid-cols-8">
             {posterImages.map((img, index) => (
               <img
                 key={index}
@@ -122,7 +122,7 @@ export default function Cadastro() {
       {/* OVERLAY */}
       <div className="absolute inset-0 bg-black/80"></div>
 
-      <div className="relative z-10 w-full max-w-sm mx-auto p-4 md:max-w-md md:bg-black/40 md:backdrop-blur-xl md:border md:border-white/10 md:rounded-2xl md:p-8">
+      <div className="relative z-10 mx-auto w-full max-w-sm p-4 md:max-w-md md:rounded-2xl md:border md:border-white/10 md:bg-black/40 md:p-8 md:backdrop-blur-xl">
         
         <img src={Logo} className="w-36 sm:w-32 mx-auto mb-6 sm:mb-8" alt="Logo" />
 
@@ -131,27 +131,27 @@ export default function Cadastro() {
             onChange={(e) => setNome(e.target.value)}
             type="text"
             placeholder="Nome"
-            className="w-full p-3 rounded-lg bg-black/50 text-white border border-purple-400 outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full rounded-lg border border-purple-400 bg-black/50 p-3 text-white outline-none focus:ring-2 focus:ring-purple-500"
           />
 
           <InputField
             onChange={(e) => setSobrenome(e.target.value)}
             type="text"
             placeholder="Sobrenome"
-            className="w-full p-3 rounded-lg bg-black/50 text-white border border-purple-400 outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full rounded-lg border border-purple-400 bg-black/50 p-3 text-white outline-none focus:ring-2 focus:ring-purple-500"
           />
 
           <InputField
             onChange={(e) => setDataNascimento(e.target.value)}
             type="date"
-            className="w-full p-3 rounded-lg bg-black/50 text-white border border-purple-400 outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full rounded-lg border border-purple-400 bg-black/50 p-3 text-white outline-none focus:ring-2 focus:ring-purple-500"
           />
 
           <InputField
             onChange={(e) => setEmail(e.target.value)}
             type="email"
             placeholder="E-mail"
-            className="w-full p-3 rounded-lg bg-black/50 text-white border border-purple-400 outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full rounded-lg border border-purple-400 bg-black/50 p-3 text-white outline-none focus:ring-2 focus:ring-purple-500"
           />
 
           <div>
@@ -177,7 +177,7 @@ export default function Cadastro() {
               type="password"
               placeholder="Confirmar Senha"
               maxLength={32}
-              className={`w-full p-3 rounded-lg bg-black/50 text-white border outline-none focus:ring-2 focus:ring-purple-500 transition-colors ${
+              className={`w-full rounded-lg border bg-black/50 p-3 text-white outline-none transition-colors focus:ring-2 focus:ring-purple-500 ${
                 erroConfirmacao ? "border-red-500" : "border-purple-400"
               }`}
             />

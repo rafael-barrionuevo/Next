@@ -26,11 +26,11 @@ export default function AdicionarPerfil() {
   };
 
   return (
-    <div className="min-h-screen bg-[#141414] text-white flex items-center justify-center px-4 font-sans">
+    <div className="flex min-h-screen items-center justify-center bg-neutral-900 px-4 font-sans text-white">
       
       <div className="w-full max-w-2xl">
         
-        <h1 className="text-4xl md:text-5xl font-medium mb-4">
+        <h1 className="mb-4 text-4xl font-medium md:text-5xl">
           Adicionar perfil
         </h1>
         
@@ -40,7 +40,7 @@ export default function AdicionarPerfil() {
 
         <hr className="border-gray-800 mb-8" />
         <div className="flex items-center gap-6 mb-8">
-          <div className="w-24 h-24 md:w-32 md:h-32 rounded-md overflow-hidden shrink-0">
+          <div className="h-24 w-24 shrink-0 overflow-hidden rounded-md md:h-32 md:w-32">
             <img 
               src={avatarPadrao} 
               alt="Avatar Padrão" 
@@ -55,7 +55,7 @@ export default function AdicionarPerfil() {
               onChange={(e) => setNome(e.target.value)}
               placeholder="Nome"
               maxLength={25}
-              className="w-full bg-[#141414] border border-transparent focus:border-white text-white text-lg px-4 py-2 outline-none transition-colors"
+              className="w-full border border-transparent bg-neutral-900 px-4 py-2 text-lg text-white outline-none transition-colors focus:border-white"
               style={{
                 backgroundColor: "rgba(0, 0, 0, 0.2)", 
                 borderBottom: "1px solid #fff" 
@@ -71,10 +71,10 @@ export default function AdicionarPerfil() {
         <div className="flex gap-4">
           <button 
             onClick={handleSalvar}
-            className={`px-8 py-2 font-medium text-lg transition-colors ${
+            className={`px-8 py-2 text-lg font-medium transition-colors ${
               nome.trim().length > 0 
-                ? "bg-white text-black hover:bg-gray-200 cursor-pointer" 
-                : "bg-gray-600 text-gray-400 cursor-not-allowed"
+                ? "cursor-pointer bg-white text-black hover:bg-gray-200" 
+                : "cursor-not-allowed bg-gray-600 text-gray-400"
             }`}
             disabled={nome.trim().length === 0}
           >

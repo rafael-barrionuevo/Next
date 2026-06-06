@@ -55,33 +55,33 @@ export default function GerenciarPerfis() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#141414] text-white font-sans relative">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-900 font-sans text-white">
       
       {/* TÍTULO */}
-      <h1 className="text-3xl md:text-5xl font-medium mb-8 md:mb-12 tracking-wide">
+      <h1 className="mb-8 text-3xl font-medium tracking-wide md:mb-12 md:text-5xl">
         Gerenciar perfis:
       </h1>
 
       {/* GRID DE PERFIS PARA EDIÇÃO */}
-      <div className="flex gap-4 md:gap-8 flex-wrap justify-center max-w-4xl px-4">
+      <div className="flex max-w-4xl flex-wrap justify-center gap-4 px-4 md:gap-8">
         {perfisAtuais.map((perfil) => (
-          <div key={perfil._id} className="flex flex-col items-center w-24 sm:w-32 relative">
+          <div key={perfil._id} className="flex w-24 flex-col items-center sm:w-32">
             
             {/* Avatar com Lápis de Edição */}
             <div 
               onClick={() => abrirEdicao(perfil)}
-              className="w-24 h-24 sm:w-32 sm:h-32 rounded-md overflow-hidden relative cursor-pointer group"
+              className="group relative h-24 w-24 cursor-pointer overflow-hidden rounded-md sm:h-32 sm:w-32"
             >
               {/* Imagem do Perfil */}
               <img
                 src={perfil.avatar}
                 alt={perfil.nome}
-                className="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity"
+                className="h-full w-full object-cover opacity-60 transition-opacity group-hover:opacity-40"
               />
               
               {/* Ícone de Lápis Centralizado */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="p-3 bg-black/60 rounded-full border border-white/50 group-hover:border-white transition-colors">
+                <div className="rounded-full border border-white/50 bg-black/60 p-3 transition-colors group-hover:border-white">
                   <FiEdit2 className="text-white text-xl sm:text-2xl" />
                 </div>
               </div>

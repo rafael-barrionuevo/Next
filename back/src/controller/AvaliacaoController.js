@@ -3,10 +3,11 @@ const AvaliacaoService = require("../services/AvaliacaoService");
 class AvaliacaoController {
   async criarAvaliacao(req, res) {
     try {
-      const { conteudoId, nota, comentario } = req.body;
+      const { conteudoId, nota, comentario, perfilId } = req.body;
 
       const dadosAvaliacao = {
-        usuarioId: req.id, // Injeta o ID do token
+        usuarioId: req.id,
+        perfilId: perfilId || null,
         conteudoId,
         nota: parseInt(nota), 
         comentario

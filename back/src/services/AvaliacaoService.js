@@ -4,22 +4,31 @@ const Usuario = require("../models/Usuario");
 class AvaliacaoService {
   // Criar uma nova avaliação
   async criarAvaliacao(dados) {
-    const { usuarioId, conteudoId, nota, comentario } = dados;
+    const { usuarioId, perfilId, conteudoId, nota, comentario } = dados;
 
     const usuario = await Usuario.findById(usuarioId);
     if (!usuario) throw new Error("Usuário não encontrado.");
 
+    // Resolve o nome do perfil ativo (se informado)
+    let nome_perfil = null;
+    if (perfilId) {
+      const perfil = usuario.perfis?.find(p => p._id.toString() === perfilId);
+      nome_perfil = perfil?.nome || null;
+    }
+
     try {
       return await Avaliacao.create({
         usuarioId,
+        perfilId: perfilId || null,
         conteudoId,
         nome_usuario: usuario.nome,
+        nome_perfil,
         nota,
         comentario
       });
     } catch (error) {
-      // Erro 11000 indica violação de índice único (um user só avalia um conteúdo uma vez)
-      if (error.code === 11000) throw new Error("Você já avaliou este conteúdo!");
+      // Erro 11000 indica violação de índice único (um perfil só avalia um conteúdo uma vez)
+      if (error.code === 11000) throw new Error("Este perfil já avaliou este conteúdo!");
       throw error;
     }
   }
@@ -51,7 +60,7 @@ class AvaliacaoService {
     return await Avaliacao.findByIdAndUpdate(
       avaliacaoId,
       { $set: novosDados },
-      { new: true, runValidators: true } // runValidators garante que o Schema também valide
+      { new: true, runValidators: true }
     );
   }
 

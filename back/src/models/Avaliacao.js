@@ -11,9 +11,19 @@ const AvaliacaoSchema = new mongoose.Schema({
     ref: 'Usuario', 
     required: true 
   },
+  // ID do perfil (subdocument) que fez a avaliação — cada perfil pode avaliar de forma independente
+  perfilId: {
+    type: String,
+    default: null
+  },
   nome_usuario: { 
     type: String, 
     required: true 
+  },
+  // Nome do perfil (pode diferir do nome do usuário)
+  nome_perfil: {
+    type: String,
+    default: null
   },
   nota: { 
     type: Number, 
@@ -35,6 +45,7 @@ const AvaliacaoSchema = new mongoose.Schema({
   }
 });
 
-AvaliacaoSchema.index({ usuarioId: 1, conteudoId: 1 }, { unique: true });
+// Unicidade por perfil: mesmo usuário com perfis diferentes pode avaliar separadamente
+AvaliacaoSchema.index({ usuarioId: 1, perfilId: 1, conteudoId: 1 }, { unique: true });
 
 module.exports = mongoose.model('Avaliacao', AvaliacaoSchema);

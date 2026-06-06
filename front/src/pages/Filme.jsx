@@ -28,32 +28,32 @@ function Filme() {
   const sections = [
     {
       title: "Lançamentos",
-      data: filmes.slice(0, 6)
+      data: filmes
     },
     {
       title: "Ação e Aventura",
-      data: filmes.filter(c => c.genero?.includes('Ação') || c.genero?.includes('Aventura')).slice(0, 6)
+      data: filmes.filter(c => c.genero?.includes('Ação') || c.genero?.includes('Aventura'))
     },
     {
       title: "Ficção Científica",
-      data: filmes.filter(c => c.genero?.includes('Ficção Científica')).slice(0, 6)
+      data: filmes.filter(c => c.genero?.includes('Ficção Científica'))
     },
     {
-      title: "Filmes Clássicos",
-      data: filmes.slice(4, 10) // Just to have different slices
+      title: "Drama",
+      data: filmes.filter(c => c.genero?.includes('Drama'))
     }
   ]
 
   const carouselItems = filmes.slice(0, 9)
 
   return (
-    <div className='flex flex-col min-h-screen bg-[#0d1117] relative pb-20'>
+    <div className='flex min-h-screen flex-col bg-slate-900 pb-20'>
       
       <div className='fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(147,51,234,0.15),transparent_50%)] pointer-events-none'></div>
 
       <NavBar />
       
-      <div className='flex-1 relative z-10 px-4 max-w-7xl mx-auto w-full space-y-10 mt-4'>
+      <div className='relative z-10 mx-auto mt-4 w-full max-w-7xl flex-1 space-y-10 px-4'>
         
         {/* Destaques */}
         <section>

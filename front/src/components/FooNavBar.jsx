@@ -10,21 +10,21 @@ function FooNavBar() {
     const isActive = (path) => location.pathname === path;
     return (
       <>
-      <div className='md:hidden fixed bottom-0 left-0 right-0 z-50'>
-        <footer className='flex items-center justify-around bg-[#0d1117]/95 backdrop-blur-lg text-white/50 border-t border-white/10 pt-3 pb-6 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]'>
-        <Link to="/home" className='flex flex-col items-center cursor-pointer group'>
-          <TbHomeFilled className={`text-2xl transition-all group-hover:drop-shadow-[0_0_8px_rgba(147,51,234,0.8)] ${isActive('/home') ? 'text-purple-500' : 'text-white/50'}`} />
-          <span className={`text-[10px] mt-1 font-bold ${isActive('/home') ? 'text-purple-500' : 'text-white/50'}`}>Início</span>
+      <div className='fixed inset-x-0 bottom-0 z-50 md:hidden'>
+        <footer className='flex items-center justify-around bg-slate-900/95 backdrop-blur-lg text-white/50 border-t border-white/10 pt-3 pb-6 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]'>
+        <Link to="/home" className='group flex cursor-pointer flex-col items-center transition-all'>
+          <TbHomeFilled className={`text-2xl transition-all group-hover:drop-shadow-[0_0_8px_rgba(147,51,234,0.8)] ${isActive('/home') ? 'text-purple-500' : 'text-white/50 group-hover:text-white'}`} />
+          <span className={`mt-1 text-[10px] font-bold transition-colors ${isActive('/home') ? 'text-purple-500' : 'text-white/50 group-hover:text-white'}`}>Início</span>
         </Link>
         
-        <Link to="/wishList" className='flex flex-col items-center cursor-pointer group transition-all'>
-          <IoMdAdd className={`text-2xl transition-all ${isActive('/wishList') ? 'text-purple-500 drop-shadow-[0_0_8px_rgba(147,51,234,0.8)]' : 'text-white/50 group-hover:text-white'}`} />
-          <span className={`text-[10px] mt-1 font-bold ${isActive('/wishList') ? 'text-purple-500' : 'text-white/50 group-hover:text-white'}`}>Minha lista</span>
+        <Link to="/wishList" className='group flex cursor-pointer flex-col items-center transition-all'>
+          <IoMdAdd className={`text-2xl transition-all group-hover:drop-shadow-[0_0_8px_rgba(147,51,234,0.8)] ${isActive('/wishList') ? 'text-purple-500 drop-shadow-[0_0_8px_rgba(147,51,234,0.8)]' : 'text-white/50 group-hover:text-white'}`} />
+          <span className={`mt-1 text-[10px] font-bold transition-colors ${isActive('/wishList') ? 'text-purple-500' : 'text-white/50 group-hover:text-white'}`}>Minha lista</span>
         </Link>
         
-        <Link to="/downloads" className='flex flex-col items-center cursor-pointer group transition-all'>
-          <MdOutlineFileDownload className={`text-2xl transition-all ${isActive('/downloads') ? 'text-purple-500 drop-shadow-[0_0_8px_rgba(147,51,234,0.8)]' : 'text-white/50 group-hover:text-white'}`} />
-          <span className={`text-[10px] mt-1 font-bold ${isActive('/downloads') ? 'text-purple-500' : 'text-white/50 group-hover:text-white'}`}>Downloads</span>
+        <Link to="/downloads" className='group flex cursor-pointer flex-col items-center transition-all'>
+          <MdOutlineFileDownload className={`text-2xl transition-all group-hover:drop-shadow-[0_0_8px_rgba(147,51,234,0.8)] ${isActive('/downloads') ? 'text-purple-500 drop-shadow-[0_0_8px_rgba(147,51,234,0.8)]' : 'text-white/50 group-hover:text-white'}`} />
+          <span className={`mt-1 text-[10px] font-bold transition-colors ${isActive('/downloads') ? 'text-purple-500' : 'text-white/50 group-hover:text-white'}`}>Downloads</span>
         </Link>
       </footer>
     </div>

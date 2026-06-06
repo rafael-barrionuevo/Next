@@ -89,7 +89,7 @@ function NavBar() {
   );
 
   return (
-    <nav className='bg-[#0d1117]/80 backdrop-blur-md sticky top-0 z-50 border-b border-white/5'>
+    <nav className='bg-slate-900/80 backdrop-blur-md sticky top-0 z-50 border-b border-white/5'>
 
       {/* MOBILE */}
       <div className='md:hidden flex flex-col'>
@@ -113,10 +113,10 @@ function NavBar() {
         </div>
 
         <div className='flex flex-wrap justify-center gap-x-6 gap-y-2 items-center pb-4 px-4 text-sm font-medium text-white/60'>
-          <Link to="/filme" className='hover:text-white transition-all cursor-pointer border-b-2 border-transparent hover:border-purple-600 pb-1'>Filmes</Link>
-          <Link to="/serie" className='hover:text-white transition-all cursor-pointer border-b-2 border-transparent hover:border-purple-600 pb-1'>Séries</Link>
+          <Link to="/filme" className='cursor-pointer border-b-2 border-transparent pb-1 transition-colors hover:border-purple-600 hover:text-white'>Filmes</Link>
+          <Link to="/serie" className='cursor-pointer border-b-2 border-transparent pb-1 transition-colors hover:border-purple-600 hover:text-white'>Séries</Link>
           {user.role === 'admin' && (
-            <Link to="/admin" className='text-purple-500 font-bold border-b-2 border-transparent hover:border-purple-600 pb-1'>Admin</Link>
+            <Link to="/admin" className='text-purple-500 font-bold border-b-2 border-transparent pb-1 transition-colors hover:border-purple-600'>Admin</Link>
           )}
         </div>
       </div>
@@ -127,10 +127,10 @@ function NavBar() {
           <img src={logo} alt="Next Logo" className='w-24' />
 
           {<div className='flex items-center gap-6 text-sm font-medium text-white/80'>
-            <Link to="/home" className='hover:text-white transition-colors cursor-pointer'>Início</Link>
-            <Link to="/serie" className="seu-codigo-de-estilizacao-aqui">Séries</Link>
-            <Link to="/filme" className="seu-codigo-de-estilizacao-aqui">Filmes</Link>
-            <Link to="/wishList" className='hover:text-white transition-colors cursor-pointer'>Minha Lista</Link>
+            <Link to="/home" className='cursor-pointer transition-colors hover:text-white'>Início</Link>
+            <Link to="/serie" className='cursor-pointer transition-colors hover:text-white'>Séries</Link>
+            <Link to="/filme" className='cursor-pointer transition-colors hover:text-white'>Filmes</Link>
+            <Link to="/wishList" className='cursor-pointer transition-colors hover:text-white'>Minha Lista</Link>
           </div>}
         </div>
 
@@ -144,13 +144,6 @@ function NavBar() {
               Painel Admin
             </Link>
           )}
-
-          <div className='relative cursor-pointer hover:text-white transition-colors'>
-            <IoNotificationsOutline className='text-2xl' />
-            <span className='absolute -top-1 -right-1 bg-purple-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full'>
-              14
-            </span>
-          </div>
 
           {/* AVATAR DESKTOP COM HOVER E SETA ROTACIONAL */}
           <div className='relative flex items-center gap-2 cursor-pointer group py-2'>
