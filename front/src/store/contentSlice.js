@@ -98,7 +98,16 @@ const contentSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(listarConteudos.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+      .addCase(listarConteudos.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
+      })
       .addCase(listarConteudos.fulfilled, (state, action) => {
+        state.status = 'succeeded';
         state.items = action.payload;
       })
       .addCase(criarConteudo.fulfilled, (state, action) => {

@@ -2,6 +2,7 @@ import NavBar from '../components/NavBar.jsx'
 import FooNavBar from '../components/FooNavBar.jsx'
 import Carousel from '../components/Carousel.jsx'
 import ListCard from '../components/ListCard.jsx'
+import { categorizeContent } from '../utils/categorizer.js'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { adicionarWishlist } from '../store/userSlice'
@@ -25,22 +26,34 @@ function Serie() {
     dispatch(adicionarWishlist(id))
   }
 
+  const {
+    animacaoInfantil,
+    ficcaoTerror,
+    crimeSuspense,
+    acaoAventura,
+    dramaHistorico
+  } = categorizeContent(series)
+
   const sections = [
     {
-      title: "Séries de Anime",
-      data: series.filter(c => c.genero?.includes('Anime'))
+      title: "Ficção Científica e Terror",
+      data: ficcaoTerror
     },
     {
-      title: "Séries Dramáticas",
-      data: series.filter(c => c.genero?.includes('Drama'))
+      title: "Animação e Infantil",
+      data: animacaoInfantil
     },
     {
-      title: "Ficção Científica",
-      data: series.filter(c => c.genero?.includes('Ficção Científica'))
+      title: "Crime e Suspense",
+      data: crimeSuspense
     },
     {
-      title: "Todas as Séries",
-      data: series
+      title: "Ação e Aventura",
+      data: acaoAventura
+    },
+    {
+      title: "Drama e Histórico",
+      data: dramaHistorico
     }
   ]
 
@@ -73,6 +86,7 @@ function Serie() {
             <ListCard 
               items={section.data} 
               onAddWishlist={handleAddWishlist}
+              linkTo="/serie"
             />
           </section>
         ))}
