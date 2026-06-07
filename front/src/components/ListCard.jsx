@@ -32,7 +32,10 @@ function ListCard({ items = [], linkTo = '/filme' }) {
 
   // Show only 1 row when collapsed, complete rows when expanded
   const visibleItems = isExpanded ? completeRowItems : items.slice(0, cols);
-  const hasMore = items.length > cols;
+  
+  // Decide whether the "Mostrar mais" (expand) button can be shown
+  const canExpand = completeRowItems.length > cols;
+  const showExpandButton = !isExpanded && canExpand;
 
   return (
     <section className='relative w-full'>
@@ -45,39 +48,44 @@ function ListCard({ items = [], linkTo = '/filme' }) {
         {visibleItems.map((item, index) => (
           <div
             key={item._id || index}
-            className='aspect-video relative bg-zinc-900 rounded-lg overflow-hidden group border border-white/5 hover:border-purple-600/50 transition-colors duration-300 cursor-pointer'
+            className='flex flex-col cursor-pointer group'
             onClick={() => navigate(`/info/${item._id}`)}
           >
-            <img
-              src={getImageUrl(item.img_capa)}
-              alt={item.titulo || `Catálogo ${index}`}
-              className='w-full h-full object-cover group-hover:scale-110 transition-transform duration-500'
-            />
-            {/* Gradient overlay for better text contrast */}
-            <div className='absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none' />
-            {/* Title with z-index and subtle hover lift micro-animation */}
-            <p className='absolute bottom-0 left-0 w-full font-bold text-md p-4 text-gray-100 z-20 transform translate-y-0 group-hover:-translate-y-1 transition-transform duration-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'>
+            {/* Image container — 2:3 portrait ratio */}
+            <div className='relative bg-zinc-900 rounded-lg overflow-hidden border border-white/5 group-hover:border-purple-600/50 transition-colors duration-300'
+              style={{ aspectRatio: '2 / 3' }}
+            >
+              <img
+                src={getImageUrl(item.img_capa)}
+                alt={item.titulo || `Catálogo ${index}`}
+                className='w-full h-full object-cover group-hover:scale-110 transition-transform duration-500'
+              />
+              {/* Blur + darken overlay on hover */}
+              <div className='absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none backdrop-blur-[2px]' />
+            </div>
+            {/* Title below the image */}
+            <p className='mt-2 font-bold text-sm text-gray-100 px-1 leading-snug group-hover:text-purple-300 transition-colors duration-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] line-clamp-2'>
               {item.titulo}
             </p>
           </div>
         ))}
       </div>
 
-      {hasMore && (
-        <div className='flex justify-center mt-4 z-30'>
-          {!isExpanded ? (
+      {items.length > 0 && (
+        <div className='flex justify-center mt-6 z-30'>
+          {showExpandButton ? (
             <button
               onClick={() => setIsExpanded(true)}
               className='font-bold text-white py-2.5 px-8 bg-purple-600 rounded-lg hover:bg-purple-500 hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(147,51,234,0.3)] cursor-pointer'
             >
-              Ver mais novidades
+              Mostrar mais
             </button>
           ) : (
             <button
               onClick={() => navigate(linkTo)}
-              className='font-bold text-white py-2.5 px-8 bg-purple-600 rounded-lg hover:bg-purple-500 hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(147,51,234,0.3)] cursor-pointer'
+              className='font-bold text-purple-400 border-2 border-purple-600/80 py-2 px-8 bg-transparent rounded-lg hover:bg-purple-600/15 hover:border-purple-500 hover:text-purple-300 hover:scale-105 transition-all duration-300 shadow-[0_0_15px_rgba(147,51,234,0.1)] cursor-pointer'
             >
-              Ver todos →
+              Ver mais
             </button>
           )}
         </div>

@@ -2,6 +2,7 @@ import NavBar from '../components/NavBar.jsx'
 import FooNavBar from '../components/FooNavBar.jsx'
 import Carousel from '../components/Carousel.jsx'
 import ListCard from '../components/ListCard.jsx'
+import { categorizeContent } from '../utils/categorizer.js'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { adicionarWishlist } from '../store/userSlice'
@@ -25,22 +26,34 @@ function Filme() {
     dispatch(adicionarWishlist(id))
   }
 
+  const {
+    animacaoInfantil,
+    ficcaoTerror,
+    crimeSuspense,
+    acaoAventura,
+    dramaHistorico
+  } = categorizeContent(filmes)
+
   const sections = [
     {
-      title: "Lançamentos",
-      data: filmes
+      title: "Ficção Científica e Terror",
+      data: ficcaoTerror
+    },
+    {
+      title: "Animação e Infantil",
+      data: animacaoInfantil
+    },
+    {
+      title: "Crime e Suspense",
+      data: crimeSuspense
     },
     {
       title: "Ação e Aventura",
-      data: filmes.filter(c => c.genero?.includes('Ação') || c.genero?.includes('Aventura'))
+      data: acaoAventura
     },
     {
-      title: "Ficção Científica",
-      data: filmes.filter(c => c.genero?.includes('Ficção Científica'))
-    },
-    {
-      title: "Drama",
-      data: filmes.filter(c => c.genero?.includes('Drama'))
+      title: "Drama e Histórico",
+      data: dramaHistorico
     }
   ]
 
@@ -73,6 +86,7 @@ function Filme() {
             <ListCard 
               items={section.data} 
               onAddWishlist={handleAddWishlist}
+              linkTo="/filme"
             />
           </section>
         ))}
