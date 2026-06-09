@@ -6,6 +6,38 @@ class ConteudoService {
     return await Conteudo.find(); 
   }
 
+  // Pesquisar conteúdos por texto e/ou gênero
+  async pesquisarConteudos({ q, genero, tipo_midia }) {
+    const filtro = {};
+
+    // Filtro de texto — busca no título e sinopse (case-insensitive)
+    if (q && q.trim()) {
+      const regex = new RegExp(q.trim(), 'i');
+      filtro.$or = [
+        { titulo: regex },
+        { sinopse: regex }
+      ];
+    }
+
+    // Filtro por gênero
+    if (genero && genero.trim()) {
+      filtro.genero = { $in: genero.split(',').map(g => g.trim()) };
+    }
+
+    // Filtro por tipo de mídia
+    if (tipo_midia && tipo_midia.trim()) {
+      filtro.tipo_midia = tipo_midia.trim();
+    }
+
+    return await Conteudo.find(filtro).sort({ createdAt: -1 });
+  }
+
+  // Listar todos os gêneros únicos
+  async listarGeneros() {
+    const generos = await Conteudo.distinct('genero');
+    return generos.filter(Boolean).sort();
+  }
+
   // Criar novo conteúdo
   async criarConteudo(dados) {
     const existeConteudo = await Conteudo.findOne({ titulo: dados.titulo });

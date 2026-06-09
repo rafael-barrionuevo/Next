@@ -4,6 +4,7 @@ const ConteudoController = require("../controller/ConteudoController");
 const auth = require("../middleware/auth");
 const authAdmin = require("../middleware/adminAuth");
 
+routes.get("/conteudos/pesquisa", ConteudoController.pesquisarConteudos);
 routes.get("/conteudos", ConteudoController.listarConteudos);
 routes.post("/conteudos", auth, authAdmin, ConteudoController.criarConteudo);
 routes.patch("/conteudos/:id", auth, authAdmin, ConteudoController.atualizarConteudo);

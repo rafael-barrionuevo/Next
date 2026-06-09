@@ -11,6 +11,20 @@ class ConteudoController {
     }
   }
 
+  // GET /conteudos/pesquisa?q=&genero=&tipo_midia=
+  async pesquisarConteudos(req, res) {
+    try {
+      const { q, genero, tipo_midia } = req.query;
+      const [resultados, generos] = await Promise.all([
+        ConteudoService.pesquisarConteudos({ q, genero, tipo_midia }),
+        ConteudoService.listarGeneros()
+      ]);
+      return res.json({ resultados, generos });
+    } catch (error) {
+      return res.status(500).json({ error: "Erro ao pesquisar conteúdos." });
+    }
+  }
+
   // POST /conteudos
   async criarConteudo(req, res) {
     try {

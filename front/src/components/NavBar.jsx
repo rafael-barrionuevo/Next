@@ -96,7 +96,7 @@ function NavBar() {
         <div className='flex justify-between items-center px-6 py-4'>
           <img src={logo} alt="Next Logo" className='w-20' />
           <div className="flex items-center gap-4">
-            <IoMdSearch className='text-2xl text-white/70 hover:text-purple-500 cursor-pointer transition-colors' />
+            <IoMdSearch onClick={() => navigate('/pesquisa')} className='text-2xl text-white/70 hover:text-purple-500 cursor-pointer transition-colors' />
             <PiScreencastBold className='text-2xl text-white/70 hover:text-purple-500 cursor-pointer transition-colors' />
 
             {/* AVATAR MOBILE COM HOVER */}
@@ -135,9 +135,9 @@ function NavBar() {
         </div>
 
         <div className='flex items-center gap-6 text-sm font-medium text-white/80'>
-          <IoMdSearch className='text-2xl hover:text-white cursor-pointer transition-colors' />
+          <IoMdSearch onClick={() => navigate('/pesquisa')} className='text-2xl hover:text-white cursor-pointer transition-colors' />
 
-          <a className='hover:text-white transition-colors cursor-pointer'>Gêneros</a>
+          <a onClick={() => navigate('/pesquisa')} className='hover:text-white transition-colors cursor-pointer'>Gêneros</a>
 
           {user.role === 'admin' && (
             <Link to="/admin" className='text-purple-500 font-bold hover:text-purple-400 transition-colors'>
