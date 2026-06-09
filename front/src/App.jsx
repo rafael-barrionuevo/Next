@@ -18,6 +18,7 @@ import AdminPlanos from "./pages/AdminPlanos.jsx";
 import Serie from "./pages/Serie.jsx";
 import Filme from "./pages/Filme.jsx";
 import Downloads from "./pages/Downloads.jsx";
+import Pesquisa from "./pages/Pesquisa.jsx";
 
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
         <Route path="/serie" element={<Serie />} />
         <Route path="/filme" element={<Filme />} />
         <Route path="/downloads" element={<Downloads />} />
+        <Route path="/pesquisa" element={<Pesquisa />} />
       </Routes>
     </BrowserRouter>
   );
