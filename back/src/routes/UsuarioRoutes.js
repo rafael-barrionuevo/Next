@@ -12,5 +12,6 @@ routes.patch("/usuarios/lista", auth, UsuarioController.addConteudoWishlist);
 routes.delete("/usuarios/lista", auth, UsuarioController.deletaConteudoWishlist);
 routes.post("/usuarios/perfis", auth, UsuarioController.adicionarPerfil);
 routes.patch("/usuarios/perfis/:perfilId", auth, UsuarioController.editarPerfil);
+routes.delete("/usuarios/me", auth, UsuarioController.deletarConta);
 
 module.exports = routes;

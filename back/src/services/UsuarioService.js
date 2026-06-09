@@ -3,6 +3,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Plano = require("../models/Plano");
 const Assinatura = require("../models/Assinatura");
+const Avaliacao = require("../models/Avaliacao");
+const fs = require("fs");
+const path = require("path");
 
 class UsuarioService {
   async criarUsuario(userData) {
@@ -200,7 +203,7 @@ return {
     return user;
   } */
 
-    async atualizarAssinatura(userId, dadosPlano) {
+  async atualizarAssinatura(userId, dadosPlano) {
       const plano = await Plano.findOne({_id: dadosPlano.plano_id,
       ativo: true
       });
@@ -251,6 +254,33 @@ return {
       return user;
 
     }
+
+  async deletarConta(userId) {
+    const usuario = await Usuario.findById(userId);
+
+    if (!usuario) {
+      throw new Error("Usuário não encontrado.");
+    }
+
+    await Avaliacao.deleteMany({ usuarioId: userId });
+    await Assinatura.deleteOne({ user_id: userId });
+    await Usuario.findByIdAndDelete(userId);
+
+    if (usuario.foto && usuario.foto.startsWith("/uploads/usuarios/")) {
+      try {
+        const caminhoRelativo = usuario.foto.replace(/^\/+/, "");
+        const caminhoArquivo = path.resolve(__dirname, "../../", caminhoRelativo);
+
+        if (fs.existsSync(caminhoArquivo)) {
+          fs.unlinkSync(caminhoArquivo);
+        }
+      } catch (error) {
+        console.error("Erro ao remover foto do usuario:", error.message);
+      }
+    }
+
+    return true;
+  }
 
   async login(email, senha) {
     const user = await Usuario.findOne({ email }).select("+senha").populate("assinatura");
