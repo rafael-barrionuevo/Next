@@ -99,6 +99,17 @@ export default function AdminPlanos() {
     }
   }
 
+  function formatarPreco(preco) {
+    return Number(preco).toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL"
+    });
+  }
+
+  function simOuNao(valor) {
+    return valor ? "Sim" : "Nao";
+  }
+
   return (
     <div className="min-h-screen bg-slate-900 text-white">
       <NavBar />
@@ -106,10 +117,10 @@ export default function AdminPlanos() {
       <main className="mx-auto max-w-5xl px-6 py-10">
         <div className="mb-8 flex items-center gap-4">
           <button
-            onClick={() => navigate('/admin')}
+            onClick={() => navigate("/admin")}
             className="flex items-center gap-2 rounded-lg border border-white/10 px-4 py-2 text-sm font-medium text-gray-300 transition-all hover:bg-white/5 hover:text-white"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             Voltar ao painel
@@ -117,37 +128,126 @@ export default function AdminPlanos() {
           <h1 className="text-3xl font-bold">Gerenciar Planos</h1>
         </div>
 
-        <form onSubmit={handleSubmit} className="mb-8 space-y-4 rounded-xl bg-slate-800 p-6">
-          <div className="grid gap-4 md:grid-cols-2">
-            <input name="nome" value={form.nome} onChange={handleChange} placeholder="Nome" className="p-3 rounded bg-black/30 border border-white/10" />
-            <input name="preco" value={form.preco} onChange={handleChange} placeholder="Preço" type="number" step="0.01" className="p-3 rounded bg-black/30 border border-white/10" />
-
-            <input name="qualidade_video" value={form.qualidade_video} onChange={handleChange} placeholder="Qualidade do vídeo" className="p-3 rounded bg-black/30 border border-white/10" />
-            <input name="telas_simultaneas" value={form.telas_simultaneas} onChange={handleChange} placeholder="Telas simultâneas" type="number" className="p-3 rounded bg-black/30 border border-white/10" />
-
-            <input name="limite_perfis" value={form.limite_perfis} onChange={handleChange} placeholder="Limite de perfis" type="number" className="p-3 rounded bg-black/30 border border-white/10" />
-            <input name="ordem" value={form.ordem} onChange={handleChange} placeholder="Ordem" type="number" className="p-3 rounded bg-black/30 border border-white/10" />
+        <form
+          onSubmit={handleSubmit}
+          className="mb-8 space-y-6 rounded-2xl border border-white/10 bg-slate-800/95 p-6 shadow-lg"
+        >
+          <div>
+            <h2 className="text-xl font-semibold text-white">
+              {editandoId ? "Editar plano" : "Novo plano"}
+            </h2>
+            <p className="mt-1 text-sm text-gray-400">
+              Preencha as informacoes do plano no mesmo padrao visual das outras telas.
+            </p>
           </div>
 
-          <div className="flex flex-wrap gap-6">
-            <label className="flex items-center gap-2">
-              <input type="checkbox" name="permite_download" checked={form.permite_download} onChange={handleChange} />
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="flex flex-col gap-2">
+              <span className="text-sm font-medium text-gray-300">Nome do plano</span>
+              <input
+                name="nome"
+                value={form.nome}
+                onChange={handleChange}
+                placeholder="Ex: Premium"
+                className="rounded-xl border border-white/10 bg-black/30 p-3 text-white outline-none transition focus:border-purple-400"
+              />
+            </label>
+
+            <label className="flex flex-col gap-2">
+              <span className="text-sm font-medium text-gray-300">Preco mensal</span>
+              <input
+                name="preco"
+                value={form.preco}
+                onChange={handleChange}
+                placeholder="Ex: 39.90"
+                type="number"
+                step="0.01"
+                className="rounded-xl border border-white/10 bg-black/30 p-3 text-white outline-none transition focus:border-purple-400"
+              />
+            </label>
+
+            <label className="flex flex-col gap-2">
+              <span className="text-sm font-medium text-gray-300">Qualidade de video</span>
+              <input
+                name="qualidade_video"
+                value={form.qualidade_video}
+                onChange={handleChange}
+                placeholder="Ex: 4K + HDR"
+                className="rounded-xl border border-white/10 bg-black/30 p-3 text-white outline-none transition focus:border-purple-400"
+              />
+            </label>
+
+            <label className="flex flex-col gap-2">
+              <span className="text-sm font-medium text-gray-300">Telas simultaneas</span>
+              <input
+                name="telas_simultaneas"
+                value={form.telas_simultaneas}
+                onChange={handleChange}
+                placeholder="Quantidade de telas"
+                type="number"
+                className="rounded-xl border border-white/10 bg-black/30 p-3 text-white outline-none transition focus:border-purple-400"
+              />
+            </label>
+
+            <label className="flex flex-col gap-2">
+              <span className="text-sm font-medium text-gray-300">Limite de perfis</span>
+              <input
+                name="limite_perfis"
+                value={form.limite_perfis}
+                onChange={handleChange}
+                placeholder="Quantidade de perfis"
+                type="number"
+                className="rounded-xl border border-white/10 bg-black/30 p-3 text-white outline-none transition focus:border-purple-400"
+              />
+            </label>
+
+            <label className="flex flex-col gap-2">
+              <span className="text-sm font-medium text-gray-300">Ordem de exibicao</span>
+              <input
+                name="ordem"
+                value={form.ordem}
+                onChange={handleChange}
+                placeholder="Posicao na lista"
+                type="number"
+                className="rounded-xl border border-white/10 bg-black/30 p-3 text-white outline-none transition focus:border-purple-400"
+              />
+            </label>
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-3">
+            <label className="flex items-center gap-3 rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-gray-200">
+              <input
+                type="checkbox"
+                name="permite_download"
+                checked={form.permite_download}
+                onChange={handleChange}
+              />
               Permite download
             </label>
 
-            <label className="flex items-center gap-2">
-              <input type="checkbox" name="tem_anuncios" checked={form.tem_anuncios} onChange={handleChange} />
-              Tem anúncios
+            <label className="flex items-center gap-3 rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-gray-200">
+              <input
+                type="checkbox"
+                name="tem_anuncios"
+                checked={form.tem_anuncios}
+                onChange={handleChange}
+              />
+              Tem anuncios
             </label>
 
-            <label className="flex items-center gap-2">
-              <input type="checkbox" name="conteudo_exclusivo" checked={form.conteudo_exclusivo} onChange={handleChange} />
-              Conteúdo exclusivo
+            <label className="flex items-center gap-3 rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-gray-200">
+              <input
+                type="checkbox"
+                name="conteudo_exclusivo"
+                checked={form.conteudo_exclusivo}
+                onChange={handleChange}
+              />
+              Conteudo exclusivo
             </label>
           </div>
 
           <div className="flex gap-3">
-            <button type="submit" className="px-5 py-2 rounded bg-blue-600 hover:bg-blue-500">
+            <button type="submit" className="rounded bg-blue-600 px-5 py-2 hover:bg-blue-500">
               {editandoId ? "Atualizar plano" : "Criar plano"}
             </button>
 
@@ -157,7 +257,7 @@ export default function AdminPlanos() {
                 setForm(initialForm);
                 setEditandoId(null);
               }}
-              className="px-5 py-2 rounded border border-white/20 hover:bg-white/10"
+              className="rounded border border-white/20 px-5 py-2 hover:bg-white/10"
             >
               Limpar
             </button>
@@ -166,22 +266,63 @@ export default function AdminPlanos() {
 
         <div className="space-y-4">
           {planos.map((plano) => (
-            <div key={plano._id} className="flex items-center justify-between rounded-xl border border-white/5 bg-slate-800 p-4">
-              <div>
-                <p className="font-semibold">
-                  {plano.nome} {!plano.ativo && <span className="text-red-400">(inativo)</span>}
-                </p>
-                <p className="text-sm text-gray-400">
-                  R$ {Number(plano.preco).toFixed(2)} | {plano.qualidade_video} | {plano.limite_perfis} perfis
-                </p>
+            <div
+              key={plano._id}
+              className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-slate-800/95 p-5 md:flex-row md:items-start md:justify-between"
+            >
+              <div className="flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <p className="text-lg font-semibold">{plano.nome}</p>
+                  {!plano.ativo && (
+                    <span className="rounded-full bg-red-500/10 px-2 py-1 text-xs font-medium text-red-300">
+                      Inativo
+                    </span>
+                  )}
+                </div>
+
+                <div className="mt-4 grid gap-3 text-sm text-gray-300 md:grid-cols-2">
+                  <p className="rounded-lg border border-white/5 bg-black/20 px-3 py-2">
+                    <span className="block text-xs uppercase tracking-wide text-gray-500">Preco</span>
+                    <span className="mt-1 block text-base text-white">{formatarPreco(plano.preco)}</span>
+                  </p>
+
+                  <p className="rounded-lg border border-white/5 bg-black/20 px-3 py-2">
+                    <span className="block text-xs uppercase tracking-wide text-gray-500">Qualidade</span>
+                    <span className="mt-1 block text-base text-white">{plano.qualidade_video}</span>
+                  </p>
+
+                  <p className="rounded-lg border border-white/5 bg-black/20 px-3 py-2">
+                    <span className="block text-xs uppercase tracking-wide text-gray-500">Perfis</span>
+                    <span className="mt-1 block text-base text-white">{plano.limite_perfis} perfis</span>
+                  </p>
+
+                  <p className="rounded-lg border border-white/5 bg-black/20 px-3 py-2">
+                    <span className="block text-xs uppercase tracking-wide text-gray-500">Telas</span>
+                    <span className="mt-1 block text-base text-white">{plano.telas_simultaneas} simultaneas</span>
+                  </p>
+
+                  <p className="rounded-lg border border-white/5 bg-black/20 px-3 py-2">
+                    <span className="block text-xs uppercase tracking-wide text-gray-500">Download</span>
+                    <span className="mt-1 block text-base text-white">{simOuNao(plano.permite_download)}</span>
+                  </p>
+
+                  <p className="rounded-lg border border-white/5 bg-black/20 px-3 py-2">
+                    <span className="block text-xs uppercase tracking-wide text-gray-500">
+                      Anuncios / Exclusivo
+                    </span>
+                    <span className="mt-1 block text-base text-white">
+                      {simOuNao(plano.tem_anuncios)} / {simOuNao(plano.conteudo_exclusivo)}
+                    </span>
+                  </p>
+                </div>
               </div>
 
-              <div className="flex gap-3">
-                <button onClick={() => editarPlano(plano)} className="px-4 py-2 rounded bg-yellow-600 hover:bg-yellow-500">
+              <div className="flex gap-3 md:pt-1">
+                <button onClick={() => editarPlano(plano)} className="rounded bg-yellow-600 px-4 py-2 hover:bg-yellow-500">
                   Editar
                 </button>
 
-                <button onClick={() => removerPlano(plano._id)} className="px-4 py-2 rounded bg-red-600 hover:bg-red-500">
+                <button onClick={() => removerPlano(plano._id)} className="rounded bg-red-600 px-4 py-2 hover:bg-red-500">
                   Desativar
                 </button>
               </div>
