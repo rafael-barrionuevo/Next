@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { atualizarPlano } from "../store/AssinaturaSlice";
-import { atualizarUsuario } from "../store/userSlice";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import api from "../services/api";
@@ -10,6 +9,7 @@ import NavBar from "../components/NavBar";
 import InputField from "../components/inputField";
 import Button from "../components/button";
 import { getImageUrl } from "../utils/getImageUrl";
+import { atualizarUsuario, excluirUsuario, logout } from "../store/userSlice";
 
 export default function PerfilUser() {
   const dispatch = useDispatch();
@@ -41,6 +41,25 @@ async function carregarPlanos() {
   const [nome, setNome] = useState(user.nome || "");
   const [sobrenome, setSobrenome] = useState(user.sobrenome || "");
   const [dataNascimento, setDataNascimento] = useState(user.data_nascimento ? String(user.data_nascimento).substring(0, 10) : ""); // Formata para YYYY-MM-DD
+
+  async function handleExcluirConta() {
+    const confirmar = window.confirm("Deseja realmente excluir sua conta?");
+
+    if (!confirmar) return;
+
+    try {
+      setLoading(true);
+
+      await dispatch(excluirUsuario()).unwrap();
+      dispatch(logout());
+      alert("Conta excluida com sucesso!");
+      navigate("/login");
+    } catch (e) {
+      alert("Erro ao excluir conta: " + (e?.message || e));
+    } finally {
+      setLoading(false);
+    }
+  }
 
   function getAge(dob) {
     if (!dob) return null;
@@ -165,10 +184,7 @@ async function carregarPlanos() {
                 <div className="text-sm text-gray-300">{assinaturaAtiva?.tipo_pagamento ? assinaturaAtiva.tipo_pagamento : '—'}</div>
               </div>
 
-              <div className="flex gap-3">
-                <Button className="flex-1 px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-500 hover:to-pink-400 shadow">Gerenciar perfis</Button>
-                <Button className="flex-1 px-4 py-2 rounded-lg border border-white/10 text-gray-200 hover:bg-white/3">Editar perfil</Button>
-              </div>
+              
             </div>
           </aside>
 
@@ -304,6 +320,21 @@ async function carregarPlanos() {
               Cancelar
             </button>
           </div>
+        </section>
+
+        <section className="rounded-2xl border border-red-500/20 bg-red-950/20 p-6">
+          <h3 className="mb-4 text-xl font-medium text-red-300">Excluir Conta</h3>
+          <p className="mb-4 text-sm text-gray-300">
+            Esta ação vai excluir sua conta permanentemente.
+          </p>
+
+          <Button
+            onClick={handleExcluirConta}
+            disabled={loading}
+            className="rounded-lg bg-red-600 px-5 py-2 hover:bg-red-500 disabled:opacity-40"
+          >
+            {loading ? "Excluindo..." : "Excluir conta"}
+          </Button>
         </section>
           </main>
         </div>

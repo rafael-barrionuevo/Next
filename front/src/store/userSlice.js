@@ -3,7 +3,24 @@ import api from "../services/api";
 
 
 
-
+export const excluirUsuario = createAsyncThunk(
+  "user/excluirUsuario",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.delete("/usuarios/me");
+      return response.data;
+    } catch (err) {
+      const apiError = err.response?.data;
+      return rejectWithValue(
+        apiError?.erro ||
+        apiError?.error ||
+        apiError?.message ||
+        err.message ||
+        "Erro ao excluir conta"
+      );
+    }
+  }
+);
 
 // CADASTRO
 export const cadastrarUsuario = createAsyncThunk(
@@ -332,9 +349,23 @@ const userSlice = createSlice({
         state.assinatura = action.payload.assinatura;
       }) */
       .addCase(atualizarUsuario.fulfilled, (state, action) => {
+        state.statusRequest = "succeeded";
         state.nome = action.payload.nome;
         state.sobrenome = action.payload.sobrenome;
         state.data_nascimento = action.payload.data_nascimento;
+        const usuarioAtual = sessionStorage.getItem("user");
+        const usuarioPersistido = usuarioAtual ? JSON.parse(usuarioAtual) : {};
+        sessionStorage.setItem("user", JSON.stringify({
+          ...usuarioPersistido,
+          id: state.id,
+          nome: action.payload.nome,
+          sobrenome: action.payload.sobrenome,
+          email: state.email,
+          data_nascimento: action.payload.data_nascimento,
+          role: state.role,
+          lista_desejos: state.lista_desejos,
+          perfis: state.perfis
+        }));
       })
       .addCase(atualizarUsuario.pending, (state) => {
         state.statusRequest = "loading";
@@ -343,6 +374,19 @@ const userSlice = createSlice({
         state.statusRequest = "failed";
         state.error = action.payload || action.error.message;
       })  
+
+      //EXCLUIR USUARIO
+            .addCase(excluirUsuario.pending, (state) => {
+        state.statusRequest = "loading";
+      })
+      .addCase(excluirUsuario.fulfilled, (state) => {
+        state.statusRequest = "succeeded";
+        state.error = null;
+      })
+      .addCase(excluirUsuario.rejected, (state, action) => {
+        state.statusRequest = "failed";
+        state.error = action.payload || action.error.message;
+      })
 
       // WISHLIST
       .addCase(buscarWishlist.fulfilled, (state, action) => {

@@ -204,6 +204,7 @@ class UsuarioController {
       return res.status(400).json({ error: error.message });
     }
   }
+  
 
   async login(req, res) {
     try {
@@ -220,6 +221,20 @@ class UsuarioController {
       return res.status(401).json({ erro: e.message });
     }
   }
+
+  async deletarConta(req, res) {
+    try {
+      const id = req.id;
+
+      await UsuarioService.deletarConta(id);
+
+      return res.status(200).json({ message: "Conta excluida com sucesso!" });
+    } catch (e) {
+      return res.status(400).json({ erro: e.message });
+    }
+  }
+
 }
+
 
 module.exports = new UsuarioController();
